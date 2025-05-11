@@ -32,7 +32,7 @@ jobs:
         run: mvn -B verify jacoco:report --file pom.xml
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: matrix.java == '24'
         with:
           name: coverage-report
