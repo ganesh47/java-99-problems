@@ -14,7 +14,11 @@ jobs:
         java: ['21', '22', '24']
       fail-fast: false
 
+    env:
+      MVN_ARGS: "-Dmaven.compiler.source=${{ matrix.java }} -Dmaven.compiler.target=${{ matrix.java }}"
+
     name: Build with Java ${{ matrix.java }}
+
     steps:
       - uses: actions/checkout@v3
 
@@ -25,15 +29,18 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+      - name: Make Maven Wrapper executable
+        run: chmod +x ./mvnw
 
-      - name: Test with Maven and generate coverage report
-        run: mvn -B verify jacoco:report --file pom.xml
+      - name: Build with Maven Wrapper
+        run: ./mvnw -B clean package $MVN_ARGS
 
-      - name: Upload coverage report
+      - name: Run Tests and Generate Coverage
+        run: ./mvnw -B verify jacoco:report $MVN_ARGS
+
+      - name: Upload Coverage Report (Java 24 only)
+        if: ${{ matrix.java == '24' }}
         uses: actions/upload-artifact@v4
-        if: matrix.java == '24'
         with:
           name: coverage-report
           path: target/site/jacoco/
