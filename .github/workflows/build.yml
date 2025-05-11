@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ['21', '22', '24']
+      fail-fast: false
+
+    name: Build with Java ${{ matrix.java }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Test with Maven and generate coverage report
+        run: mvn -B verify jacoco:report --file pom.xml
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        if: matrix.java == '24'
+        with:
+          name: coverage-report
+          path: target/site/jacoco/
+          retention-days: 14
