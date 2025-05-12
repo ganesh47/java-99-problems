@@ -1,9 +1,15 @@
 package org.nintynine.problems;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
-public class MyList<T> {
+interface Streamable<T> extends Iterable<T> {
+    Stream<T> stream();
+}
+
+public class MyList<T> implements Streamable<T>{
     protected final T[] items;
 
     @SafeVarargs
@@ -20,5 +26,15 @@ public class MyList<T> {
     @Override
     public String toString() {
         return "(" + String.join(" ", Arrays.stream(items).map(Objects::toString).toList()) + ")";
+    }
+
+    @Override
+    public Stream<T> stream() {
+        return Arrays.stream (items);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return Arrays.stream(items).iterator();
     }
 }
