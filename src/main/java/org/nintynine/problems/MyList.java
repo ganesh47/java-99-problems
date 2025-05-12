@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class MyList<T> {
-    private final T[] items;
+    protected final T[] items;
 
     @SafeVarargs
     public MyList(T... elements) {
@@ -12,7 +12,7 @@ public class MyList<T> {
     }
     //P01 : Find the last box of a list
     public T last() {
-        return Arrays.stream(items, 0, items.length)
+        return Arrays.stream(items)
                 .reduce((_, b) -> b)
                 .orElseThrow(() -> new IllegalStateException("Empty list has no last element"));
     }
