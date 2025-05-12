@@ -18,7 +18,7 @@ public class MyListP07<T> extends MyListP06<T> {
         return new MyListP07<>(flattenedArray);
     }
     
-    private Stream<?> flattenHelper(Object item) {
+    protected Stream<?> flattenHelper(Object item) {
         return switch (item) {
             case MyListP07<?> myListP07 -> Arrays.stream(myListP07.items).flatMap(this::flattenHelper);
             case List<?> objects -> objects.stream().flatMap(this::flattenHelper);
