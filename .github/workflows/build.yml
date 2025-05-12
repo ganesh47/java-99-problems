@@ -33,7 +33,7 @@ jobs:
         run: chmod +x ./mvnw
 
       - name: Test, Package & Verify
-        run: ./mvnw -B verify $MVN_ARGS
+        run: ./mvnw -B verify jacoco:report $MVN_ARGS
 
       - name: Upload Coverage Report (Java 24 only)
         if: ${{ matrix.java == '24' }}
