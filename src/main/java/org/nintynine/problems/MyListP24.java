@@ -41,15 +41,15 @@ public class MyListP24<T> extends MyListP23<T> {
         }
         if (n > m) {
             throw new IllegalArgumentException(
-                    "Cannot select " + n + " numbers from range of size " + m
+                    "Cannot select " + n + " numbers from range_ of size " + m
             );
         }
 
-        // Generate range 1…M using P22's range method
-        MyListP22<Integer> range = MyListP22.range(1, m);
+        // Generate range_ 1…M using P22's range_ method
+        MyListP22<Integer> range_ = range(1, m);
 
         // Convert to P23 to use random selection
-        MyListP23<Integer> pool = new MyListP23<>(range.stream().toList().toArray(new Integer[0]));
+        MyListP23<Integer> pool = new MyListP23<>(range_.stream().toList().toArray(new Integer[0]));
 
         // Select N random numbers using P23's rndSelect
         return new MyListP24<>(pool.rndSelect(n).stream().toList().toArray(new Integer[0]));
