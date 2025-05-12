@@ -1,6 +1,9 @@
 package org.nintynine.problems;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A generic list class that provides group generation functionality.
@@ -23,7 +26,7 @@ public class MyListP27<T> extends MyListP26<T> {
      * Generates all possible ways to group 9 people into groups of 2, 3, and 4.
      *
      * @return list of all possible groupings
-     * @throws IllegalStateException if list size is not 9
+     * @throws IllegalStateException if the list size is not 9
      */
     public List<List<MyListP27<T>>> group3() {
         if (length() != 9) {
@@ -75,7 +78,7 @@ public class MyListP27<T> extends MyListP26<T> {
         List<MyListP26<T>> combinations = remainingList.combinations(currentSize);
 
         for (MyListP26<T> combination : combinations) {
-            // Create new remaining list excluding chosen elements
+            // Create a new remaining list excluding chosen elements
             List<T> newRemaining = new ArrayList<>(remaining);
             for (int i = 0; i < combination.length(); i++) {
                 newRemaining.remove(combination.elementAt(1+i));
