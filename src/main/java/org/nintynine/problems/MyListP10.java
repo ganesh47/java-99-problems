@@ -26,8 +26,8 @@ public class MyListP10<T> extends MyListP09<T> {
      * @param <T> the type of the element
      */
     public static class EncodedElement<T> {
-        private final long count;
-        private final T element;
+        final long count;
+        final T element;
 
         /**
          * Creates a new EncodedElement with the specified count and element.
