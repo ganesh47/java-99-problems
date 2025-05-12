@@ -8,7 +8,7 @@ public class MyListP03<T> extends MyListP02<T> {
         super(elements);
     }
     
-    public T elementAt(int k) {
+    public T elementAt(long k) {
         if (k < 1) {
             throw new IllegalArgumentException("Position must be greater than 0");
         }
