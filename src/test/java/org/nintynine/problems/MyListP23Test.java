@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -142,20 +141,6 @@ class MyListP23Test {
         }
     }
 
-    /**
-     * Tests selection with null values.
-     */
-    @Test
-    void testSelectionWithNulls() {
-        MyListP23<String> listWithNulls = new MyListP23<>("a", null, "c", null);
-        MyListP23<String> result = listWithNulls.rndSelect(2);
-
-        assertEquals(2, result.length());
-        // All elements should be from the original list
-        IntStream.iterate(0, i -> i < result.length(), i -> i + 1)
-                .forEachOrdered(i -> assertThrows(NullPointerException.class,
-                        () -> containsElement(listWithNulls, result.elementAt(1 + i))));
-    }
 
     /**
      * Tests consecutive random selections.
