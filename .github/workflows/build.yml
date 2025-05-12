@@ -32,11 +32,8 @@ jobs:
       - name: Make Maven Wrapper executable
         run: chmod +x ./mvnw
 
-      - name: Build with Maven Wrapper
-        run: ./mvnw -B clean package $MVN_ARGS
-
-      - name: Run Tests and Generate Coverage
-        run: ./mvnw -B verify jacoco:report $MVN_ARGS
+      - name: Test, Package & Verify
+        run: ./mvnw -B verify $MVN_ARGS
 
       - name: Upload Coverage Report (Java 24 only)
         if: ${{ matrix.java == '24' }}
