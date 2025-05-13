@@ -110,7 +110,7 @@ public class MathP39 {
 
         // Step 2: Process segments
         BitSet segment = new BitSet(segmentSize);
-        long low = Math.max(start, (sqrt + 1L));
+        long low = Math.max(start, sqrt + 1L);
 
         while (low <= end) {
             long high = Math.min(low + segmentSize - 1, end);
@@ -119,7 +119,7 @@ public class MathP39 {
             // Sieve segment using small primes
             for (int prime : smallPrimesList) {
                 long firstMultiple = Math.max((long) prime * prime,
-                        ((low + prime - 1) / prime) * prime);
+                        (low + prime - 1) / prime * prime);
 
                 for (long j = firstMultiple; j <= high; j += prime) {
                     segment.clear((int)(j - low));
@@ -197,7 +197,7 @@ public class MathP39 {
 
         // Process segments
         BitSet segment = new BitSet(segmentSize);
-        long low = Math.max(start, (sqrt + 1L));
+        long low = Math.max(start, sqrt + 1L);
 
         while (low <= end) {
             long high = Math.min(low + segmentSize - 1, end);
@@ -205,7 +205,7 @@ public class MathP39 {
 
             for (int prime : smallPrimesList) {
                 long firstMultiple = Math.max((long) prime * prime,
-                        ((low + prime - 1) / prime) * prime);
+                        (low + prime - 1) / prime * prime);
 
                 for (long j = firstMultiple; j <= high; j += prime) {
                     segment.clear((int)(j - low));

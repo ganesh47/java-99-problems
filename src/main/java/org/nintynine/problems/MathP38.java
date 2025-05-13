@@ -23,13 +23,13 @@ public class MathP38 {
         @Override
         public String toString() {
             return String.format("""
-                Method: %s
-                Result: %d
-                Time: %,d ns
-                Arithmetic operations: %,d
-                Comparisons: %,d
-                Method calls: %,d
-                """,
+                Method: %s %n
+                Result: %d %n
+                Time: %,d ns %n
+                Arithmetic operations: %,d %n
+                Comparisons: %,d %n
+                Method calls: %,d %n
+                """.strip(),
                     methodName, result, timeNanos,
                     arithmeticOps, comparisonOps, methodCalls);
         }
