@@ -10,7 +10,7 @@ interface Streamable<T> extends Iterable<T> {
 }
 
 public class MyList<T> implements Streamable<T>{
-    protected final T[] items;
+    protected T[] items;
 
     @SafeVarargs
     public MyList(T... elements) {
