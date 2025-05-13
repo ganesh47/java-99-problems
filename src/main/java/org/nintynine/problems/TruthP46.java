@@ -1,7 +1,11 @@
 
 package org.nintynine.problems;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 /**
@@ -18,8 +22,9 @@ public class TruthP46 {
         NOR("nor", (a, b) -> !(a || b)),
         XOR("xor", (a, b) -> a ^ b),
         IMPL("impl", (a, b) -> !a || b),
-        EQU("equ", (a, b) -> a == b);
+        EQU("equ", (a, b) -> a.booleanValue() == b.booleanValue());
 
+        @SuppressWarnings("PMD.UnusedPrivateField")
         private final String symbol;
         private final BiFunction<Boolean, Boolean, Boolean> operation;
 
@@ -133,7 +138,7 @@ public class TruthP46 {
             if (var == 'A' || var == 'B') {
                 return new VariableNode(var);
             }
-            throw new IllegalArgumentException("Invalid variable: " + var+" (must be A or B)");
+            throw new IllegalArgumentException("Invalid variable: " + var + " (must be A or B)");
         }
 
         // Handle operations
