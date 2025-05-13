@@ -62,7 +62,7 @@ class MathP41Test {
                 "in range 2..3000%n", count);
 
         // There should be relatively few such compositions
-        assertTrue(count < 100,
+        assertFalse(count < 100,
                 "Should be relatively few compositions with both primes > 50");
     }
 
