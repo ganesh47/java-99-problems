@@ -218,7 +218,7 @@ private static ExpressionNode parse(String expression) {
             try {
                 // It's a variable
                 return new VariableNode(expression);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException _) {
                 throw new IllegalArgumentException("Invalid expression: " + expression);
             }
         }
