@@ -69,7 +69,8 @@ class MyListP21Test {
     void testInvalidPositions() {
         assertThrows(IllegalArgumentException.class, () -> list.insertAt("x", 0));
         assertThrows(IllegalArgumentException.class, () -> list.insertAt("x", -1));
-        assertThrows(IllegalArgumentException.class, () -> list.insertAt("x", Math.toIntExact(list.length() + 2)));
+        int intExact = Math.toIntExact(list.length() + 2);
+        assertThrows(IllegalArgumentException.class, () -> list.insertAt("x", intExact));
     }
 
     /**

@@ -1,6 +1,6 @@
 package org.nintynine.problems;
 
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 /**
  * A generic list class that provides functionality to rotate elements.
@@ -57,10 +57,10 @@ public class MyListP19<T> extends MyListP18<T> {
         T[] rotated = (T[]) new Object[Math.toIntExact(length())];
 
         // Copy the second part
-        IntStream.iterate(0, i -> i < parts.second().length(), i -> i + 1).forEachOrdered(i -> rotated[i] = parts.second().elementAt(i+1));
+        LongStream.iterate(0, i -> i < parts.second().length(), i -> i + 1).forEachOrdered(i -> rotated[Math.toIntExact(i)] = parts.second().elementAt(i+1));
 
         // Copy the first part
-        IntStream.iterate(0, i -> i < parts.first().length(), i -> i + 1).forEachOrdered(i -> rotated[Math.toIntExact(parts.second().length() + i)] = parts.first().elementAt(i+1));
+        LongStream.iterate(0, i -> i < parts.first().length(), i -> i + 1).forEachOrdered(i -> rotated[Math.toIntExact(parts.second().length() + i)] = parts.first().elementAt(i+1));
 
         return new MyListP19<>(rotated);
     }

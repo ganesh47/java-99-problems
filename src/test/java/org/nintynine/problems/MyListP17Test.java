@@ -91,13 +91,15 @@ class MyListP17Test {
         MyListP17<String> list = new MyListP17<>("a", null, "b", null);
         MyListP17.Pair<MyListP17<String>, MyListP17<String>> result = list.split(2);
 
-        assertEquals(2, result.first().length());
-        assertEquals(2, result.second().length());
+        MyListP17<String> firstItem = result.first();
+        assertEquals(2, firstItem.length());
+        MyListP17<String> secondItem = result.second();
+        assertEquals(2, secondItem.length());
 
-        assertEquals("a", result.first().elementAt(1+0));
-        assertThrows(NullPointerException.class,()->result.first().elementAt(1+1));
-        assertEquals("b", result.second().elementAt(1+0));
-        assertThrows(NullPointerException.class,()->result.second().elementAt(1+1));
+        assertEquals("a", firstItem.elementAt(1+0));
+        assertThrows(NullPointerException.class,()-> firstItem.elementAt(1+1));
+        assertEquals("b", secondItem.elementAt(1+0));
+        assertThrows(NullPointerException.class,()-> secondItem.elementAt(1+1));
     }
 
     /**
