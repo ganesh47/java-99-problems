@@ -69,7 +69,8 @@ class MathP39Test {
             "1, 100, 25",
             "100, 200, 21",
             "1000, 1100, 16",
-            "9900, 10000, 9"
+            "9900, 10000, 9",
+            "9900, 100000, 8372"
     })
     void testPrimeCount(long start, long end, long expectedCount) {
         assertEquals(expectedCount, MathP39.countPrimesInRange(start, end));
@@ -81,7 +82,7 @@ class MathP39Test {
     void testLargerRanges() {
         // Test performance and correctness for larger ranges
         long start = System.nanoTime();
-        List<Long> primes = MathP39.primesInRange(10000, 10100);
+        List<Long> primes = MathP39.primesInRange(10000, 101000000);
         long end = System.nanoTime();
 
         // Verify some known primes in this range
