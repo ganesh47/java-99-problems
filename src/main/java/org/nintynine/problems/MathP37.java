@@ -9,7 +9,9 @@ import java.util.List;
  * phi(m) = (p1 - 1) * p1^(m1 - 1) * (p2 - 1) * p2^(m2 - 1) * ...
  */
 public class MathP37 {
-    private MathP37() {}
+    private MathP37() {
+    }
+
     /**
      * Calculates Euler's totient function phi(m) using prime factorization.
      * This is more efficient than the primitive method from P34.
@@ -47,7 +49,7 @@ public class MathP37 {
     /**
      * Helper method to calculate power with positive integer exponent.
      *
-     * @param base the base number
+     * @param base     the base number
      * @param exponent the exponent (must be non-negative)
      * @return base raised to the power of exponent
      */

@@ -60,16 +60,16 @@ public class MyListP17<T> extends MyListP16<T> {
     }
 
     /**
-         * A simple pair class to hold two values.
-         *
-         * @param <A> type of the first value
-         * @param <B> type of the second value
-         */
-        public record Pair<A, B>(A first, B second) {
+     * A simple pair class to hold two values.
+     *
+     * @param <A> type of the first value
+     * @param <B> type of the second value
+     */
+    public record Pair<A, B>(A first, B second) {
 
         @Override
-            public String toString() {
-                return "(" + first + ", " + second + ")";
-            }
+        public String toString() {
+            return "(" + first + ", " + second + ")";
         }
+    }
 }

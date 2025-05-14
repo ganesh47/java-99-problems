@@ -8,7 +8,7 @@ public class MyListP04<T> extends MyListP03<T> {
     public MyListP04(T... elements) {
         super(elements);
     }
-    
+
     public long length() {
         return Arrays.stream(items)
                 .count();

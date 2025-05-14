@@ -9,7 +9,7 @@ public class MyListP07<T> extends MyListP06<T> {
     public MyListP07(T... elements) {
         super(elements);
     }
-    
+
     @SuppressWarnings("unchecked")
     public MyListP07<T> flatten() {
         T[] flattenedArray = (T[]) Arrays.stream(items)
@@ -17,7 +17,7 @@ public class MyListP07<T> extends MyListP06<T> {
                 .toArray();
         return new MyListP07<>(flattenedArray);
     }
-    
+
     protected Stream<?> flattenHelper(Object item) {
         return switch (item) {
             case MyListP07<?> myListP07 -> Arrays.stream(myListP07.items).flatMap(this::flattenHelper);

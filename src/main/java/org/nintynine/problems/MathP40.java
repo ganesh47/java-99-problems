@@ -9,26 +9,6 @@ import java.util.Optional;
  */
 public class MathP40 {
     /**
-     * Represents a pair of prime numbers that sum to a given even number.
-     */
-    public record GoldbachPair(long prime1, long prime2) {
-        /**
-         * Verifies that this is a valid Goldbach pair.
-         * @return true if both numbers are prime and sum to an even number
-         */
-        public boolean isValid() {
-            return MathP31.isPrime(prime1) &&
-                    MathP31.isPrime(prime2) &&
-                    (prime1 + prime2) % 2 == 0;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("(%d %d)", prime1, prime2);
-        }
-    }
-
-    /**
      * Finds a pair of prime numbers that sum up to the given even number.
      * Returns the first such pair found (typically with the smallest first prime).
      *
@@ -46,10 +26,10 @@ public class MathP40 {
 
         BitSet sieve = sieveOfEratosthenes(n);
 
-        for (long p = 2; p <= n/2; p++) {
-            if (sieve.get((int)p)) {
+        for (long p = 2; p <= n / 2; p++) {
+            if (sieve.get((int) p)) {
                 long q = n - p;
-                if (q < n && sieve.get((int)q)) {
+                if (q < n && sieve.get((int) q)) {
                     return Optional.of(new GoldbachPair(p, q));
                 }
             }
@@ -75,18 +55,18 @@ public class MathP40 {
 
         BitSet sieve = sieveOfEratosthenes(n);
         int pairCount = 0;
-        for (long p = 2; p <= n/2; p++) {
-            if (sieve.get((int)p) && sieve.get((int)(n-p))) {
+        for (long p = 2; p <= n / 2; p++) {
+            if (sieve.get((int) p) && sieve.get((int) (n - p))) {
                 pairCount++;
             }
         }
 
         GoldbachPair[] pairs = new GoldbachPair[pairCount];
         int index = 0;
-        for (long p = 2; p <= n/2; p++) {
-            if (sieve.get((int)p)) {
+        for (long p = 2; p <= n / 2; p++) {
+            if (sieve.get((int) p)) {
                 long q = n - p;
-                if (q < n && sieve.get((int)q)) {
+                if (q < n && sieve.get((int) q)) {
                     pairs[index++] = new GoldbachPair(p, q);
                 }
             }
@@ -112,10 +92,10 @@ public class MathP40 {
         for (long i = 4; i <= n; i += 2) {
             boolean found = false;
 
-            for (long p = 2; p <= i/2; p++) {
-                if (sieve.get((int)p)) {
+            for (long p = 2; p <= i / 2; p++) {
+                if (sieve.get((int) p)) {
                     long q = i - p;
-                    if (q < i && sieve.get((int)q)) {
+                    if (q < i && sieve.get((int) q)) {
                         found = true;
                         break;
                     }
@@ -135,8 +115,8 @@ public class MathP40 {
      * Uses BitSet for efficient storage and lookup.
      */
     private static BitSet sieveOfEratosthenes(long n) {
-        BitSet sieve = new BitSet((int)n + 1);
-        sieve.set(2, (int)n + 1);
+        BitSet sieve = new BitSet((int) n + 1);
+        sieve.set(2, (int) n + 1);
 
         for (int i = 2; (long) i * i <= n; i++) {
             if (sieve.get(i)) {
@@ -147,5 +127,26 @@ public class MathP40 {
         }
 
         return sieve;
+    }
+
+    /**
+     * Represents a pair of prime numbers that sum to a given even number.
+     */
+    public record GoldbachPair(long prime1, long prime2) {
+        /**
+         * Verifies that this is a valid Goldbach pair.
+         *
+         * @return true if both numbers are prime and sum to an even number
+         */
+        public boolean isValid() {
+            return MathP31.isPrime(prime1) &&
+                    MathP31.isPrime(prime2) &&
+                    (prime1 + prime2) % 2 == 0;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("(%d %d)", prime1, prime2);
+        }
     }
 }

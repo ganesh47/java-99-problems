@@ -8,13 +8,15 @@ import java.util.List;
  * P39: Generate a list of prime numbers in a given range.
  */
 public class MathP39 {
-    private MathP39() {}
+    private MathP39() {
+    }
+
     /**
      * Returns a list of all prime numbers in the range [start, end] inclusive.
      * Uses the Sieve of Eratosthenes algorithm optimized for ranges.
      *
      * @param start the lower bound of the range (inclusive)
-     * @param end the upper bound of the range (inclusive)
+     * @param end   the upper bound of the range (inclusive)
      * @return list of prime numbers in the range
      * @throws IllegalArgumentException if start > end or start < 0
      */
@@ -162,7 +164,7 @@ public class MathP39 {
      * More efficient than generating the full list when only count is needed.
      *
      * @param start the lower bound of the range (inclusive)
-     * @param end the upper bound of the range (inclusive)
+     * @param end   the upper bound of the range (inclusive)
      * @return count of prime numbers in the range
      */
     public static long countPrimesInRange(long start, long end) {
@@ -240,30 +242,30 @@ public class MathP39 {
         while (low <= end) {
             // Determine the high boundary for current segment
             long high = Math.min(low + segmentSize - 1, end);
-            
+
             // Calculate segment length safely
             int segmentLength = (int) Math.min(Integer.MAX_VALUE, high - low + 1);
-            
+
             // Mark all numbers in the segment as prime initially
             segment.clear();  // Reset the segment
             segment.set(0, segmentLength);
 
-        // Eliminate non-primes using small primes
-        for (Integer prime : smallPrimesList) {
-            markNonPrimesInSegment(segment, prime, low, high);
+            // Eliminate non-primes using small primes
+            for (Integer prime : smallPrimesList) {
+                markNonPrimesInSegment(segment, prime, low, high);
+            }
+
+            // Count the remaining primes in this segment
+            count += segment.cardinality();
+            low += segmentSize;
         }
-
-        // Count the remaining primes in this segment
-        count += segment.cardinality();
-        low += segmentSize;
+        return count;
     }
-    return count;
-}
 
-private static void markNonPrimesInSegment(BitSet segment, int prime, long low, long high) {
-    long firstMultiple = Math.max((long) prime * prime, (low + prime - 1) / prime * prime);
-    for (long j = firstMultiple; j <= high; j += prime) {
-        segment.clear((int) (j - low));
+    private static void markNonPrimesInSegment(BitSet segment, int prime, long low, long high) {
+        long firstMultiple = Math.max((long) prime * prime, (low + prime - 1) / prime * prime);
+        for (long j = firstMultiple; j <= high; j += prime) {
+            segment.clear((int) (j - low));
+        }
     }
-}
 }

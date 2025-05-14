@@ -12,7 +12,7 @@ public class MyListP06<T> extends MyListP05<T> {
     public boolean isPalindrome() {
         final long len = length();
         return LongStream.range(0, len / 2)
-                .allMatch(i -> Objects.equals(elementAt(i+1), elementAt(len+1 - 1 - i)));
+                .allMatch(i -> Objects.equals(elementAt(i + 1), elementAt(len + 1 - 1 - i)));
     }
 
 }

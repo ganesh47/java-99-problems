@@ -28,7 +28,7 @@ public class MyListP13<T> extends MyListP12<T> {
      * Consecutive duplicates are encoded as EncodedElement instances,
      * while single elements are kept as is.
      * Unlike P11, this implementation doesn't create intermediate sublists.
-     * 
+     *
      * <p>Examples:
      * <pre>
      * [a, a, a, a, b, c, c, a, a, d, e, e, e, e] → [(4 a), b, (2 c), (2 a), d, (4 e)]
@@ -51,7 +51,7 @@ public class MyListP13<T> extends MyListP12<T> {
         long count = 1;
 
         for (int i = 1; i < length(); i++) {
-            T element = elementAt(i+1);
+            T element = elementAt(i + 1);
             if (Objects.equals(currentElement, element)) {
                 count++;
             } else {
@@ -60,7 +60,7 @@ public class MyListP13<T> extends MyListP12<T> {
                 count = 1;
             }
         }
-        
+
         // Handle the last group
         addEncodedElement(result, count, currentElement);
 
@@ -70,8 +70,8 @@ public class MyListP13<T> extends MyListP12<T> {
     /**
      * Helper method to add either an encoded element or a single element to the result list.
      *
-     * @param result the list to add the element to
-     * @param count the count of consecutive occurrences
+     * @param result  the list to add the element to
+     * @param count   the count of consecutive occurrences
      * @param element the element to add
      */
     private void addEncodedElement(List<Object> result, long count, T element) {

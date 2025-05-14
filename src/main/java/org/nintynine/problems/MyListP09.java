@@ -2,9 +2,9 @@ package org.nintynine.problems;
 
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -14,7 +14,7 @@ import java.util.Objects;
  * @param <T> the type of elements in the list
  */
 public class MyListP09<T> extends MyListP08<T> {
-    
+
     /**
      * Constructs a new MyListP09 instance with the given elements.
      *
@@ -24,11 +24,11 @@ public class MyListP09<T> extends MyListP08<T> {
     public MyListP09(T... elements) {
         super(elements);
     }
-    
+
     /**
      * Packs consecutive duplicate elements into sublists.
      * Each sublist contains elements that are equal according to {@link Object#equals(Object)}.
-     * 
+     *
      * <p>Examples:
      * <pre>
      * [a, a, a, b, c, c] → [[a, a, a], [b], [c, c]]
@@ -38,7 +38,7 @@ public class MyListP09<T> extends MyListP08<T> {
      * </pre>
      *
      * @return a new MyListP09 instance where each element is a MyListP09 containing
-     *         consecutive equal elements from the original list
+     * consecutive equal elements from the original list
      * @throws NullPointerException if the list contains null elements
      */
     @SuppressWarnings("unchecked")

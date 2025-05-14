@@ -9,13 +9,14 @@ interface Streamable<T> extends Iterable<T> {
     Stream<T> stream();
 }
 
-public class MyList<T> implements Streamable<T>{
+public class MyList<T> implements Streamable<T> {
     protected T[] items;
 
     @SafeVarargs
     public MyList(T... elements) {
         this.items = Arrays.copyOf(elements, elements.length);
     }
+
     //P01 : Find the last box of a list
     public T last() {
         return Arrays.stream(items)
@@ -30,7 +31,7 @@ public class MyList<T> implements Streamable<T>{
 
     @Override
     public Stream<T> stream() {
-        return Arrays.stream (items);
+        return Arrays.stream(items);
     }
 
     @Override

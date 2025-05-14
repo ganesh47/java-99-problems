@@ -8,6 +8,13 @@ public class MyListP02<T> extends MyList<T> {
     public MyListP02(T... elements) {
         super(elements);
     }
+
+    public T lastButOne() {
+        return Arrays.stream(items)
+                .reduce(Pair.<T>empty(), Pair::shift, (a, b) -> b)
+                .secondLastOrThrow();
+    }
+
     private record Pair<T>(T first, T second) {
         static <T> Pair<T> empty() {
             return new Pair<>(null, null);
@@ -24,10 +31,4 @@ public class MyListP02<T> extends MyList<T> {
             return first;
         }
     }
-
-    public T lastButOne() {
-        return Arrays.stream(items)
-                .reduce(Pair.<T>empty(), Pair::shift, (a, b) -> b)
-                .secondLastOrThrow();
-    }
-    }
+}

@@ -1,4 +1,3 @@
-
 package org.nintynine.problems;
 
 
@@ -12,94 +11,6 @@ import java.util.function.BiFunction;
  * P46: Truth tables for logical expressions.
  */
 public class TruthP46 {
-    /**
-     * Represents a logical operation that can be performed on boolean values.
-     */
-    public enum LogicalOp {
-        AND("and", (a, b) -> a && b),
-        OR("or", (a, b) -> a || b),
-        NAND("nand", (a, b) -> !(a && b)),
-        NOR("nor", (a, b) -> !(a || b)),
-        XOR("xor", (a, b) -> a ^ b),
-        IMPL("impl", (a, b) -> !a || b),
-        EQU("equ", (a, b) -> a.booleanValue() == b.booleanValue());
-
-        @SuppressWarnings("PMD.UnusedPrivateField")
-        private final String symbol;
-        private final BiFunction<Boolean, Boolean, Boolean> operation;
-
-        LogicalOp(String symbol, BiFunction<Boolean, Boolean, Boolean> operation) {
-            this.symbol = symbol;
-            this.operation = operation;
-        }
-
-        public boolean apply(boolean a, boolean b) {
-            return operation.apply(a, b);
-        }
-
-        public static Optional<LogicalOp> fromString(String symbol) {
-            return Arrays.stream(values())
-                    .filter(op -> op.symbol.equals(symbol))
-                    .findFirst();
-        }
-    }
-
-    /**
-     * Represents a logical expression node in the expression tree.
-     */
-    private static abstract class ExpressionNode {
-        abstract boolean evaluate(boolean a, boolean b);
-    }
-
-    /**
-     * Represents a variable (A or B) in the expression.
-     */
-    private static class VariableNode extends ExpressionNode {
-        private final char variable;
-
-        public VariableNode(char variable) {
-            this.variable = variable;
-        }
-
-        @Override
-        boolean evaluate(boolean a, boolean b) {
-            return variable == 'A' ? a : b;
-        }
-    }
-
-    /**
-     * Represents an operation node with two operands.
-     */
-    private static class OperationNode extends ExpressionNode {
-        private final LogicalOp operator;
-        private final ExpressionNode left;
-        private final ExpressionNode right;
-
-        public OperationNode(LogicalOp operator, ExpressionNode left, ExpressionNode right) {
-            this.operator = operator;
-            this.left = left;
-            this.right = right;
-        }
-
-        @Override
-        boolean evaluate(boolean a, boolean b) {
-            return operator.apply(
-                    left.evaluate(a, b),
-                    right.evaluate(a, b)
-            );
-        }
-    }
-
-    /**
-     * Represents a truth table row.
-     */
-    public record TruthTableRow(boolean a, boolean b, boolean result) {
-        @Override
-        public String toString() {
-            return String.format("%5s %5s %7s", a, b, result);
-        }
-    }
-
     /**
      * Generates a truth table for a given logical expression.
      *
@@ -215,5 +126,93 @@ public class TruthP46 {
         sb.append("-------------------\n");
         table.forEach(row -> sb.append(row).append('\n'));
         return sb.toString();
+    }
+
+    /**
+     * Represents a logical operation that can be performed on boolean values.
+     */
+    public enum LogicalOp {
+        AND("and", (a, b) -> a && b),
+        OR("or", (a, b) -> a || b),
+        NAND("nand", (a, b) -> !(a && b)),
+        NOR("nor", (a, b) -> !(a || b)),
+        XOR("xor", (a, b) -> a ^ b),
+        IMPL("impl", (a, b) -> !a || b),
+        EQU("equ", (a, b) -> a.booleanValue() == b.booleanValue());
+
+        @SuppressWarnings("PMD.UnusedPrivateField")
+        private final String symbol;
+        private final BiFunction<Boolean, Boolean, Boolean> operation;
+
+        LogicalOp(String symbol, BiFunction<Boolean, Boolean, Boolean> operation) {
+            this.symbol = symbol;
+            this.operation = operation;
+        }
+
+        public static Optional<LogicalOp> fromString(String symbol) {
+            return Arrays.stream(values())
+                    .filter(op -> op.symbol.equals(symbol))
+                    .findFirst();
+        }
+
+        public boolean apply(boolean a, boolean b) {
+            return operation.apply(a, b);
+        }
+    }
+
+    /**
+     * Represents a logical expression node in the expression tree.
+     */
+    private static abstract class ExpressionNode {
+        abstract boolean evaluate(boolean a, boolean b);
+    }
+
+    /**
+     * Represents a variable (A or B) in the expression.
+     */
+    private static class VariableNode extends ExpressionNode {
+        private final char variable;
+
+        public VariableNode(char variable) {
+            this.variable = variable;
+        }
+
+        @Override
+        boolean evaluate(boolean a, boolean b) {
+            return variable == 'A' ? a : b;
+        }
+    }
+
+    /**
+     * Represents an operation node with two operands.
+     */
+    private static class OperationNode extends ExpressionNode {
+        private final LogicalOp operator;
+        private final ExpressionNode left;
+        private final ExpressionNode right;
+
+        public OperationNode(LogicalOp operator, ExpressionNode left, ExpressionNode right) {
+            this.operator = operator;
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        boolean evaluate(boolean a, boolean b) {
+            return operator.apply(
+                    left.evaluate(a, b),
+                    right.evaluate(a, b)
+            );
+        }
+    }
+
+    /**
+     * Represents a truth table row.
+     */
+    public record TruthTableRow(boolean a, boolean b, boolean result) {
+        @Override
+        public String toString() {
+            return String.format("%5s %5s %7s", a, b, result);
+        }
     }
 }

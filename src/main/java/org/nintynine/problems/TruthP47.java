@@ -12,6 +12,150 @@ import java.util.function.UnaryOperator;
  */
 public class TruthP47 {
     /**
+     * Generates a truth table for a given logical expression in infix notation.
+     *
+     * @param expression the logical expression
+     * @return list of truth table rows
+     * @throws IllegalArgumentException if expression is invalid
+     */
+    public static List<TruthTableRow> table(String expression) {
+        ExpressionNode root = parseInfixExpression(expression);
+        List<TruthTableRow> rows = new ArrayList<>();
+
+        // Generate all possible combinations of A and B
+        for (boolean a : new boolean[]{false, true}) {
+            for (boolean b : new boolean[]{false, true}) {
+                boolean result = root.evaluate(a, b);
+                rows.add(new TruthTableRow(a, b, result));
+            }
+        }
+
+        return rows;
+    }
+
+    /**
+     * Parses an infix expression and builds an expression tree.
+     */
+    private static ExpressionNode parseInfixExpression(String expression) {
+        expression = expression.trim();
+
+        // Handle single variables
+        if (expression.length() == 1) {
+            char var = expression.charAt(0);
+            if (var == 'A' || var == 'B') {
+                return new VariableNode(var);
+            }
+            throw new IllegalArgumentException("Invalid variable: " + var);
+        }
+
+        // Check if this is a parenthesized single variable - illegal
+        if (expression.startsWith("(") && expression.endsWith(")")) {
+            String inner = expression.substring(1, expression.length() - 1).trim();
+            if (inner.length() == 1 && (inner.equals("A") || inner.equals("B"))) {
+                throw new IllegalArgumentException(
+                        "Single variables should not be parenthesized: " + expression);
+            }
+        }
+
+        // Rest of the validation and parsing...
+        // Require parentheses for all non-single-variable expressions
+        if (!expression.startsWith("(") || !expression.endsWith(")")) {
+            throw new IllegalArgumentException(
+                    "Expression must be fully parenthesized: " + expression);
+        }
+
+        // Remove outer parentheses
+        expression = expression.substring(1, expression.length() - 1).trim();
+
+        // Find the main operator
+        int operatorIndex = findMainOperator(expression);
+        if (operatorIndex == -1) {
+            // Might be a NOT expression or nested expression
+            if (expression.startsWith("not ")) {
+                String operand = expression.substring(4).trim();
+                return new UnaryOperationNode(
+                        LogicalOp.NOT,
+                        parseInfixExpression(operand)
+                );
+            }
+            return parseInfixExpression(expression);
+        }
+
+        // Split into operator and operands
+        String operator = findOperatorString(expression, operatorIndex);
+        String leftExpr = expression.substring(0, operatorIndex).trim();
+        String rightExpr = expression.substring(operatorIndex + operator.length()).trim();
+
+        LogicalOp op = LogicalOp.fromString(operator)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown operator: " + operator));
+
+        if (op.isUnary()) {
+            return new UnaryOperationNode(
+                    op,
+                    parseInfixExpression(rightExpr)
+            );
+        } else {
+            return new BinaryOperationNode(
+                    op,
+                    parseInfixExpression(leftExpr),
+                    parseInfixExpression(rightExpr)
+            );
+        }
+
+        // Rest of the method remains the same...
+    }
+
+    private static int findMainOperator(String expression) {
+        int parenthesesCount = 0;
+        int lastOperatorIndex = -1;
+
+        for (int i = 0; i < expression.length(); i++) {
+            char c = expression.charAt(i);
+
+            if (c == '(') {
+                parenthesesCount++;
+            } else if (c == ')') {
+                parenthesesCount--;
+            } else if (parenthesesCount == 0) {
+                // Try to match any operator starting at current position
+                String remainingExpr = expression.substring(i);
+                for (LogicalOp op : LogicalOp.values()) {
+                    if (remainingExpr.startsWith(op.symbol) &&
+                            (i == 0 || Character.isWhitespace(expression.charAt(i - 1)))) {
+                        lastOperatorIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return lastOperatorIndex;
+    }
+
+    /**
+     * Extracts the operator string from an expression.
+     */
+    private static String findOperatorString(String expression, int startIndex) {
+        for (LogicalOp op : LogicalOp.values()) {
+            if (expression.substring(startIndex).startsWith(op.symbol)) {
+                return op.symbol;
+            }
+        }
+        throw new IllegalArgumentException("No valid operator found at position " + startIndex);
+    }
+
+    /**
+     * Formats a truth table as a string.
+     */
+    public static String formatTruthTable(List<TruthTableRow> table) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("   A     B   Result\n");
+        sb.append("-------------------\n");
+        table.forEach(row -> sb.append(row).append('\n'));
+        return sb.toString();
+    }
+
+    /**
      * Represents a logical operation that can be performed on boolean values.
      */
     public enum LogicalOp {
@@ -46,6 +190,12 @@ public class TruthP47 {
             this.isUnary = isUnary;
         }
 
+        public static Optional<LogicalOp> fromString(String symbol) {
+            return Arrays.stream(values())
+                    .filter(op -> op.symbol.equals(symbol))
+                    .findFirst();
+        }
+
         public boolean apply(boolean a, boolean b) {
             if (isUnary) {
                 throw new IllegalStateException("Cannot apply binary operation to unary operator");
@@ -62,12 +212,6 @@ public class TruthP47 {
 
         public boolean isUnary() {
             return isUnary;
-        }
-
-        public static Optional<LogicalOp> fromString(String symbol) {
-            return Arrays.stream(values())
-                    .filter(op -> op.symbol.equals(symbol))
-                    .findFirst();
         }
     }
 
@@ -143,149 +287,5 @@ public class TruthP47 {
         public String toString() {
             return String.format("%5s %5s %7s", a, b, result);
         }
-    }
-
-    /**
-     * Generates a truth table for a given logical expression in infix notation.
-     *
-     * @param expression the logical expression
-     * @return list of truth table rows
-     * @throws IllegalArgumentException if expression is invalid
-     */
-    public static List<TruthTableRow> table(String expression) {
-        ExpressionNode root = parseInfixExpression(expression);
-        List<TruthTableRow> rows = new ArrayList<>();
-
-        // Generate all possible combinations of A and B
-        for (boolean a : new boolean[]{false, true}) {
-            for (boolean b : new boolean[]{false, true}) {
-                boolean result = root.evaluate(a, b);
-                rows.add(new TruthTableRow(a, b, result));
-            }
-        }
-
-        return rows;
-    }
-
-    /**
-     * Parses an infix expression and builds an expression tree.
-     */
-    private static ExpressionNode parseInfixExpression(String expression) {
-        expression = expression.trim();
-
-        // Handle single variables
-        if (expression.length() == 1) {
-            char var = expression.charAt(0);
-            if (var == 'A' || var == 'B') {
-                return new VariableNode(var);
-            }
-            throw new IllegalArgumentException("Invalid variable: " + var);
-        }
-
-        // Check if this is a parenthesized single variable - illegal
-        if (expression.startsWith("(") && expression.endsWith(")")) {
-            String inner = expression.substring(1, expression.length() - 1).trim();
-            if (inner.length() == 1 && (inner.equals("A") || inner.equals("B"))) {
-                throw new IllegalArgumentException(
-                    "Single variables should not be parenthesized: " + expression);
-            }
-        }
-
-        // Rest of the validation and parsing...
-        // Require parentheses for all non-single-variable expressions
-        if (!expression.startsWith("(") || !expression.endsWith(")")) {
-            throw new IllegalArgumentException(
-                "Expression must be fully parenthesized: " + expression);
-        }
-
-        // Remove outer parentheses
-        expression = expression.substring(1, expression.length() - 1).trim();
-
-        // Find the main operator
-        int operatorIndex = findMainOperator(expression);
-        if (operatorIndex == -1) {
-            // Might be a NOT expression or nested expression
-            if (expression.startsWith("not ")) {
-                String operand = expression.substring(4).trim();
-                return new UnaryOperationNode(
-                        LogicalOp.NOT,
-                        parseInfixExpression(operand)
-                );
-            }
-            return parseInfixExpression(expression);
-        }
-
-        // Split into operator and operands
-        String operator = findOperatorString(expression, operatorIndex);
-        String leftExpr = expression.substring(0, operatorIndex).trim();
-        String rightExpr = expression.substring(operatorIndex + operator.length()).trim();
-
-        LogicalOp op = LogicalOp.fromString(operator)
-                    .orElseThrow(() -> new IllegalArgumentException("Unknown operator: " + operator));
-
-        if (op.isUnary()) {
-            return new UnaryOperationNode(
-                    op,
-                    parseInfixExpression(rightExpr)
-            );
-        } else {
-            return new BinaryOperationNode(
-                    op,
-                    parseInfixExpression(leftExpr),
-                    parseInfixExpression(rightExpr)
-            );
-        }
-
-        // Rest of the method remains the same...
-    }
-
-    private static int findMainOperator(String expression) {
-        int parenthesesCount = 0;
-        int lastOperatorIndex = -1;
-
-        for (int i = 0; i < expression.length(); i++) {
-            char c = expression.charAt(i);
-
-            if (c == '(') {
-                parenthesesCount++;
-            } else if (c == ')') {
-                parenthesesCount--;
-            } else if (parenthesesCount == 0) {
-                // Try to match any operator starting at current position
-                String remainingExpr = expression.substring(i);
-                for (LogicalOp op : LogicalOp.values()) {
-                    if (remainingExpr.startsWith(op.symbol) &&
-                        (i == 0 || Character.isWhitespace(expression.charAt(i - 1)))) {
-                        lastOperatorIndex = i;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return lastOperatorIndex;
-    }
-
-    /**
-     * Extracts the operator string from an expression.
-     */
-    private static String findOperatorString(String expression, int startIndex) {
-        for (LogicalOp op : LogicalOp.values()) {
-            if (expression.substring(startIndex).startsWith(op.symbol)) {
-                return op.symbol;
-            }
-        }
-        throw new IllegalArgumentException("No valid operator found at position " + startIndex);
-    }
-
-    /**
-     * Formats a truth table as a string.
-     */
-    public static String formatTruthTable(List<TruthTableRow> table) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("   A     B   Result\n");
-        sb.append("-------------------\n");
-        table.forEach(row -> sb.append(row).append('\n'));
-        return sb.toString();
     }
 }

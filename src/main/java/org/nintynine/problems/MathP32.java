@@ -4,7 +4,8 @@ package org.nintynine.problems;
  * P32: Determine the greatest common divisor of two positive integer numbers using Euclid's algorithm.
  */
 public class MathP32 {
-    private MathP32() {}
+    private MathP32() {
+    }
 
     /**
      * Calculates the Greatest Common Divisor (GCD) of two numbers using Euclid's algorithm.

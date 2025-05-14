@@ -29,7 +29,7 @@ public class MyListP22<T> extends MyListP21<T> {
      * </pre>
      *
      * @param start the starting value
-     * @param end the ending value
+     * @param end   the ending value
      * @return a new MyListP22 containing the range of integers
      */
     public static MyListP22<Integer> range(int start, int end) {

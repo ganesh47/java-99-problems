@@ -22,7 +22,7 @@ public class MyListP11<T> extends MyListP10<T> {
      * Performs modified run-length encoding on the list.
      * Single elements are kept as is, while consecutive duplicates
      * are encoded as EncodedElement instances.
-     * 
+     *
      * <p>Examples:
      * <pre>
      * [a, a, a, a, b, c, c, a, a, d, e, e, e, e] → [(4 a), b, (2 c), (2 a), d, (4 e)]
@@ -37,7 +37,7 @@ public class MyListP11<T> extends MyListP10<T> {
      */
     public MyListP11<Object> encodeModified() {
         MyListP09<MyListP09<T>> packed = pack();
-        
+
         Object[] encoded = packed.stream()
                 .map(sublist -> {
                     if (sublist.length() == 1) {
@@ -47,7 +47,7 @@ public class MyListP11<T> extends MyListP10<T> {
                     }
                 })
                 .toArray();
-        
+
         return new MyListP11<>(encoded);
     }
 }

@@ -20,16 +20,6 @@ public class MyListP28<T> extends MyListP27<MyListP28<T>> {
     }
 
     @SuppressWarnings("unchecked")
-    private MyListP28<T>[] createItemsArray(T[] elements) {
-        MyListP28<T>[] result = (MyListP28<T>[]) new MyListP28[elements.length];
-        for (int i = 0; i < elements.length; i++) {
-            T[] singleElement = (T[]) new Object[]{elements[i]};
-            result[i] = new MyListP28<>(singleElement, true);
-        }
-        return result;
-    }
-
-    @SuppressWarnings("unchecked")
     private MyListP28(T[] elements, boolean isSublist) {
         super();
         if (isSublist && elements.length == 1) {
@@ -44,17 +34,28 @@ public class MyListP28<T> extends MyListP27<MyListP28<T>> {
             };
         }
     }
+
     /**
      * Creates a list of lists from the given sublists.
      *
      * @param sublists array of sublists to initialize with
-     * @param <T> the type of elements in the sublists
+     * @param <T>      the type of elements in the sublists
      * @return new MyListP28 containing the sublists
      */
     @SafeVarargs
     public static <T> MyListP28<T> of(MyListP28<T>... sublists) {
         MyListP28<T> result = new MyListP28<>();
         result.items = sublists;
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private MyListP28<T>[] createItemsArray(T[] elements) {
+        MyListP28<T>[] result = (MyListP28<T>[]) new MyListP28[elements.length];
+        for (int i = 0; i < elements.length; i++) {
+            T[] singleElement = (T[]) new Object[]{elements[i]};
+            result[i] = new MyListP28<>(singleElement, true);
+        }
         return result;
     }
 

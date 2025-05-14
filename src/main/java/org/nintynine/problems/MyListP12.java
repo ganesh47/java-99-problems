@@ -26,7 +26,7 @@ public class MyListP12<T> extends MyListP11<T> {
      * Decodes a run-length encoded list, supporting both standard (P10) and modified (P11) encodings.
      * For modified encoding, single elements are represented directly, while repeated elements
      * are encoded as EncodedElement instances.
-     * 
+     *
      * <p>Examples:
      * <pre>
      * [(4 a), b, (2 c), (2 a), d, (4 e)] → [a, a, a, a, b, c, c, a, a, d, e, e, e, e]
@@ -43,7 +43,7 @@ public class MyListP12<T> extends MyListP11<T> {
     @SuppressWarnings("unchecked")
     public <U> MyListP12<U> decode() {
         List<U> decoded = new ArrayList<>();
-        
+
         for (T item : items) {
             if (item instanceof MyListP10.EncodedElement<?> encoded) {
                 U element = (U) encoded.element;
@@ -54,7 +54,7 @@ public class MyListP12<T> extends MyListP11<T> {
                 decoded.add((U) item);
             }
         }
-        
+
         return new MyListP12<>(decoded.toArray(size -> (U[]) Array.newInstance(
                 decoded.isEmpty() ? Object.class : decoded.getFirst().getClass(), size)));
     }

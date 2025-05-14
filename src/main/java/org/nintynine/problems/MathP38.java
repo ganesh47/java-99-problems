@@ -1,4 +1,3 @@
-
 package org.nintynine.problems;
 
 import java.util.ArrayList;
@@ -9,49 +8,6 @@ import java.util.List;
  * Compares performance and operation counts between P34 (primitive) and P37 (improved) methods.
  */
 public class MathP38 {
-    /**
-     * Represents performance metrics for a totient calculation method
-     */
-    public record PerformanceMetrics(
-            String methodName,
-            long result,
-            long timeNanos,
-            long arithmeticOps,
-            long comparisonOps,
-            long methodCalls
-    ) {
-        @Override
-        public String toString() {
-            return String.format("""
-                Method: %s %n
-                Result: %d %n
-                Time: %,d ns %n
-                Arithmetic operations: %,d %n
-                Comparisons: %,d %n
-                Method calls: %,d %n
-                """.strip(),
-                    methodName, result, timeNanos,
-                    arithmeticOps, comparisonOps, methodCalls);
-        }
-    }
-
-    /**
-     * Counter class to track operations during calculation
-     */
-    public static class OperationCounter {
-        private long arithmeticOps = 0;
-        private long comparisonOps = 0;
-        private long methodCalls = 0;
-
-        public void countArithmetic() { arithmeticOps++; }
-        public void countComparison() { comparisonOps++; }
-        public void countMethodCall() { methodCalls++; }
-
-        public long getArithmeticOps() { return arithmeticOps; }
-        public long getComparisonOps() { return comparisonOps; }
-        public long getMethodCalls() { return methodCalls; }
-    }
-
     /**
      * Instrumented version of primitive totient calculation (P34 style)
      */
@@ -242,5 +198,64 @@ public class MathP38 {
         ));
 
         return results;
+    }
+
+    /**
+     * Represents performance metrics for a totient calculation method
+     */
+    public record PerformanceMetrics(
+            String methodName,
+            long result,
+            long timeNanos,
+            long arithmeticOps,
+            long comparisonOps,
+            long methodCalls
+    ) {
+        @Override
+        public String toString() {
+            return String.format("""
+                            Method: %s %n
+                            Result: %d %n
+                            Time: %,d ns %n
+                            Arithmetic operations: %,d %n
+                            Comparisons: %,d %n
+                            Method calls: %,d %n
+                            """.strip(),
+                    methodName, result, timeNanos,
+                    arithmeticOps, comparisonOps, methodCalls);
+        }
+    }
+
+    /**
+     * Counter class to track operations during calculation
+     */
+    public static class OperationCounter {
+        private long arithmeticOps = 0;
+        private long comparisonOps = 0;
+        private long methodCalls = 0;
+
+        public void countArithmetic() {
+            arithmeticOps++;
+        }
+
+        public void countComparison() {
+            comparisonOps++;
+        }
+
+        public void countMethodCall() {
+            methodCalls++;
+        }
+
+        public long getArithmeticOps() {
+            return arithmeticOps;
+        }
+
+        public long getComparisonOps() {
+            return comparisonOps;
+        }
+
+        public long getMethodCalls() {
+            return methodCalls;
+        }
     }
 }

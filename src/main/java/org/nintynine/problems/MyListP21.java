@@ -27,7 +27,7 @@ public class MyListP21<T> extends MyListP20<T> {
      * [a] insertAt("x", 1) → [x, a]
      * </pre>
      *
-     * @param element the element to insert
+     * @param element  the element to insert
      * @param position the position where to insert (1-based)
      * @return a new MyListP21 with the element inserted
      * @throws IllegalArgumentException if the position is invalid

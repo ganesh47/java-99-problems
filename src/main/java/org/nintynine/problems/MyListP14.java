@@ -23,7 +23,7 @@ public class MyListP14<T> extends MyListP13<T> {
     /**
      * Duplicates each element in the list.
      * Each element appears exactly twice in the resulting list.
-     * 
+     *
      * <p>Examples:
      * <pre>
      * [a, b, c, d] → [a, a, b, b, c, c, d, d]

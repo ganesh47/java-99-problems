@@ -4,7 +4,8 @@ package org.nintynine.problems;
  * P31: Determine whether a given integer number is prime.
  */
 public class MathP31 {
-    private MathP31() {}
+    private MathP31() {
+    }
 
     /**
      * Determines if a number is prime.

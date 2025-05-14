@@ -30,7 +30,7 @@ public class MyListP18<T> extends MyListP17<T> {
      * </pre>
      *
      * @param startIndex the starting index (1-based)
-     * @param endIndex the ending index (1-based)
+     * @param endIndex   the ending index (1-based)
      * @return a new MyListP18 containing the slice
      * @throws IllegalArgumentException if indices are invalid
      */

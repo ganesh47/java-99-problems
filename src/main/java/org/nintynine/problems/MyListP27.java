@@ -23,6 +23,39 @@ public class MyListP27<T> extends MyListP26<T> {
     }
 
     /**
+     * Calculates multinomial coefficient for given group sizes.
+     *
+     * @param n total number of elements
+     * @param k array of group sizes
+     * @return multinomial coefficient
+     */
+    public static long multinomialCoefficient(int n, int... k) {
+        // Validate input
+        int sum = Arrays.stream(k).sum();
+        if (sum != n) {
+            throw new IllegalArgumentException(
+                    "Sum of group sizes must equal total size"
+            );
+        }
+
+        long result = 1;
+        int denominator = 1;
+
+        // Calculate n!/(k1!*k2!*...km!)
+        for (int i = 1; i <= n; i++) {
+            result *= i;
+        }
+
+        for (int size : k) {
+            for (int i = 1; i <= size; i++) {
+                denominator *= i;
+            }
+        }
+
+        return result / denominator;
+    }
+
+    /**
      * Generates all possible ways to group 9 people into groups of 2, 3, and 4.
      *
      * @return list of all possible groupings
@@ -81,46 +114,13 @@ public class MyListP27<T> extends MyListP26<T> {
             // Create a new remaining list excluding chosen elements
             List<T> newRemaining = new ArrayList<>(remaining);
             for (int i = 0; i < combination.length(); i++) {
-                newRemaining.remove(combination.elementAt(1+i));
+                newRemaining.remove(combination.elementAt(1 + i));
             }
 
             // Add the current combination to groups and recurse
-            current.add(new MyListP27<>(combination.items) );
+            current.add(new MyListP27<>(combination.items));
             generateGroups(newRemaining, remainingSizes, current, result);
             current.removeLast();
         }
-    }
-
-    /**
-     * Calculates multinomial coefficient for given group sizes.
-     *
-     * @param n total number of elements
-     * @param k array of group sizes
-     * @return multinomial coefficient
-     */
-    public static long multinomialCoefficient(int n, int... k) {
-        // Validate input
-        int sum = Arrays.stream(k).sum();
-        if (sum != n) {
-            throw new IllegalArgumentException(
-                    "Sum of group sizes must equal total size"
-            );
-        }
-
-        long result = 1;
-        int denominator = 1;
-
-        // Calculate n!/(k1!*k2!*...km!)
-        for (int i = 1; i <= n; i++) {
-            result *= i;
-        }
-
-        for (int size : k) {
-            for (int i = 1; i <= size; i++) {
-                denominator *= i;
-            }
-        }
-
-        return result / denominator;
     }
 }

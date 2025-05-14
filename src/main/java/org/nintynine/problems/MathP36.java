@@ -1,4 +1,3 @@
-
 package org.nintynine.problems;
 
 import java.util.ArrayList;
@@ -10,21 +9,11 @@ import java.util.List;
  */
 public class MathP36 {
     /**
-     * Represents a prime factor and its multiplicity (how many times it appears).
-     */
-    public record PrimeFactor(long factor, int multiplicity) {
-        @Override
-        public String toString() {
-            return "(" + factor + " " + multiplicity + ")";
-        }
-    }
-
-    /**
      * Determines the prime factors of a given number and their multiplicities.
      * Returns a list of PrimeFactor records, each containing a prime factor
      * and how many times it appears in the factorization.
      * Example:
-     * primeFactorsMult(315) returns [(3,2), (5,1), (7,1)] 
+     * primeFactorsMult(315) returns [(3,2), (5,1), (7,1)]
      * because 315 = 3² × 5 × 7
      *
      * @param n the number to factorize
@@ -83,5 +72,15 @@ public class MathP36 {
         return factors.stream()
                 .mapToLong(f -> (long) Math.pow(f.factor, f.multiplicity))
                 .reduce(1L, (a, b) -> a * b);
+    }
+
+    /**
+     * Represents a prime factor and its multiplicity (how many times it appears).
+     */
+    public record PrimeFactor(long factor, int multiplicity) {
+        @Override
+        public String toString() {
+            return "(" + factor + " " + multiplicity + ")";
+        }
     }
 }

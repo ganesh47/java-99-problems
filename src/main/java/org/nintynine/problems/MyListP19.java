@@ -57,10 +57,10 @@ public class MyListP19<T> extends MyListP18<T> {
         T[] rotated = (T[]) new Object[Math.toIntExact(length())];
 
         // Copy the second part
-        LongStream.iterate(0, i -> i < parts.second().length(), i -> i + 1).forEachOrdered(i -> rotated[Math.toIntExact(i)] = parts.second().elementAt(i+1));
+        LongStream.iterate(0, i -> i < parts.second().length(), i -> i + 1).forEachOrdered(i -> rotated[Math.toIntExact(i)] = parts.second().elementAt(i + 1));
 
         // Copy the first part
-        LongStream.iterate(0, i -> i < parts.first().length(), i -> i + 1).forEachOrdered(i -> rotated[Math.toIntExact(parts.second().length() + i)] = parts.first().elementAt(i+1));
+        LongStream.iterate(0, i -> i < parts.first().length(), i -> i + 1).forEachOrdered(i -> rotated[Math.toIntExact(parts.second().length() + i)] = parts.first().elementAt(i + 1));
 
         return new MyListP19<>(rotated);
     }

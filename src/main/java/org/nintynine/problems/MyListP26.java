@@ -21,6 +21,29 @@ public class MyListP26<T> extends MyListP25<T> {
     }
 
     /**
+     * Calculates the number of possible combinations (n choose k).
+     *
+     * @param n total number of elements
+     * @param k number of elements to choose
+     * @return number of possible combinations
+     */
+    public static long binomialCoefficient(int n, int k) {
+        if (k < 0 || k > n) return 0;
+        if (k == 0 || k == n) return 1;
+
+        // Use symmetry to optimize calculation
+        if (k > n - k) {
+            k = n - k;
+        }
+
+        long result = 1;
+        for (int i = 0; i < k; i++) {
+            result = result * (n - i) / (i + 1);
+        }
+        return result;
+    }
+
+    /**
      * Generates all combinations of K elements from the list.
      *
      * <p>Examples:
@@ -47,29 +70,6 @@ public class MyListP26<T> extends MyListP25<T> {
         return result;
     }
 
-    /**
-     * Calculates the number of possible combinations (n choose k).
-     *
-     * @param n total number of elements
-     * @param k number of elements to choose
-     * @return number of possible combinations
-     */
-    public static long binomialCoefficient(int n, int k) {
-        if (k < 0 || k > n) return 0;
-        if (k == 0 || k == n) return 1;
-
-        // Use symmetry to optimize calculation
-        if (k > n - k) {
-            k = n - k;
-        }
-
-        long result = 1;
-        for (int i = 0; i < k; i++) {
-            result = result * (n - i) / (i + 1);
-        }
-        return result;
-    }
-
     @SuppressWarnings("unchecked")
     private void generateCombinations(int start, int k, List<T> current,
                                       List<MyListP26<T>> result) {
@@ -81,7 +81,7 @@ public class MyListP26<T> extends MyListP25<T> {
 
         // For each remaining position, try to include the element at that position
         for (int i = start; i <= length() - k; i++) {
-            current.add(elementAt(1+i));
+            current.add(elementAt(1 + i));
             generateCombinations(i + 1, k - 1, current, result);
             current.removeLast();
         }
