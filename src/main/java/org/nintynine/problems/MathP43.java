@@ -37,6 +37,7 @@ public class MathP43 {
      * Internal method to generate Gray code without caching.
      * Uses recursive approach with concatenation.
      */
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private static List<String> generateGrayCode(int n) {
         if (n == 1) {
             return List.of("0", "1");
