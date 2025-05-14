@@ -1,6 +1,9 @@
 package org.nintynine.problems;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class TruthP55 {
     private TruthP55() {}
