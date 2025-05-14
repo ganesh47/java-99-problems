@@ -48,7 +48,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
           mvn sonar:sonar
-          -Dsonar.projectKey=ganesh47:java-99-problems
+          -Dsonar.projectKey=ganesh47_java-99-problems
           -Dsonar.organization=ganesh47
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=$SONAR_TOKEN
