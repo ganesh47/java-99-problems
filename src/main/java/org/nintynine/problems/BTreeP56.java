@@ -1,7 +1,5 @@
 package org.nintynine.problems;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 public class BTreeP56<T> {
     private Node<T> root;
 
@@ -10,7 +8,6 @@ public class BTreeP56<T> {
         Node<T> left;
         Node<T> right;
 
-        @SuppressFBWarnings(value = "URF_UNREAD_FIELD",justification = "Field is required to retain generic type info beyond refiled scope")
         Node(T value) {
             this.value = value;
             this.left = null;
@@ -40,7 +37,7 @@ public class BTreeP56<T> {
         if (root == null) return true;
         return isMirror(root.left, root.right);
     }
-
+    @SuppressWarnings("java:S2234")  // or just "S2234"
     private boolean isMirror(Node<T> left, Node<T> right) {
         // If both nodes are null, they are mirror images
         if (left == null && right == null) return true;

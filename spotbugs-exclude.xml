@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <Match>
+        <!-- The Field is used to retain reified type info on a field and is not UNREAD -->
+        <Class name="org.nintynine.problems.BTreeP56$Node"/>
+        <Bug pattern="URF_UNREAD_FIELD"/>
+    </Match>
+</FindBugsFilter>
