@@ -1,5 +1,7 @@
 package org.nintynine.problems;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class BTreeP56<T> {
     private Node<T> root;
 
@@ -8,6 +10,7 @@ public class BTreeP56<T> {
         Node<T> left;
         Node<T> right;
 
+        @SuppressFBWarnings(value = "URF_UNREAD_FIELD",justification = "Field is required to retain generic type info beyond refiled scope")
         Node(T value) {
             this.value = value;
             this.left = null;
