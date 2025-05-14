@@ -47,8 +47,8 @@ bash ./mvnw test
 Each problem's implementation and its corresponding test class can be studied independently, making it easy to focus on specific concepts or challenges.
 
 
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ganesh47_java-99-problems)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ganesh47_java-99-problems)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)  
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)  
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)  
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)  
+[![Coverage](https://img.shields.io/sonar/coverage/ganesh47_java-99-problems?server=https%3A%2F%2Fsonarcloud.io&style=plastic)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)
