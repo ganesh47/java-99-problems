@@ -6,6 +6,7 @@ package org.nintynine.problems;
  * Two numbers are coprime (or relatively prime) if their greatest common divisor equals 1.
  */
 public class MathP33 {
+    private MathP33() {}
     /**
      * Determines if two numbers are coprime.
      * Numbers are coprime if their greatest common divisor is 1.

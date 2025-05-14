@@ -9,6 +9,7 @@ import java.util.List;
  * phi(m) = (p1 - 1) * p1^(m1 - 1) * (p2 - 1) * p2^(m2 - 1) * ...
  */
 public class MathP37 {
+    private MathP37() {}
     /**
      * Calculates Euler's totient function phi(m) using prime factorization.
      * This is more efficient than the primitive method from P34.
@@ -78,7 +79,8 @@ public class MathP37 {
      * @return array containing [primitive_time, improved_time] in nanoseconds
      */
     public static long[] comparePerformance(long m) {
-        long startTime, endTime;
+        long startTime;
+        long endTime;
         long[] times = new long[2];
 
         // Test primitive method (P34)

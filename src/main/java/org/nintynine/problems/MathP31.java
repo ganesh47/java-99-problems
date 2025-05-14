@@ -4,6 +4,8 @@ package org.nintynine.problems;
  * P31: Determine whether a given integer number is prime.
  */
 public class MathP31 {
+    private MathP31() {}
+
     /**
      * Determines if a number is prime.
      * A prime number is a natural number greater than 1 that is only divisible by 1 and itself.

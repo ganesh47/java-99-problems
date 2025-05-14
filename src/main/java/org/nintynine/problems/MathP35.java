@@ -8,6 +8,7 @@ import java.util.List;
  * Returns a flat list containing the prime factors in ascending order.
  */
 public class MathP35 {
+    private MathP35() {}
     /**
      * Determines the prime factors of a given number.
      * Returns a list of prime factors in ascending order, including duplicates

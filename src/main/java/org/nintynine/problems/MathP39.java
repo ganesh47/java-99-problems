@@ -9,6 +9,7 @@ import java.util.List;
  * P39: Generate a list of prime numbers in a given range.
  */
 public class MathP39 {
+    private MathP39() {}
     /**
      * Returns a list of all prime numbers in the range [start, end] inclusive.
      * Uses the Sieve of Eratosthenes algorithm optimized for ranges.
@@ -84,11 +85,21 @@ public class MathP39 {
         int segmentSize = 32768; // Size of each segment
         List<Long> primes = new ArrayList<>();
 
-        // Step 1: Generate small primes up to sqrt(end) using regular sieve
+        // Step 1: Generate small primes up to sqrt(end)
+        List<Integer> smallPrimesList = generateSmallPrimes(end);
+        addPrimesInRange(start, smallPrimesList, primes);
+
+        // Step 2: Process segments and collect primes
+        sieveSegments(start, end, segmentSize, smallPrimesList, primes);
+
+        return primes;
+    }
+
+    // Generates small primes up to sqrt(end)
+    private static List<Integer> generateSmallPrimes(long end) {
         int sqrt = (int) Math.sqrt(end);
         BitSet smallPrimes = new BitSet(sqrt + 1);
         smallPrimes.set(2, sqrt + 1); // Set all bits to true initially
-
         for (int i = 2; i * i <= sqrt; i++) {
             if (smallPrimes.get(i)) {
                 for (int j = i * i; j <= sqrt; j += i) {
@@ -96,47 +107,55 @@ public class MathP39 {
                 }
             }
         }
-
-        // Get list of small primes
         List<Integer> smallPrimesList = new ArrayList<>();
         for (int i = 2; i <= sqrt; i++) {
             if (smallPrimes.get(i)) {
                 smallPrimesList.add(i);
-                if (i >= start) {
-                    primes.add((long) i);
-                }
             }
         }
+        return smallPrimesList;
+    }
 
-        // Step 2: Process segments
+    // Add small primes in range to the result
+    private static void addPrimesInRange(long start, List<Integer> smallPrimesList, List<Long> primes) {
+        for (Integer prime : smallPrimesList) {
+            if (prime >= start) {
+                primes.add((long) prime);
+            }
+        }
+    }
+
+    // Processes segments and collects primes from them
+    private static void sieveSegments(long start, long end, int segmentSize, List<Integer> smallPrimesList, List<Long> primes) {
+        long low = Math.max(start, (long) Math.sqrt(end) + 1);
         BitSet segment = new BitSet(segmentSize);
-        long low = Math.max(start, sqrt + 1L);
 
         while (low <= end) {
             long high = Math.min(low + segmentSize - 1, end);
-            segment.set(0, (int)(high - low + 1)); // Set all bits to true
-
-            // Sieve segment using small primes
-            for (int prime : smallPrimesList) {
-                long firstMultiple = Math.max((long) prime * prime,
-                        (low + prime - 1) / prime * prime);
-
-                for (long j = firstMultiple; j <= high; j += prime) {
-                    segment.clear((int)(j - low));
-                }
-            }
-
-            // Collect primes from segment
-            for (int i = 0; i < high - low + 1; i++) {
-                if (segment.get(i)) {
-                    primes.add(low + i);
-                }
-            }
-
+            segment.set(0, (int) (high - low + 1)); // Set all bits to true initially
+            sieveSegment(low, high, smallPrimesList, segment);
+            collectPrimesFromSegment(low, high, segment, primes);
             low += segmentSize;
         }
+    }
 
-        return primes;
+    // Sieves a single segment using small primes
+    private static void sieveSegment(long low, long high, List<Integer> smallPrimesList, BitSet segment) {
+        for (Integer prime : smallPrimesList) {
+            long firstMultiple = Math.max((long) prime * prime, (low + prime - 1) / prime * prime);
+            for (long j = firstMultiple; j <= high; j += prime) {
+                segment.clear((int) (j - low));
+            }
+        }
+    }
+
+    // Collect primes from the sieved segment
+    private static void collectPrimesFromSegment(long low, long high, BitSet segment, List<Long> primes) {
+        for (int i = 0; i < high - low + 1; i++) {
+            if (segment.get(i)) {
+                primes.add(low + i);
+            }
+        }
     }
 
     /**
@@ -169,54 +188,79 @@ public class MathP39 {
      */
     private static long countPrimesSegmentedSieve(long start, long end) {
         int segmentSize = 32768;
-        long count = 0;
 
-        // Count small primes up to sqrt(end)
+        // Step 1: Calculate all small primes up to sqrt(end)
         int sqrt = (int) Math.sqrt(end);
-        BitSet smallPrimes = new BitSet(sqrt + 1);
-        smallPrimes.set(2, sqrt + 1);
+        BitSet smallPrimes = generateSmallPrimes(sqrt);
 
-        for (int i = 2; i * i <= sqrt; i++) {
-            if (smallPrimes.get(i)) {
-                for (int j = i * i; j <= sqrt; j += i) {
-                    smallPrimes.clear(j);
+        // Step 2: Convert small primes into a list, and count primes in the range of [start, end]
+        List<Integer> smallPrimesList = new ArrayList<>();
+        long count = collectSmallPrimesAndCountInRange(start, end, sqrt, smallPrimes, smallPrimesList);
+
+        // Step 3: Process larger primes in segments
+        long low = Math.max(start, sqrt + 1L);
+        count += countPrimesInLargeSegments(end, segmentSize, smallPrimesList, low);
+
+        return count;
+    }
+
+    private static BitSet generateSmallPrimes(int limit) {
+        BitSet primes = new BitSet(limit + 1);
+        primes.set(2, limit + 1); // Assume all numbers >= 2 are primes
+
+        for (int i = 2; i * i <= limit; i++) {
+            if (primes.get(i)) {
+                for (int j = i * i; j <= limit; j += i) {
+                    primes.clear(j);
                 }
             }
         }
+        return primes;
+    }
 
-        // Count small primes in range and collect them for sieving
-        List<Integer> smallPrimesList = new ArrayList<>();
+    private static long collectSmallPrimesAndCountInRange(
+            long start, long end, int sqrt, BitSet smallPrimes, List<Integer> smallPrimesList) {
+        long count = 0;
         for (int i = 2; i <= sqrt; i++) {
             if (smallPrimes.get(i)) {
                 smallPrimesList.add(i);
+                // Check if the prime is within the range [start, end]
                 if (i >= start && i <= end) {
                     count++;
                 }
             }
         }
+        return count;
+    }
 
-        // Process segments
+    private static long countPrimesInLargeSegments(
+            long end, int segmentSize, List<Integer> smallPrimesList, long low) {
+        long count = 0;
         BitSet segment = new BitSet(segmentSize);
-        long low = Math.max(start, sqrt + 1L);
 
         while (low <= end) {
+            // Determine the high boundary for current segment
             long high = Math.min(low + segmentSize - 1, end);
-            segment.set(0, (int)(high - low + 1));
 
-            for (int prime : smallPrimesList) {
-                long firstMultiple = Math.max((long) prime * prime,
-                        (low + prime - 1) / prime * prime);
+            // Mark all numbers in the segment as prime initially
+            segment.set(0, (int) (high - low + 1));
 
-                for (long j = firstMultiple; j <= high; j += prime) {
-                    segment.clear((int)(j - low));
-                }
+            // Eliminate non-primes using small primes
+            for (Integer prime : smallPrimesList) {
+                markNonPrimesInSegment(segment, prime, low, high);
             }
 
-            // Count primes in segment
+            // Count the remaining primes in this segment
             count += segment.cardinality();
             low += segmentSize;
         }
-
         return count;
+    }
+
+    private static void markNonPrimesInSegment(BitSet segment, int prime, long low, long high) {
+        long firstMultiple = Math.max((long) prime * prime, (low + prime - 1) / prime * prime);
+        for (long j = firstMultiple; j <= high; j += prime) {
+            segment.clear((int) (j - low));
+        }
     }
 }
