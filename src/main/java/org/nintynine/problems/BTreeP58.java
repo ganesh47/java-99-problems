@@ -18,7 +18,7 @@ public class BTreeP58 {
 
         @Override
         public int hashCode() {
-            return super.hashCode();
+            return Objects.hash(left, right);
         }
 
         @Override
