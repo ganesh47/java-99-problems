@@ -3,6 +3,7 @@
 This is a Java implementation of the famous "99 Problems" collection, originally written in Prolog and Lisp. The problems are designed to help developers learn programming concepts through practical exercises.
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=ganesh47_java-99-problems)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)  
+[![CI](https://github.com/ganesh47/java-99-problems/actions/workflows/build.yml/badge.svg)](https://github.com/ganesh47/java-99-problems/actions/workflows/build.yml) 
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems) 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)  
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ganesh47_java-99-problems&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ganesh47_java-99-problems)
