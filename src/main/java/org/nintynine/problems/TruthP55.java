@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("ClassEscapesDefinedScope")
 public class TruthP55 {
     private TruthP55() {}
     static class Node {
@@ -48,7 +49,7 @@ public class TruthP55 {
      * @param n number of nodes
      * @return list of all possible balanced trees
      */
-    public static List<Node> cbalTree(int n) {
+    protected static List<Node> cbalTree(int n) {
         if (n < 1) {
             return Collections.emptyList();
         }

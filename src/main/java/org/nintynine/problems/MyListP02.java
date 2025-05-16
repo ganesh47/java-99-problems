@@ -11,7 +11,7 @@ public class MyListP02<T> extends MyList<T> {
 
     public T lastButOne() {
         return Arrays.stream(items)
-                .reduce(Pair.<T>empty(), Pair::shift, (a, b) -> b)
+                .reduce(Pair.<T>empty(), Pair::shift, (_, b) -> b)
                 .secondLastOrThrow();
     }
 
