@@ -8,14 +8,14 @@ class BTreeP58Test {
 
     @Test
     void testSymCbalTreesWithOneNode() {
-        List<BTreeP58.Node> trees = BTreeP58.symCbalTrees(1);
+        List<BTreeP58.BTreeP58Node> trees = BTreeP58.symCbalTrees(1);
         assertEquals(1, trees.size());
         assertEquals("X", trees.getFirst().toString());
     }
 
     @Test
     void testSymCbalTreesWithFiveNodes() {
-        List<BTreeP58.Node> trees = BTreeP58.symCbalTrees(5);
+        List<BTreeP58.BTreeP58Node> trees = BTreeP58.symCbalTrees(5);
         assertEquals(2, trees.size());
         assertTrue(trees.stream()
                 .map(Object::toString)
@@ -25,7 +25,7 @@ class BTreeP58Test {
 
     @Test
     void testSymCbalTreesWithEvenNodes() {
-        List<BTreeP58.Node> trees = BTreeP58.symCbalTrees(6);
+        List<BTreeP58.BTreeP58Node> trees = BTreeP58.symCbalTrees(6);
         assertEquals(0, trees.size());
     }
 

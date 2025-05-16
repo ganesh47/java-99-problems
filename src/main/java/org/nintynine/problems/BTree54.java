@@ -9,10 +9,10 @@ public class BTree54 {
     /**
      * Represents a node in the binary tree expression
      */
-    public static class Node {
+    public static class BTree54Node {
         private final String value;
-        private final Node left;
-        private final Node right;
+        private final BTree54Node left;
+        private final BTree54Node right;
 
         /**
          * Constructs a binary tree node
@@ -20,7 +20,7 @@ public class BTree54 {
          * @param left Left child node or null
          * @param right Right child node or null
          */
-        public Node(String value, Node left, Node right) {
+        public BTree54Node(String value, BTree54Node left, BTree54Node right) {
             this.value = Objects.requireNonNull(value, "Node value cannot be null");
             this.left = left;
             this.right = right;
@@ -30,17 +30,17 @@ public class BTree54 {
          * Creates a leaf node with no children
          * @param value The value at this node
          */
-        public Node(String value) {
+        public BTree54Node(String value) {
             this(value, null, null);
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof Node node)) return false;
-            return Objects.equals(value, node.value) &&
-                   Objects.equals(left, node.left) &&
-                   Objects.equals(right, node.right);
+            if (!(o instanceof BTree54Node bTree54Node)) return false;
+            return Objects.equals(value, bTree54Node.value) &&
+                   Objects.equals(left, bTree54Node.left) &&
+                   Objects.equals(right, bTree54Node.right);
         }
 
         @Override
@@ -112,7 +112,7 @@ public static boolean isTree(String expression) {
      * @return The root node of the parsed tree
      * @throws IllegalArgumentException if the expression is invalid
      */
-    public static Node parseTree(String expression) {
+    public static BTree54Node parseTree(String expression) {
         if (expression == null) {
             throw new IllegalArgumentException("Expression cannot be null");
         }
@@ -122,7 +122,7 @@ public static boolean isTree(String expression) {
         // Handle single value case
         if (!expression.startsWith("(")) {
             if (isValidValue(expression)) {
-                return new Node(expression);
+                return new BTree54Node(expression);
             }
             throw new IllegalArgumentException("Invalid value: " + expression);
         }
@@ -147,12 +147,13 @@ public static boolean isTree(String expression) {
             throw new IllegalArgumentException("Invalid node value");
         }
 
-        Node left = "nil".equals(leftExpr) ? null : parseTree(leftExpr);
-        Node right = "nil".equals(rightExpr) ? null : parseTree(rightExpr);
+        BTree54Node left = "nil".equals(leftExpr) ? null : parseTree(leftExpr);
+        BTree54Node right = "nil".equals(rightExpr) ? null : parseTree(rightExpr);
 
-        return new Node(value, left, right);
+        return new BTree54Node(value, left, right);
     }
 
+@SuppressWarnings("java:S5852")
 private static String[] splitExpression(String expr) {
     // Add space validation
     if (expr.contains(")(") || expr.matches(".*\\w\\(.*") || expr.matches(".*\\)\\w.*")) {

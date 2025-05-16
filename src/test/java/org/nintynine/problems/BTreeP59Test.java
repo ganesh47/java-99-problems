@@ -8,21 +8,21 @@ class BTreeP59Test {
 
     @Test
     void testHbalTreesHeight0() {
-        List<BTreeP59.Node> trees = BTreeP59.hbalTrees(0);
+        List<BTreeP59.BTree59Node> trees = BTreeP59.hbalTrees(0);
         assertEquals(1, trees.size());
         assertNull(trees.getFirst());
     }
 
     @Test
     void testHbalTreesHeight1() {
-        List<BTreeP59.Node> trees = BTreeP59.hbalTrees(1);
+        List<BTreeP59.BTree59Node> trees = BTreeP59.hbalTrees(1);
         assertEquals(1, trees.size());
         assertEquals("X", trees.getFirst().toString());
     }
 
     @Test
     void testHbalTreesHeight2() {
-        List<BTreeP59.Node> trees = BTreeP59.hbalTrees(2);
+        List<BTreeP59.BTree59Node> trees = BTreeP59.hbalTrees(2);
         assertEquals(3, trees.size());
         assertTrue(trees.stream()
                 .map(Object::toString)
@@ -31,7 +31,7 @@ class BTreeP59Test {
 
     @Test
     void testHbalTreesHeight3() {
-        List<BTreeP59.Node> trees = BTreeP59.hbalTrees(3);
+        List<BTreeP59.BTree59Node> trees = BTreeP59.hbalTrees(3);
         assertFalse(trees.isEmpty());
         // All trees should be height-balanced
         assertTrue(trees.stream().allMatch(BTreeP59::isHeightBalanced));
@@ -41,7 +41,7 @@ class BTreeP59Test {
 
     @Test
     void testHbalTreesNegativeHeight() {
-        List<BTreeP59.Node> trees = BTreeP59.hbalTrees(-1);
+        List<BTreeP59.BTree59Node> trees = BTreeP59.hbalTrees(-1);
         assertTrue(trees.isEmpty());
     }
 }

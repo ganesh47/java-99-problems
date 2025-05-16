@@ -49,7 +49,7 @@ class BTree54Test {
     @DisplayName("Test tree parsing and reconstruction")
     void testTreeParsing() {
         String expr = "(a (b nil nil) (c nil nil))";
-        BTree54.Node tree = BTree54.parseTree(expr);
+        BTree54.BTree54Node tree = BTree54.parseTree(expr);
         assertEquals(expr, tree.toString());
     }
 
@@ -64,21 +64,21 @@ class BTree54Test {
     @Test
     @DisplayName("Test node creation and equality")
     void testNodeCreation() {
-        BTree54.Node leaf1 = new BTree54.Node("x");
-        BTree54.Node leaf2 = new BTree54.Node("x");
-        BTree54.Node node1 = new BTree54.Node("a", leaf1, null);
-        BTree54.Node node2 = new BTree54.Node("a", leaf2, null);
+        BTree54.BTree54Node leaf1 = new BTree54.BTree54Node("x");
+        BTree54.BTree54Node leaf2 = new BTree54.BTree54Node("x");
+        BTree54.BTree54Node bTree54Node1 = new BTree54.BTree54Node("a", leaf1, null);
+        BTree54.BTree54Node bTree54Node = new BTree54.BTree54Node("a", leaf2, null);
 
         assertEquals(leaf1, leaf2);
-        assertEquals(node1, node2);
-        assertNotEquals(leaf1, node1);
+        assertEquals(bTree54Node1, bTree54Node);
+        assertNotEquals(leaf1, bTree54Node1);
     }
 
     @Test
     @DisplayName("Test node construction with null value")
     void testNodeNullValue() {
         assertThrows(NullPointerException.class,
-                () -> new BTree54.Node(null));
+                () -> new BTree54.BTree54Node(null));
     }
 
     @Test
@@ -87,7 +87,7 @@ class BTree54Test {
         String complexExpr = "(root (left (ll nil nil) (lr nil nil)) (right nil (rr nil nil)))";
         assertTrue(BTree54.isTree(complexExpr));
 
-        BTree54.Node tree = BTree54.parseTree(complexExpr);
+        BTree54.BTree54Node tree = BTree54.parseTree(complexExpr);
         assertEquals(complexExpr, tree.toString());
     }
 
