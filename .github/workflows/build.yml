@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
 
     env:
-      MVN_ARGS: "-Dmaven.compiler.source=${{ matrix.java }} -Dmaven.compiler.target=${{ matrix.java }}"
+      MVN_ARGS: "-Djava.version=${{ matrix.java }}"
 
     name: Build with Java ${{ matrix.java }}
 
