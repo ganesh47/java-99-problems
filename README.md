@@ -36,6 +36,15 @@ To run the tests:
 bash ./mvnw test
 ```
 
+### Microbenchmarks
+
+Microbenchmarks are implemented using [JMH](https://openjdk.org/projects/code-tools/jmh/).
+Run them with the JMH plugin:
+
+```bash
+bash ./mvnw jmh:benchmark
+```
+
 ## Implementation Notes
 
 - Each class builds upon previous solutions where appropriate
