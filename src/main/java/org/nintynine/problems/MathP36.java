@@ -70,8 +70,16 @@ public class MathP36 {
      */
     public static long reconstruct(List<PrimeFactor> factors) {
         return factors.stream()
-                .mapToLong(f -> (long) Math.pow(f.factor, f.multiplicity))
-                .reduce(1L, (a, b) -> a * b);
+                .mapToLong(f -> powLong(f.factor, f.multiplicity))
+                .reduce(1L, Math::multiplyExact);
+    }
+
+    private static long powLong(long base, int exponent) {
+        long result = 1;
+        for (int i = 0; i < exponent; i++) {
+            result = Math.multiplyExact(result, base);
+        }
+        return result;
     }
 
     /**
