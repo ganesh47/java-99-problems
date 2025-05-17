@@ -14,7 +14,7 @@ This is a Java implementation of the famous "99 Problems" collection, originally
 Each problem is implemented in its own dedicated class within the `org.nintynine.problems` package. The corresponding test class contains detailed test cases that demonstrate the expected behavior and usage.
 
 For example:
-- Problem P01: `MyListP01.java` with tests in `MyListP01Test.java`
+- Problem P01: implemented as `last()` in `MyList.java` with tests in `MyListP01Test.java`
 - Problem P02: `MyListP02.java` with tests in `MyListP02Test.java`
   And so on...
 
