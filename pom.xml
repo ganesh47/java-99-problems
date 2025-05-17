@@ -13,6 +13,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jmh.version>1.37</jmh.version>
     </properties>
     <build>
         <plugins>
@@ -97,6 +98,19 @@
                     <target>22</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-generator-maven-plugin</artifactId>
+                <version>${jmh.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-jmh-sources</id>
+                        <goals>
+                            <goal>generate-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
         </plugins>
     </build>
@@ -106,6 +120,18 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.13.0-M3</version> <!-- latest as of May 2025 -->
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
