@@ -76,9 +76,11 @@ public class MathP36 {
     }
 
     private static long powLong(long base, int exponent) {
-        return BigInteger.valueOf(base)
-                .pow(exponent)
-                .longValueExact();
+        long result = 1;
+        for (int i = 0; i < exponent; i++) {
+            result = Math.multiplyExact(result, base);
+        }
+        return result;
     }
 
     /**
