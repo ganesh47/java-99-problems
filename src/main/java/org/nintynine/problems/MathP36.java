@@ -2,6 +2,7 @@ package org.nintynine.problems;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigInteger;
 
 /**
  * P36: Determine the prime factors of a given positive integer with their multiplicities.
