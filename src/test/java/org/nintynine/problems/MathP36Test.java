@@ -67,6 +67,15 @@ class MathP36Test {
     }
 
     @Test
+    @DisplayName("Test reconstruction with large numbers")
+    void testReconstructionLarge() {
+        long n = 1_000_000_000_000L;
+        List<MathP36.PrimeFactor> factors = MathP36.primeFactorsMult(n);
+        assertEquals(n, MathP36.reconstruct(factors),
+                "Reconstruction should match original number for large input");
+    }
+
+    @Test
     @DisplayName("Verify factors are prime")
     void verifyFactorsArePrime() {
         long[] testNumbers = {12L, 315L, 1001L, 1024L, 123456L};
