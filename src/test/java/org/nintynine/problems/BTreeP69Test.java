@@ -34,4 +34,25 @@ class BTreeP69Test {
         assertThrows(IllegalArgumentException.class, () -> BTreeP69.tree("A."));
         assertThrows(IllegalArgumentException.class, () -> BTreeP69.tree("A..."));
     }
+
+    @Test
+    void testNullInput() {
+        assertThrows(IllegalArgumentException.class, () -> BTreeP69.tree(null));
+    }
+
+    @Test
+    void testIncompleteDotstring() {
+        assertThrows(IllegalArgumentException.class, () -> BTreeP69.tree("A"));
+    }
+
+    @Test
+    void testExtraCharacters() {
+        assertThrows(IllegalArgumentException.class, () -> BTreeP69.tree("A..B"));
+    }
+
+    @Test
+    void testToStringRepresentation() {
+        BTreeP69.Node tree = BTreeP69.tree("ABD..E..C.FG...");
+        assertEquals("A(B(D,E),C(NIL,F(G,NIL)))", tree.toString());
+    }
 }
