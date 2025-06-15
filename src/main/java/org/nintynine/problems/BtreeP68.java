@@ -12,9 +12,9 @@ import java.util.Objects;
  * <p>See issue #61.
  */
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-public class BTreeP68 {
+public class BtreeP68 {
 
-  private BTreeP68() {
+  private BtreeP68() {
     // utility class
   }
 

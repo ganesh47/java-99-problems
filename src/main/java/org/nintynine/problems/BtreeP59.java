@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("DuplicatedCode")
-public class BTreeP59 {
-  private BTreeP59() {}
+/** Utility class for generating completely balanced binary trees. */
+public class BtreeP59 {
+  private BtreeP59() {}
 
   public static class BTree59Node {
     char value;

@@ -179,6 +179,9 @@ public class TruthP47 {
       return Arrays.stream(values()).filter(op -> op.symbol.equals(symbol)).findFirst();
     }
 
+    /**
+     * Applies the binary logical operation.
+     */
     public boolean apply(boolean a, boolean b) {
       if (isUnary) {
         throw new IllegalStateException("Cannot apply binary operation to unary operator");
@@ -186,6 +189,9 @@ public class TruthP47 {
       return binaryOp.apply(a, b);
     }
 
+    /**
+     * Applies the unary logical operation.
+     */
     public boolean apply(boolean a) {
       if (!isUnary) {
         throw new IllegalStateException("Cannot apply unary operation to binary operator");

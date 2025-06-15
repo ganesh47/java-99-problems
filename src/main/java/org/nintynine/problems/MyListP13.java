@@ -83,7 +83,7 @@ public class MyListP13<T> extends MyListP12<T> {
     }
   }
 
-  /** Override of decode method to return MyListP13 instead of MyListP12 */
+  /** Override of decode method to return MyListP13 instead of MyListP12. */
   @Override
   @SuppressWarnings({"unchecked", "DuplicatedCode"})
   public <U> MyListP13<U> decode() {

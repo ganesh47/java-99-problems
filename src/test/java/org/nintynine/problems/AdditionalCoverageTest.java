@@ -10,25 +10,25 @@ import org.junit.jupiter.api.Test;
 class AdditionalCoverageTest {
 
   @Test
-  @DisplayName("BTree54Node handles raw expression values")
-  void testBTree54NodeRawValue() {
+  @DisplayName("Btree54Node handles raw expression values")
+  void testBtree54NodeRawValue() {
     String raw = "(a nil nil)";
-    BTree54.BTree54Node node = new BTree54.BTree54Node(raw);
+    Btree54.Btree54Node node = new Btree54.Btree54Node(raw);
     assertEquals(raw, node.toString());
   }
 
   @Test
-  @DisplayName("BTreeP58Node equality and toString")
-  void testBTreeP58NodeEquality() {
-    BTreeP58.BTreeP58Node left1 = new BTreeP58.BTreeP58Node('A');
-    BTreeP58.BTreeP58Node right1 = new BTreeP58.BTreeP58Node('B');
-    BTreeP58.BTreeP58Node root1 = new BTreeP58.BTreeP58Node('X');
+  @DisplayName("BtreeP58Node equality and toString")
+  void testBtreeP58NodeEquality() {
+    BtreeP58.BtreeP58Node left1 = new BtreeP58.BtreeP58Node('A');
+    BtreeP58.BtreeP58Node right1 = new BtreeP58.BtreeP58Node('B');
+    BtreeP58.BtreeP58Node root1 = new BtreeP58.BtreeP58Node('X');
     root1.left = left1;
     root1.right = right1;
 
-    BTreeP58.BTreeP58Node left2 = new BTreeP58.BTreeP58Node('A');
-    BTreeP58.BTreeP58Node right2 = new BTreeP58.BTreeP58Node('B');
-    BTreeP58.BTreeP58Node root2 = new BTreeP58.BTreeP58Node('X');
+    BtreeP58.BtreeP58Node left2 = new BtreeP58.BtreeP58Node('A');
+    BtreeP58.BtreeP58Node right2 = new BtreeP58.BtreeP58Node('B');
+    BtreeP58.BtreeP58Node root2 = new BtreeP58.BtreeP58Node('X');
     root2.left = left2;
     root2.right = right2;
 
@@ -38,17 +38,17 @@ class AdditionalCoverageTest {
   }
 
   @Test
-  @DisplayName("BTreeP59Node equality and toString")
-  void testBTreeP59NodeEquality() {
-    BTreeP59.BTree59Node left1 = new BTreeP59.BTree59Node('L');
-    BTreeP59.BTree59Node right1 = new BTreeP59.BTree59Node('R');
-    BTreeP59.BTree59Node root1 = new BTreeP59.BTree59Node('X');
+  @DisplayName("BtreeP59Node equality and toString")
+  void testBtreeP59NodeEquality() {
+    BtreeP59.BTree59Node left1 = new BtreeP59.BTree59Node('L');
+    BtreeP59.BTree59Node right1 = new BtreeP59.BTree59Node('R');
+    BtreeP59.BTree59Node root1 = new BtreeP59.BTree59Node('X');
     root1.left = left1;
     root1.right = right1;
 
-    BTreeP59.BTree59Node left2 = new BTreeP59.BTree59Node('L');
-    BTreeP59.BTree59Node right2 = new BTreeP59.BTree59Node('R');
-    BTreeP59.BTree59Node root2 = new BTreeP59.BTree59Node('X');
+    BtreeP59.BTree59Node left2 = new BtreeP59.BTree59Node('L');
+    BtreeP59.BTree59Node right2 = new BtreeP59.BTree59Node('R');
+    BtreeP59.BTree59Node root2 = new BtreeP59.BTree59Node('X');
     root2.left = left2;
     root2.right = right2;
 

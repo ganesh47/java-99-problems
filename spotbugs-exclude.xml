@@ -2,7 +2,7 @@
 <FindBugsFilter>
     <Match>
         <!-- The Field is used to retain reified type info on a field and is not UNREAD -->
-        <Class name="org.nintynine.problems.BTreeP56$Node"/>
+        <Class name="org.nintynine.problems.BtreeP56$Node"/>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
 </FindBugsFilter>

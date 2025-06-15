@@ -4,24 +4,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class BTreeP56Test {
+class BtreeP56Test {
 
   @Test
   void emptyTreeIsSymmetric() {
-    BTreeP56<Integer> tree = new BTreeP56<>();
+    BtreeP56<Integer> tree = new BtreeP56<>();
     assertTrue(tree.isSymmetric());
   }
 
   @Test
   void singleNodeTreeIsSymmetric() {
-    BTreeP56<Integer> tree = new BTreeP56<>();
+    BtreeP56<Integer> tree = new BtreeP56<>();
     tree.setRoot(1);
     assertTrue(tree.isSymmetric());
   }
 
   @Test
   void symmetricTreeWithTwoNodes() {
-    BTreeP56<Integer> tree = new BTreeP56<>();
+    BtreeP56<Integer> tree = new BtreeP56<>();
     tree.setRoot(1);
     tree.addLeft(2);
     tree.addRight(3);
@@ -30,7 +30,7 @@ class BTreeP56Test {
 
   @Test
   void asymmetricTreeWithLeftNodeOnly() {
-    BTreeP56<Integer> tree = new BTreeP56<>();
+    BtreeP56<Integer> tree = new BtreeP56<>();
     tree.setRoot(1);
     tree.addLeft(2);
     assertFalse(tree.isSymmetric());
@@ -38,7 +38,7 @@ class BTreeP56Test {
 
   @Test
   void asymmetricTreeWithRightNodeOnly() {
-    BTreeP56<Integer> tree = new BTreeP56<>();
+    BtreeP56<Integer> tree = new BtreeP56<>();
     tree.setRoot(1);
     tree.addRight(2);
     assertFalse(tree.isSymmetric());
@@ -46,7 +46,7 @@ class BTreeP56Test {
 
   @Test
   void throwsExceptionWhenAddingToEmptyTree() {
-    BTreeP56<Integer> tree = new BTreeP56<>();
+    BtreeP56<Integer> tree = new BtreeP56<>();
     assertThrows(IllegalStateException.class, () -> tree.addLeft(1));
     assertThrows(IllegalStateException.class, () -> tree.addRight(1));
   }

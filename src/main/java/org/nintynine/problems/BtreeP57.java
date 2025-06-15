@@ -1,6 +1,12 @@
 package org.nintynine.problems;
 
-public class BTreeP57<T extends Comparable<T>> {
+/**
+ * Binary tree utilities for problem 57.
+ *
+ * @param <T> type of node values
+ */
+@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
+public class BtreeP57<T extends Comparable<T>> {
   private Node<T> root;
 
   private static class Node<T> {
@@ -15,10 +21,15 @@ public class BTreeP57<T extends Comparable<T>> {
     }
   }
 
-  public BTreeP57() {
+  public BtreeP57() {
     this.root = null;
   }
 
+  /**
+   * Constructs the tree by inserting all given values.
+   *
+   * @param values values to insert
+   */
   public void construct(T[] values) {
     for (T value : values) {
       insert(value);
@@ -44,6 +55,11 @@ public class BTreeP57<T extends Comparable<T>> {
     return node;
   }
 
+  /**
+   * Checks if this tree is symmetric.
+   *
+   * @return {@code true} if the tree is symmetric, otherwise {@code false}
+   */
   public boolean isSymmetric() {
     return root == null || isMirror(root.left, root.right);
   }

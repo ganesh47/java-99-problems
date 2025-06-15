@@ -4,12 +4,22 @@ import java.lang.reflect.Array;
 import java.util.Objects;
 import java.util.stream.LongStream;
 
+/**
+ * Removes consecutive duplicates from the list.
+ *
+ * @param <T> element type
+ */
 public class MyListP08<T> extends MyListP07<T> {
   @SafeVarargs
   public MyListP08(T... elements) {
     super(elements);
   }
 
+  /**
+   * Compresses consecutive duplicate elements.
+   *
+   * @return a new list without consecutive duplicates
+   */
   public MyListP08<T> compress() {
     if (length() == 0) {
       return new MyListP08<>();
