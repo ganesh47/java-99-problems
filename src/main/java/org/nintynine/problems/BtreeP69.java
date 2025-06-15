@@ -11,9 +11,9 @@ package org.nintynine.problems;
  * representation.
  */
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-public class BTreeP69 {
+public class BtreeP69 {
 
-  private BTreeP69() {
+  private BtreeP69() {
     // utility class
   }
 

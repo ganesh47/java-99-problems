@@ -4,6 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Utility class for flattening nested lists.
+ *
+ * @param <T> type of elements in the list
+ */
 public class MyListP07<T> extends MyListP06<T> {
   @SafeVarargs
   public MyListP07(T... elements) {

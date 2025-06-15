@@ -37,8 +37,8 @@ public class MyListP18<T> extends MyListP17<T> {
    */
   public MyListP18<T> slice(int startIndex, int endIndex) {
     // Convert to 0-based indices for internal use
-    int start = startIndex - 1;
-    int end = endIndex - 1;
+    final int start = startIndex - 1;
+    final int end = endIndex - 1;
 
     // Validate indices
     if (startIndex < 1) {

@@ -1,6 +1,11 @@
 package org.nintynine.problems;
 
-public class BTreeP56<T> {
+/**
+ * Simple binary tree used for symmetry checks in problem 56.
+ *
+ * @param <T> node value type
+ */
+public class BtreeP56<T> {
   private Node<T> root;
 
   private static class Node<T> {
@@ -15,7 +20,7 @@ public class BTreeP56<T> {
     }
   }
 
-  public BTreeP56() {
+  public BtreeP56() {
     this.root = null;
   }
 
@@ -24,27 +29,37 @@ public class BTreeP56<T> {
   }
 
   public void addLeft(T value) {
-    if (root == null) throw new IllegalStateException("Tree has no root");
+    if (root == null) {
+      throw new IllegalStateException("Tree has no root");
+    }
     root.left = new Node<>(value);
   }
 
   public void addRight(T value) {
-    if (root == null) throw new IllegalStateException("Tree has no root");
+    if (root == null) {
+      throw new IllegalStateException("Tree has no root");
+    }
     root.right = new Node<>(value);
   }
 
   public boolean isSymmetric() {
-    if (root == null) return true;
+    if (root == null) {
+      return true;
+    }
     return isMirror(root.left, root.right);
   }
 
   @SuppressWarnings("java:S2234") // or just "S2234"
   private boolean isMirror(Node<T> left, Node<T> right) {
     // If both nodes are null, they are mirror images
-    if (left == null && right == null) return true;
+    if (left == null && right == null) {
+      return true;
+    }
 
     // If only one node is null, they are not mirror images
-    if (left == null || right == null) return false;
+    if (left == null || right == null) {
+      return false;
+    }
 
     // Check if the structure is mirrored
     return isMirror(left.left, right.right) && isMirror(left.right, right.left);

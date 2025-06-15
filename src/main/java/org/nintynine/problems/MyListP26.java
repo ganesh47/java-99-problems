@@ -28,8 +28,12 @@ public class MyListP26<T> extends MyListP25<T> {
    * @return number of possible combinations
    */
   public static long binomialCoefficient(int n, int k) {
-    if (k < 0 || k > n) return 0;
-    if (k == 0 || k == n) return 1;
+    if (k < 0 || k > n) {
+      return 0;
+    }
+    if (k == 0 || k == n) {
+      return 1;
+    }
 
     // Use symmetry to optimize calculation
     if (k > n - k) {

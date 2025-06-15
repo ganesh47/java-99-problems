@@ -5,18 +5,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class BTreeP58Test {
+class BtreeP58Test {
 
   @Test
   void testSymCbalTreesWithOneNode() {
-    List<BTreeP58.BTreeP58Node> trees = BTreeP58.symCbalTrees(1);
+    List<BtreeP58.BtreeP58Node> trees = BtreeP58.symCbalTrees(1);
     assertEquals(1, trees.size());
     assertEquals("X", trees.getFirst().toString());
   }
 
   @Test
   void testSymCbalTreesWithFiveNodes() {
-    List<BTreeP58.BTreeP58Node> trees = BTreeP58.symCbalTrees(5);
+    List<BtreeP58.BtreeP58Node> trees = BtreeP58.symCbalTrees(5);
     assertEquals(2, trees.size());
     assertTrue(
         trees.stream()
@@ -26,18 +26,18 @@ class BTreeP58Test {
 
   @Test
   void testSymCbalTreesWithEvenNodes() {
-    List<BTreeP58.BTreeP58Node> trees = BTreeP58.symCbalTrees(6);
+    List<BtreeP58.BtreeP58Node> trees = BtreeP58.symCbalTrees(6);
     assertEquals(0, trees.size());
   }
 
   @Test
   void testCountSymCbalTrees() {
-    assertEquals(1, BTreeP58.countSymCbalTrees(1));
-    assertEquals(0, BTreeP58.countSymCbalTrees(2));
-    assertEquals(1, BTreeP58.countSymCbalTrees(3));
-    assertEquals(0, BTreeP58.countSymCbalTrees(4));
-    assertEquals(2, BTreeP58.countSymCbalTrees(5));
-    assertEquals(0, BTreeP58.countSymCbalTrees(6));
-    assertEquals(1, BTreeP58.countSymCbalTrees(7));
+    assertEquals(1, BtreeP58.countSymCbalTrees(1));
+    assertEquals(0, BtreeP58.countSymCbalTrees(2));
+    assertEquals(1, BtreeP58.countSymCbalTrees(3));
+    assertEquals(0, BtreeP58.countSymCbalTrees(4));
+    assertEquals(2, BtreeP58.countSymCbalTrees(5));
+    assertEquals(0, BtreeP58.countSymCbalTrees(6));
+    assertEquals(1, BtreeP58.countSymCbalTrees(7));
   }
 }

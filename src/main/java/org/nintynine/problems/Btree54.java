@@ -3,12 +3,12 @@ package org.nintynine.problems;
 import java.util.Objects;
 
 /** P54A: Check whether a given expression represents a binary tree */
-public class BTree54 {
+public class Btree54 {
   /** Represents a node in the binary tree expression */
-  public static class BTree54Node {
+  public static class Btree54Node {
     private final String value;
-    private final BTree54Node left;
-    private final BTree54Node right;
+    private final Btree54Node left;
+    private final Btree54Node right;
 
     /**
      * Constructs a binary tree node
@@ -17,7 +17,7 @@ public class BTree54 {
      * @param left Left child node or null
      * @param right Right child node or null
      */
-    public BTree54Node(String value, BTree54Node left, BTree54Node right) {
+    public Btree54Node(String value, Btree54Node left, Btree54Node right) {
       this.value = Objects.requireNonNull(value, "Node value cannot be null");
       this.left = left;
       this.right = right;
@@ -28,14 +28,14 @@ public class BTree54 {
      *
      * @param value The value at this node
      */
-    public BTree54Node(String value) {
+    public Btree54Node(String value) {
       this(value, null, null);
     }
 
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
-      if (!(o instanceof BTree54Node bTree54Node)) return false;
+      if (!(o instanceof Btree54Node bTree54Node)) return false;
       return Objects.equals(value, bTree54Node.value)
           && Objects.equals(left, bTree54Node.left)
           && Objects.equals(right, bTree54Node.right);
@@ -60,7 +60,7 @@ public class BTree54 {
     }
   }
 
-  private BTree54() {} // Prevent instantiation
+  private Btree54() {} // Prevent instantiation
 
   private static boolean isValidValue(String value) {
     // Check for any special characters or improper formatting
@@ -113,7 +113,7 @@ public class BTree54 {
    * @return The root node of the parsed tree
    * @throws IllegalArgumentException if the expression is invalid
    */
-  public static BTree54Node parseTree(String expression) {
+  public static Btree54Node parseTree(String expression) {
     if (expression == null) {
       throw new IllegalArgumentException("Expression cannot be null");
     }
@@ -123,7 +123,7 @@ public class BTree54 {
     // Handle single value case
     if (!expression.startsWith("(")) {
       if (isValidValue(expression)) {
-        return new BTree54Node(expression);
+        return new Btree54Node(expression);
       }
       throw new IllegalArgumentException("Invalid value: " + expression);
     }
@@ -148,10 +148,10 @@ public class BTree54 {
       throw new IllegalArgumentException("Invalid node value");
     }
 
-    BTree54Node left = "nil".equals(leftExpr) ? null : parseTree(leftExpr);
-    BTree54Node right = "nil".equals(rightExpr) ? null : parseTree(rightExpr);
+    Btree54Node left = "nil".equals(leftExpr) ? null : parseTree(leftExpr);
+    Btree54Node right = "nil".equals(rightExpr) ? null : parseTree(rightExpr);
 
-    return new BTree54Node(value, left, right);
+    return new Btree54Node(value, left, right);
   }
 
   @SuppressWarnings("java:S5852")

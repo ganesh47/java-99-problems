@@ -85,7 +85,7 @@ public class MathP37 {
 
     // Test primitive method (P34)
     startTime = System.nanoTime();
-    long result1 = MathP34.totientPhi(m);
+    final long result1 = MathP34.totientPhi(m);
     endTime = System.nanoTime();
     times[0] = endTime - startTime;
 

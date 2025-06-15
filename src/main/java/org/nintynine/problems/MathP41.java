@@ -117,7 +117,7 @@ public class MathP41 {
     return compositions.stream().map(GoldbachListEntry::toString).collect(Collectors.joining("\n"));
   }
 
-  /** Represents a Goldbach composition list entry */
+  /** Represents a Goldbach composition list entry. */
   public record GoldbachListEntry(long number, MathP40.GoldbachPair pair) {
     @Override
     public String toString() {
