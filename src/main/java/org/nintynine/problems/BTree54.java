@@ -2,212 +2,212 @@ package org.nintynine.problems;
 
 import java.util.Objects;
 
-/**
- * P54A: Check whether a given expression represents a binary tree
- */
+/** P54A: Check whether a given expression represents a binary tree */
 public class BTree54 {
+  /** Represents a node in the binary tree expression */
+  public static class BTree54Node {
+    private final String value;
+    private final BTree54Node left;
+    private final BTree54Node right;
+
     /**
-     * Represents a node in the binary tree expression
+     * Constructs a binary tree node
+     *
+     * @param value The value at this node
+     * @param left Left child node or null
+     * @param right Right child node or null
      */
-    public static class BTree54Node {
-        private final String value;
-        private final BTree54Node left;
-        private final BTree54Node right;
-
-        /**
-         * Constructs a binary tree node
-         * @param value The value at this node
-         * @param left Left child node or null
-         * @param right Right child node or null
-         */
-        public BTree54Node(String value, BTree54Node left, BTree54Node right) {
-            this.value = Objects.requireNonNull(value, "Node value cannot be null");
-            this.left = left;
-            this.right = right;
-        }
-
-        /**
-         * Creates a leaf node with no children
-         * @param value The value at this node
-         */
-        public BTree54Node(String value) {
-            this(value, null, null);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof BTree54Node bTree54Node)) return false;
-            return Objects.equals(value, bTree54Node.value) &&
-                   Objects.equals(left, bTree54Node.left) &&
-                   Objects.equals(right, bTree54Node.right);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(value, left, right);
-        }
-
-        @Override
-        public String toString() {
-            if (left == null && right == null) {
-                if (value.startsWith("(")) {
-                    return value;
-                }
-                return String.format("(%s nil nil)", value);
-            }
-            return String.format("(%s %s %s)",
-                    value,
-                    left == null ? "nil" : left.toString(),
-                    right == null ? "nil" : right.toString()
-            );
-        }
-
+    public BTree54Node(String value, BTree54Node left, BTree54Node right) {
+      this.value = Objects.requireNonNull(value, "Node value cannot be null");
+      this.left = left;
+      this.right = right;
     }
 
-    private BTree54() {} // Prevent instantiation
+    /**
+     * Creates a leaf node with no children
+     *
+     * @param value The value at this node
+     */
+    public BTree54Node(String value) {
+      this(value, null, null);
+    }
 
-private static boolean isValidValue(String value) {
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof BTree54Node bTree54Node)) return false;
+      return Objects.equals(value, bTree54Node.value)
+          && Objects.equals(left, bTree54Node.left)
+          && Objects.equals(right, bTree54Node.right);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(value, left, right);
+    }
+
+    @Override
+    public String toString() {
+      if (left == null && right == null) {
+        if (value.startsWith("(")) {
+          return value;
+        }
+        return String.format("(%s nil nil)", value);
+      }
+      return String.format(
+          "(%s %s %s)",
+          value, left == null ? "nil" : left.toString(), right == null ? "nil" : right.toString());
+    }
+  }
+
+  private BTree54() {} // Prevent instantiation
+
+  private static boolean isValidValue(String value) {
     // Check for any special characters or improper formatting
-    return value != null && !value.isEmpty() && 
-           !value.contains("(") && !value.contains(")") &&
-           !value.contains(",") && !value.contains(" ") &&
-           !"nil".equals(value);
-}
+    return value != null
+        && !value.isEmpty()
+        && !value.contains("(")
+        && !value.contains(")")
+        && !value.contains(",")
+        && !value.contains(" ")
+        && !"nil".equals(value);
+  }
 
-public static boolean isTree(String expression) {
+  public static boolean isTree(String expression) {
     if (expression == null || expression.trim().isEmpty()) {
-        return false;
+      return false;
     }
 
     // Pre-validate the expression format
     String trimmed = expression.trim();
-    
+
     // Check for invalid formatting patterns
-    if (trimmed.contains(")(") ||          // Multiple expressions
-        trimmed.contains(",") ||           // Commas
-        trimmed.matches(".*\\w\\(.*") ||   // No space before opening parenthesis
-        trimmed.matches(".*\\)\\w.*")) {   // No space after closing parenthesis
-        return false;
+    if (trimmed.contains(")(")
+        || // Multiple expressions
+        trimmed.contains(",")
+        || // Commas
+        trimmed.matches(".*\\w\\(.*")
+        || // No space before opening parenthesis
+        trimmed.matches(".*\\)\\w.*")) { // No space after closing parenthesis
+      return false;
     }
 
     try {
-        // Handle single value case
-        if (!trimmed.startsWith("(")) {
-            return isValidValue(trimmed);
-        }
+      // Handle single value case
+      if (!trimmed.startsWith("(")) {
+        return isValidValue(trimmed);
+      }
 
-        // For expressions in parentheses, try parsing
-        parseTree(trimmed);
-        return true;
+      // For expressions in parentheses, try parsing
+      parseTree(trimmed);
+      return true;
     } catch (IllegalArgumentException _) {
-        return false;
+      return false;
     }
-}
+  }
 
-    /**
-     * Parses a string expression into a binary tree.
-     * 
-     * @param expression The string expression to parse
-     * @return The root node of the parsed tree
-     * @throws IllegalArgumentException if the expression is invalid
-     */
-    public static BTree54Node parseTree(String expression) {
-        if (expression == null) {
-            throw new IllegalArgumentException("Expression cannot be null");
-        }
-
-        expression = expression.trim();
-        
-        // Handle single value case
-        if (!expression.startsWith("(")) {
-            if (isValidValue(expression)) {
-                return new BTree54Node(expression);
-            }
-            throw new IllegalArgumentException("Invalid value: " + expression);
-        }
-
-        // Remove outer parentheses
-        if (!expression.endsWith(")")) {
-            throw new IllegalArgumentException("Missing closing parenthesis");
-        }
-        expression = expression.substring(1, expression.length() - 1).trim();
-
-        // Split into value and subtrees
-        String[] parts = splitExpression(expression);
-        if (parts.length != 3) {
-            throw new IllegalArgumentException("Invalid node format");
-        }
-
-        String value = parts[0];
-        String leftExpr = parts[1];
-        String rightExpr = parts[2];
-
-        if (!isValidValue(value)) {
-            throw new IllegalArgumentException("Invalid node value");
-        }
-
-        BTree54Node left = "nil".equals(leftExpr) ? null : parseTree(leftExpr);
-        BTree54Node right = "nil".equals(rightExpr) ? null : parseTree(rightExpr);
-
-        return new BTree54Node(value, left, right);
+  /**
+   * Parses a string expression into a binary tree.
+   *
+   * @param expression The string expression to parse
+   * @return The root node of the parsed tree
+   * @throws IllegalArgumentException if the expression is invalid
+   */
+  public static BTree54Node parseTree(String expression) {
+    if (expression == null) {
+      throw new IllegalArgumentException("Expression cannot be null");
     }
 
-@SuppressWarnings("java:S5852")
-private static String[] splitExpression(String expr) {
+    expression = expression.trim();
+
+    // Handle single value case
+    if (!expression.startsWith("(")) {
+      if (isValidValue(expression)) {
+        return new BTree54Node(expression);
+      }
+      throw new IllegalArgumentException("Invalid value: " + expression);
+    }
+
+    // Remove outer parentheses
+    if (!expression.endsWith(")")) {
+      throw new IllegalArgumentException("Missing closing parenthesis");
+    }
+    expression = expression.substring(1, expression.length() - 1).trim();
+
+    // Split into value and subtrees
+    String[] parts = splitExpression(expression);
+    if (parts.length != 3) {
+      throw new IllegalArgumentException("Invalid node format");
+    }
+
+    String value = parts[0];
+    String leftExpr = parts[1];
+    String rightExpr = parts[2];
+
+    if (!isValidValue(value)) {
+      throw new IllegalArgumentException("Invalid node value");
+    }
+
+    BTree54Node left = "nil".equals(leftExpr) ? null : parseTree(leftExpr);
+    BTree54Node right = "nil".equals(rightExpr) ? null : parseTree(rightExpr);
+
+    return new BTree54Node(value, left, right);
+  }
+
+  @SuppressWarnings("java:S5852")
+  private static String[] splitExpression(String expr) {
     // Add space validation
     if (expr.contains(")(") || expr.matches(".*\\w\\(.*") || expr.matches(".*\\)\\w.*")) {
-        throw new IllegalArgumentException("Invalid expression format");
+      throw new IllegalArgumentException("Invalid expression format");
     }
 
     String[] result = new String[3];
     int idx = 0;
-        StringBuilder current = new StringBuilder();
-        int parenthesesCount = 0;
-        
-        for (char c : expr.toCharArray()) {
-            if (c == '(') {
-                parenthesesCount++;
-                current.append(c);
-            } else if (c == ')') {
-                parenthesesCount--;
-                current.append(c);
-                if (parenthesesCount < 0) {
-                    throw new IllegalArgumentException("Unmatched parentheses");
-                }
-            } else if (c == ' ' && parenthesesCount == 0 && !current.isEmpty()) {
-                // Only split on space when not inside parentheses
-                if (idx >= 3) {
-                    throw new IllegalArgumentException("Too many parts in expression");
-                }
-                result[idx++] = current.toString();
-                current = new StringBuilder();
-            } else if (c != ' ' || parenthesesCount > 0) {
-                current.append(c);
-            }
-        }
+    StringBuilder current = new StringBuilder();
+    int parenthesesCount = 0;
 
-        if (!current.isEmpty()) {
-            if (idx >= 3) {
-                throw new IllegalArgumentException("Too many parts in expression");
-            }
-            result[idx] = current.toString();
+    for (char c : expr.toCharArray()) {
+      if (c == '(') {
+        parenthesesCount++;
+        current.append(c);
+      } else if (c == ')') {
+        parenthesesCount--;
+        current.append(c);
+        if (parenthesesCount < 0) {
+          throw new IllegalArgumentException("Unmatched parentheses");
         }
-
-        // Must have exactly three parts
-        if (idx != 2 || result[0] == null || result[1] == null || result[2] == null) {
-            throw new IllegalArgumentException("Invalid expression format");
+      } else if (c == ' ' && parenthesesCount == 0 && !current.isEmpty()) {
+        // Only split on space when not inside parentheses
+        if (idx >= 3) {
+          throw new IllegalArgumentException("Too many parts in expression");
         }
-
-        // Validate "nil" tokens
-        if (!"nil".equals(result[1]) && !result[1].startsWith("(")) {
-            throw new IllegalArgumentException("Invalid left child format");
-        }
-        if (!"nil".equals(result[2]) && !result[2].startsWith("(")) {
-            throw new IllegalArgumentException("Invalid right child format");
-        }
-
-        return result;
+        result[idx++] = current.toString();
+        current = new StringBuilder();
+      } else if (c != ' ' || parenthesesCount > 0) {
+        current.append(c);
+      }
     }
 
+    if (!current.isEmpty()) {
+      if (idx >= 3) {
+        throw new IllegalArgumentException("Too many parts in expression");
+      }
+      result[idx] = current.toString();
+    }
+
+    // Must have exactly three parts
+    if (idx != 2 || result[0] == null || result[1] == null || result[2] == null) {
+      throw new IllegalArgumentException("Invalid expression format");
+    }
+
+    // Validate "nil" tokens
+    if (!"nil".equals(result[1]) && !result[1].startsWith("(")) {
+      throw new IllegalArgumentException("Invalid left child format");
+    }
+    if (!"nil".equals(result[2]) && !result[2].startsWith("(")) {
+      throw new IllegalArgumentException("Invalid right child format");
+    }
+
+    return result;
+  }
 }
