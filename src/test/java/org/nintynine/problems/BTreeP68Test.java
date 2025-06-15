@@ -59,4 +59,45 @@ class BTreeP68Test {
         assertThrows(IllegalArgumentException.class, () ->
                 BTreeP68.preInTree(List.of('A'), List.of('A','B')));
     }
+
+    @Test
+    void testNodeEqualityAndHash() {
+        BTreeP68.Node n1 = new BTreeP68.Node('A');
+        n1.left = new BTreeP68.Node('B');
+        BTreeP68.Node n2 = new BTreeP68.Node('A');
+        n2.left = new BTreeP68.Node('B');
+        assertEquals(n1, n2); // same structure
+        assertEquals(n1, n1); // self equality
+        assertNotEquals(n1, "other");
+        assertNotEquals(n1, null);
+        assertEquals(n1.hashCode(), n2.hashCode());
+
+        assertNotEquals(n1, new BTreeP68.Node('X'));
+        BTreeP68.Node n3 = new BTreeP68.Node('A');
+        n3.left = new BTreeP68.Node('B');
+        n3.right = new BTreeP68.Node('C');
+        assertNotEquals(n1, n3);
+
+        n2.left.value = 'C';
+        assertNotEquals(n1, n2);
+    }
+
+    @Test
+    void testNodeToString() {
+        BTreeP68.Node leaf = new BTreeP68.Node('X');
+        assertEquals("X", leaf.toString());
+
+        BTreeP68.Node root = new BTreeP68.Node('A');
+        root.left = new BTreeP68.Node('B');
+        root.right = new BTreeP68.Node('C');
+        assertEquals("A(B,C)", root.toString());
+
+        BTreeP68.Node half = new BTreeP68.Node('A');
+        half.left = new BTreeP68.Node('B');
+        assertEquals("A(B,NIL)", half.toString());
+
+        BTreeP68.Node halfRight = new BTreeP68.Node('A');
+        halfRight.right = new BTreeP68.Node('B');
+        assertEquals("A(NIL,B)", halfRight.toString());
+    }
 }
