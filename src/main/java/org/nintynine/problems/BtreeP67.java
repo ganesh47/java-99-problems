@@ -4,7 +4,7 @@ import java.util.Objects; // For Objects.equals and Objects.hash
 
 public class BtreeP67<T> {
 
-    private static class Node<T> {
+    static class Node<T> { // Changed from private static to static (package-private)
         T value;
         Node<T> left;
         Node<T> right;
