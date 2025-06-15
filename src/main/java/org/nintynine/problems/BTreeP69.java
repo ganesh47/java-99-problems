@@ -3,13 +3,12 @@ package org.nintynine.problems;
 /**
  * P69 (**): Dotstring representation of binary trees.
  *
- * <p>A binary tree where nodes are identified by single characters can be
- * represented as a "dotstring" using a preorder traversal in which
- * null (empty) subtrees are encoded by a dot character '.'. For example
- * the tree from problem P67 is encoded as {@code ABD..E..C.FG...}.
+ * <p>A binary tree where nodes are identified by single characters can be represented as a
+ * "dotstring" using a preorder traversal in which null (empty) subtrees are encoded by a dot
+ * character '.'. For example the tree from problem P67 is encoded as {@code ABD..E..C.FG...}.
  *
- * <p>This class provides utility methods to convert between a tree
- * structure and its dotstring representation.
+ * <p>This class provides utility methods to convert between a tree structure and its dotstring
+ * representation.
  */
 @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 public class BTreeP69 {
@@ -35,8 +34,10 @@ public class BTreeP69 {
       }
       return value
           + "("
-          + (left == null ? "NIL" : left.toString()) + ","
-          + (right == null ? "NIL" : right.toString()) + ")";
+          + (left == null ? "NIL" : left.toString())
+          + ","
+          + (right == null ? "NIL" : right.toString())
+          + ")";
     }
   }
 

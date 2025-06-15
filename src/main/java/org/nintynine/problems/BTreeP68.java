@@ -52,8 +52,11 @@ public class BTreeP68 {
         return String.valueOf(value);
       }
       return value
-          + "(" + (left == null ? "NIL" : left.toString())
-          + "," + (right == null ? "NIL" : right.toString()) + ")";
+          + "("
+          + (left == null ? "NIL" : left.toString())
+          + ","
+          + (right == null ? "NIL" : right.toString())
+          + ")";
     }
   }
 
