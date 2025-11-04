@@ -60,7 +60,7 @@ public final class BtreeP64 {
     private final PositionedNode<T> left;
     private final PositionedNode<T> right;
 
-    PositionedNode(
+    public PositionedNode(
         T value, int x, int y, PositionedNode<T> left, PositionedNode<T> right) {
       this.value = Objects.requireNonNull(value, "value");
       this.x = x;
