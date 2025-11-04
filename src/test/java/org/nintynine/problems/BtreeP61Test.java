@@ -1,60 +1,70 @@
 package org.nintynine.problems;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 class BtreeP61Test {
 
   @Test
-  void testEmptyTree() {
-    assertNull(null);
+  void countsLeavesInEmptyTree() {
     assertEquals(0, BtreeP61.countLeaves(null));
   }
 
   @Test
-  void testSingleNode() {
-    BtreeP61<String> tree = new BtreeP61<>("a");
+  void countsSingleLeaf() {
+    var tree = BtreeP61.Node.leaf("a");
     assertEquals(1, BtreeP61.countLeaves(tree));
   }
 
   @Test
-  void testOneChild() {
-    BtreeP61<String> tree = new BtreeP61<>("a");
-    tree.left = new BtreeP61<>("b");
+  void countsLeanerTree() {
+    var tree =
+        BtreeP61.Node.of(
+            "root",
+            BtreeP61.Node.of(
+                "left",
+                BtreeP61.Node.leaf("left.left"),
+                null),
+            null);
+
     assertEquals(1, BtreeP61.countLeaves(tree));
   }
 
   @Test
-  void testTwoChildren() {
-    BtreeP61<String> tree = new BtreeP61<>("a");
-    tree.left = new BtreeP61<>("b");
-    tree.right = new BtreeP61<>("c");
-    assertEquals(2, BtreeP61.countLeaves(tree));
-  }
-
-  @Test
-  void testComplexTree() {
-    BtreeP61<String> tree = new BtreeP61<>("a");
-    tree.left = new BtreeP61<>("b");
-    tree.right = new BtreeP61<>("c");
-    tree.left.left = new BtreeP61<>("d");
-    tree.left.right = new BtreeP61<>("e");
-    tree.right.right = new BtreeP61<>("f");
-
-    assertEquals(3, BtreeP61.countLeaves(tree));
-  }
-
-  @Test
-  void testFullBinaryTree() {
-    BtreeP61<String> tree = new BtreeP61<>("a");
-    tree.left = new BtreeP61<>("b");
-    tree.right = new BtreeP61<>("c");
-    tree.left.left = new BtreeP61<>("d");
-    tree.left.right = new BtreeP61<>("e");
-    tree.right.left = new BtreeP61<>("f");
-    tree.right.right = new BtreeP61<>("g");
+  void countsBalancedTree() {
+    var tree =
+        BtreeP61.Node.of(
+            "root",
+            BtreeP61.Node.of(
+                "left",
+                BtreeP61.Node.leaf("left.left"),
+                BtreeP61.Node.leaf("left.right")),
+            BtreeP61.Node.of(
+                "right",
+                BtreeP61.Node.leaf("right.left"),
+                BtreeP61.Node.leaf("right.right")));
 
     assertEquals(4, BtreeP61.countLeaves(tree));
+  }
+
+  @Test
+  void countsAsymmetricTree() {
+    var tree =
+        BtreeP61.Node.of(
+            "a",
+            BtreeP61.Node.of(
+                "b",
+                BtreeP61.Node.leaf("d"),
+                BtreeP61.Node.leaf("e")),
+            BtreeP61.Node.of(
+                "c",
+                null,
+                BtreeP61.Node.of(
+                    "f",
+                    BtreeP61.Node.leaf("g"),
+                    null)));
+
+    assertEquals(3, BtreeP61.countLeaves(tree));
   }
 }
