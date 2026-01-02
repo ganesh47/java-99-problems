@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# codex specs: delegate to specs CLI with discovery + doctor.
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+choose_specs() {
+  local local_bin="$ROOT_DIR/node_modules/.bin/specs"
+  if [[ -x "$local_bin" ]]; then
+    echo "$local_bin|local"
+    return
+  fi
+  if command -v specs >/dev/null 2>&1; then
+    echo "$(command -v specs)|global"
+    return
+  fi
+  echo "npx specs|npx"
+}
+
+doctor() {
+  echo "Codex specs doctor:"
+  IFS='|' read -r cmd source <<<"$(choose_specs)"
+  echo "- source: $source"
+  echo "- command: $cmd"
+  if [[ "$source" == "local" ]]; then
+    "$ROOT_DIR/node_modules/.bin/specs" --version || true
+  elif [[ "$source" == "global" ]]; then
+    specs --version || true
+  else
+    echo "- specs not installed globally; will fallback to npx."
+    echo "  Install with: npm i -g specs"
+  fi
+  if [[ -f "$ROOT_DIR/package.json" ]]; then
+    if npm run -s spec-kit:check --if-present >/dev/null 2>&1; then
+      echo "- spec-kit: check passed (npm run spec-kit:check)"
+    else
+      echo "- spec-kit: check failed or unavailable; run 'npm run spec-kit:check' after installing deps"
+    fi
+  fi
+  if [[ -d "$ROOT_DIR/.specs/spec-kit" ]]; then
+    echo "- spec-kit templates present at .specs/spec-kit (refresh with codex specs scan --refresh-spec-kit)"
+  else
+    echo "- spec-kit templates missing; refresh with codex specs scan --refresh-spec-kit"
+  fi
+  echo "- To refresh spec-kit templates: codex specs scan --refresh-spec-kit"
+  echo "- To uninstall: npm rm -g specs; remove .codex/commands/specs to disable the hook"
+}
+
+if [[ "${1-}" == "--doctor" || "${1-}" == "doctor" ]]; then
+  doctor
+  exit 0
+fi
+
+IFS='|' read -r SPEC_CMD SOURCE <<<"$(choose_specs)"
+eval "$SPEC_CMD" "$@"
