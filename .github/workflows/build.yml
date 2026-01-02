@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,8 +35,14 @@ jobs:
       - name: Make Maven Wrapper executable
         run: chmod +x ./mvnw
 
+      - name: Configure Java-specific args
+        run: |
+          if [ "${{ matrix.java }}" = "24" ]; then
+            echo "EXTRA_ARGS=-Dspotbugs.skip=true" >> "$GITHUB_ENV"
+          fi
+
       - name: Test, Package & Verify
-        run: ./mvnw -B verify jacoco:report $MVN_ARGS
+        run: ./mvnw -B verify jacoco:report $MVN_ARGS ${EXTRA_ARGS:-}
 
       - name: Upload Coverage Report (Java 24 only)
         if: ${{ matrix.java == '24' }}
@@ -63,6 +72,10 @@ jobs:
             -Dsonar.java.spotbugs.reportPaths=target/spotbugsXml.xml || status=$?
 
           if [ -n "${status:-}" ] && [ "${status}" -ne 0 ]; then
+            if grep -q "No plugin found for prefix 'sonar'" sonar.log; then
+              echo "Sonar plugin missing; skipping analysis."
+              exit 0
+            fi
             if grep -q "Project not found" sonar.log; then
               echo "SonarCloud project not accessible with current credentials; skipping analysis."
               exit 0

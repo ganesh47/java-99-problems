@@ -1,0 +1,166 @@
+name: specs release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 0.1.0)'
+        required: true
+      notes:
+        description: 'Additional release notes (optional)'
+        required: false
+      adr_url:
+        description: 'ADR discussion URL'
+        required: true
+      spec_issue:
+        description: 'Spec issue number'
+        required: true
+      wiki_url:
+        description: 'Wiki page URL'
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: read
+  issues: write
+  discussions: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      INPUT_VERSION: ${{ github.event.inputs.version }}
+      INPUT_NOTES: ${{ github.event.inputs.notes }}
+      ADR_URL: ${{ github.event.inputs.adr_url }}
+      SPEC_ISSUE: ${{ github.event.inputs.spec_issue }}
+      WIKI_URL: ${{ github.event.inputs.wiki_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up git identity
+        run: |
+          git config user.name "specs-bot"
+          git config user.email "specs-bot@users.noreply.github.com"
+
+      - name: Prepare variables
+        id: prep
+        run: |
+          VERSION="$INPUT_VERSION"
+          if [ -z "$VERSION" ]; then
+            echo "Release version input is required."
+            exit 1
+          fi
+          TAG="v${VERSION}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure changelog contains version entry
+        run: |
+          TAG="${{ steps.prep.outputs.tag }}"
+          VERSION="${{ steps.prep.outputs.version }}"
+          if ! grep -qE "## (v?${VERSION}|${TAG})" CHANGELOG.md; then
+            echo "CHANGELOG.md missing entry for ${TAG} (accepts headings like '## ${TAG}' or '## ${VERSION}')."
+            exit 1
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install specs CLI
+        run: npm install -g specs
+
+      - name: spec-kit availability
+        run: npm run spec-kit:check
+
+      - name: Run specs coverage for artifacts
+        run: specs coverage
+
+      - name: Extract changelog section
+        id: notes
+        env:
+          TAG: ${{ steps.prep.outputs.tag }}
+          INPUT_NOTES: ${{ env.INPUT_NOTES }}
+        run: |
+          awk -v tag="## ${TAG}" '
+            $0 ~ tag {flag=1; next}
+            /^## / && flag {flag=0}
+            flag {print}
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "No release notes extracted for ${TAG}. Ensure CHANGELOG.md has a section."
+            exit 1
+          fi
+          if [ -n "$INPUT_NOTES" ]; then
+            printf "\n## Additional Notes\n%s\n" "$INPUT_NOTES" >> release-notes.md
+          fi
+
+      - name: Create GitHub Release (creates tag if missing)
+        env:
+          TAG: ${{ steps.prep.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --latest --notes-file release-notes.md
+          else
+            gh release create "$TAG" --latest --notes-file release-notes.md --target main
+          fi
+
+      - name: Upload coverage artifact to release
+        env:
+          TAG: ${{ steps.prep.outputs.tag }}
+        run: |
+          if [ -f .specs/coverage-report.json ]; then
+            gh release upload "$TAG" .specs/coverage-report.json --clobber
+          else
+            echo "No coverage report found to upload."
+          fi
+
+      - name: Comment in ADR discussion
+        env:
+          TAG: ${{ steps.prep.outputs.tag }}
+        run: |
+          adr_number=$(printf "%s" "$ADR_URL" | sed -E 's#.*/discussions/([0-9]+).*#\\1#')
+          body=$(cat <<'EOF'
+          Release {TAG} published.
+          - Release: https://github.com/${GITHUB_REPOSITORY}/releases/{TAG}
+          - Changelog: https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md
+          - Issue: https://github.com/${GITHUB_REPOSITORY}/issues/{ISSUE}
+          - Wiki: {WIKI}
+          EOF
+          )
+          body="${body//\{TAG\}/$TAG}"
+          body="${body//\{ISSUE\}/$SPEC_ISSUE}"
+          body="${body//\{WIKI\}/$WIKI_URL}"
+          gh api graphql -f query='mutation($id:ID!,$body:String!){addDiscussionComment(input:{discussionId:$id,body:$body}){comment{id}}}' \
+            -f id="$(gh api graphql -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){id}}}' -f owner=${GITHUB_REPOSITORY%/*} -f name=${GITHUB_REPOSITORY#*/} -F number="$adr_number" --jq .data.repository.discussion.id)" \
+            -f body="$body"
+
+      - name: Update wiki with release entry
+        env:
+          TAG: ${{ steps.prep.outputs.tag }}
+        run: |
+          page=$(basename "$WIKI_URL")
+          tmpdir=$(mktemp -d)
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git" "$tmpdir/wiki"
+          cd "$tmpdir/wiki"
+          git config user.name "specs-bot"
+          git config user.email "specs-bot@users.noreply.github.com"
+          cat >> "${page}.md" <<EOF
+
+          ## ${TAG}
+          - Release: https://github.com/${GITHUB_REPOSITORY}/releases/${TAG}
+          - Changelog: https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md
+          - ADR: ${ADR_URL}
+          - Issue: https://github.com/${GITHUB_REPOSITORY}/issues/${SPEC_ISSUE}
+          EOF
+          git add "${page}.md"
+          git commit -m "Add release notes for ${TAG}"
+          git push origin master
+
+      - name: Comment on related spec issue
+        env:
+          TAG: ${{ steps.prep.outputs.tag }}
+        run: |
+          gh issue comment "$SPEC_ISSUE" --body "Released ${TAG}: https://github.com/${GITHUB_REPOSITORY}/releases/${TAG}\nChangelog updated, ADR discussion noted, wiki updated: $WIKI_URL"
