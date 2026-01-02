@@ -18,8 +18,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+      - name: Checkout specs tool
+        uses: actions/checkout@v4
+        with:
+          repository: ganesh47/specs
+          path: .specs-tool
+      - name: Install specs tool deps
+        working-directory: .specs-tool
+        run: npm install
+      - name: Build specs CLI
+        working-directory: .specs-tool
+        run: npm run build --workspace packages/specs-cli
       - name: Run specs coverage
-        run: npx --yes specs coverage
+        run: node .specs-tool/packages/specs-cli/bin/specs.js coverage
       - name: spec-kit availability
         run: npm run spec-kit:check
 
