@@ -18,8 +18,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
+      - name: Install specs CLI
+        run: npm install -g specs
+      - name: Add npm global bin to PATH
+        run: echo "$(npm bin -g)" >> "$GITHUB_PATH"
       - name: Run specs coverage
-        run: npx specs coverage
+        run: specs coverage
       - name: spec-kit availability
         run: npm run spec-kit:check
 
