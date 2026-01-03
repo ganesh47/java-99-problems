@@ -38,6 +38,7 @@ jobs:
       - name: Configure Java-specific args
         run: |
           if [ "${{ matrix.java }}" = "24" ]; then
+            echo "SpotBugs is skipped on Java 24 to keep CI green."
             echo "EXTRA_ARGS=-Dspotbugs.skip=true" >> "$GITHUB_ENV"
           fi
 
