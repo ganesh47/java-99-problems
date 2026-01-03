@@ -4,7 +4,8 @@ title: Upgrade Java Baseline to 24
 features:
   - id: toolchain.java24
     accept:
-      - "pom.xml defines java.version=24 and compiler/PMD configs consume the property"
+      - "pom.xml defines java.version=24 and compiler config consumes the property"
+      - "PMD targetJdk is pinned to the highest supported level with rationale noted"
       - "mvnw verify defaults to Java 24 when no -Djava.version override is supplied"
   - id: ci.java24
     accept:
