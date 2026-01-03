@@ -9,6 +9,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <java.version>24</java.version>
+        <!-- PMD 3.26.0 does not support targetJdk 24 yet. -->
+        <pmd.targetJdk>23</pmd.targetJdk>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
@@ -63,7 +66,7 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>3.26.0</version>
                 <configuration>
-                    <targetJdk>22</targetJdk>
+                    <targetJdk>${pmd.targetJdk}</targetJdk>
                 </configuration>
                 <executions>
                     <execution>
@@ -93,8 +96,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>22</source>
-                    <target>22</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
 

@@ -47,9 +47,10 @@ bash ./mvnw test
 
 1. Clone the repository
 2. Import as a Maven project
-3. Browse the problems in order, starting from P01
-4. Run tests to verify your understanding
-5. Check the test cases for usage examples
+3. Use Java 24 (Temurin 24 recommended)
+4. Browse the problems in order, starting from P01
+5. Run tests to verify your understanding
+6. Check the test cases for usage examples
 
 Each problem's implementation and its corresponding test class can be studied independently, making it easy to focus on specific concepts or challenges.
 
