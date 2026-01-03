@@ -130,7 +130,7 @@ jobs:
         env:
           TAG: ${{ steps.prep.outputs.tag }}
         run: |
-          adr_number=$(printf "%s" "$ADR_URL" | sed -E 's#.*/discussions/([0-9]+).*#\\1#')
+          adr_number=$(printf "%s" "$ADR_URL" | sed -E 's#.*/discussions/([0-9]+).*#\1#')
           body=$(cat <<'EOF'
           Release {TAG} published.
           - Release: https://github.com/${GITHUB_REPOSITORY}/releases/{TAG}
