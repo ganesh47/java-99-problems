@@ -133,15 +133,16 @@ jobs:
           adr_number=$(printf "%s" "$ADR_URL" | sed -E 's#.*/discussions/([0-9]+).*#\1#')
           body=$(cat <<'EOF'
           Release {TAG} published.
-          - Release: https://github.com/${GITHUB_REPOSITORY}/releases/{TAG}
-          - Changelog: https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md
-          - Issue: https://github.com/${GITHUB_REPOSITORY}/issues/{ISSUE}
+          - Release: https://github.com/{REPO}/releases/{TAG}
+          - Changelog: https://github.com/{REPO}/blob/main/CHANGELOG.md
+          - Issue: https://github.com/{REPO}/issues/{ISSUE}
           - Wiki: {WIKI}
           EOF
           )
           body="${body//\{TAG\}/$TAG}"
           body="${body//\{ISSUE\}/$SPEC_ISSUE}"
           body="${body//\{WIKI\}/$WIKI_URL}"
+          body="${body//\{REPO\}/$GITHUB_REPOSITORY}"
           gh api graphql -f query='mutation($id:ID!,$body:String!){addDiscussionComment(input:{discussionId:$id,body:$body}){comment{id}}}' \
             -f id="$(gh api graphql -f query='query($owner:String!,$name:String!,$number:Int!){repository(owner:$owner,name:$name){discussion(number:$number){id}}}' -f owner=${GITHUB_REPOSITORY%/*} -f name=${GITHUB_REPOSITORY#*/} -F number="$adr_number" --jq .data.repository.discussion.id)" \
             -f body="$body"
