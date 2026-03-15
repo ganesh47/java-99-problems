@@ -14,22 +14,32 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: ['23','22', '24']
+        include:
+          - java: '25'
+            distribution: 'temurin'
+          - java: '25'
+            distribution: 'zulu'
+          - java: '24'
+            distribution: 'microsoft'
+          - java: '23'
+            distribution: 'corretto'
+          - java: '23'
+            distribution: 'temurin'
       fail-fast: false
 
     env:
       MVN_ARGS: "-Djava.version=${{ matrix.java }}"
 
-    name: Build with Java ${{ matrix.java }}
+    name: Build with Java ${{ matrix.java }} (${{ matrix.distribution }})
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK ${{ matrix.java }}
+      - name: Set up JDK ${{ matrix.java }} (${{ matrix.distribution }})
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
-          distribution: 'temurin'
+          distribution: ${{ matrix.distribution }}
           cache: maven
 
       - name: Make Maven Wrapper executable
@@ -37,23 +47,24 @@ jobs:
 
       - name: Configure Java-specific args
         run: |
-          if [ "${{ matrix.java }}" = "24" ]; then
-            echo "SpotBugs is skipped on Java 24 to keep CI green."
+          if [ "${{ matrix.java }}" = "24" ] || [ "${{ matrix.java }}" = "25" ]; then
+            echo "SpotBugs is skipped on Java ${{ matrix.java }} to keep CI green."
             echo "EXTRA_ARGS=-Dspotbugs.skip=true" >> "$GITHUB_ENV"
           fi
 
       - name: Test, Package & Verify
         run: ./mvnw -B verify jacoco:report $MVN_ARGS ${EXTRA_ARGS:-}
 
-      - name: Upload Coverage Report (Java 24 only)
-        if: ${{ matrix.java == '24' }}
+      - name: Upload Coverage Report (Java 25 only)
+        if: ${{ matrix.java == '25' && matrix.distribution == 'temurin' }}
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: target/site/jacoco/
           retention-days: 14
+
       - name: SonarCloud Scan
-        if: ${{ matrix.java == '24' }}
+        if: ${{ matrix.java == '25' && matrix.distribution == 'temurin' }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
