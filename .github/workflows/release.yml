@@ -35,6 +35,7 @@ jobs:
       ADR_URL: ${{ github.event.inputs.adr_url }}
       SPEC_ISSUE: ${{ github.event.inputs.spec_issue }}
       WIKI_URL: ${{ github.event.inputs.wiki_url }}
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
 

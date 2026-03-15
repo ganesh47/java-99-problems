@@ -33,6 +33,8 @@ jobs:
 
     env:
       MVN_ARGS: "-Djava.version=${{ matrix.java }}"
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      MAVEN_OPTS: "--enable-native-access=ALL-UNNAMED"
 
     name: Build with Java ${{ matrix.java }} (${{ matrix.distribution }})
 
