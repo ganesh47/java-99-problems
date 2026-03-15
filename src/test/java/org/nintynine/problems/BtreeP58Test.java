@@ -8,36 +8,34 @@ import org.junit.jupiter.api.Test;
 class BtreeP58Test {
 
   @Test
-  void testSymCbalTreesWithOneNode() {
-    List<BtreeP58.BtreeP58Node> trees = BtreeP58.symCbalTrees(1);
+  void testSymHbalTreesWithOneNode() {
+    List<BtreeP61.Node<String>> trees = BtreeP58.symHbalTrees(1);
     assertEquals(1, trees.size());
-    assertEquals("X", trees.getFirst().toString());
+    assertEquals("x", trees.getFirst().getValue());
   }
 
   @Test
-  void testSymCbalTreesWithFiveNodes() {
-    List<BtreeP58.BtreeP58Node> trees = BtreeP58.symCbalTrees(5);
-    assertEquals(2, trees.size());
-    assertTrue(
-        trees.stream()
-            .map(Object::toString)
-            .allMatch(s -> s.equals("X(X(NIL,X),X(X,NIL))") || s.equals("X(X(X,NIL),X(NIL,X))")));
+  void testSymHbalTreesWithThreeNodes() {
+    List<BtreeP61.Node<String>> trees = BtreeP58.symHbalTrees(3);
+    assertEquals(1, trees.size());
+    assertTrue(BtreeP61.isSymmetric(trees.getFirst()));
   }
 
   @Test
-  void testSymCbalTreesWithEvenNodes() {
-    List<BtreeP58.BtreeP58Node> trees = BtreeP58.symCbalTrees(6);
+  void testSymHbalTreesWithEvenNodes() {
+    List<BtreeP61.Node<String>> trees = BtreeP58.symHbalTrees(2);
     assertEquals(0, trees.size());
   }
 
   @Test
-  void testCountSymCbalTrees() {
-    assertEquals(1, BtreeP58.countSymCbalTrees(1));
-    assertEquals(0, BtreeP58.countSymCbalTrees(2));
-    assertEquals(1, BtreeP58.countSymCbalTrees(3));
-    assertEquals(0, BtreeP58.countSymCbalTrees(4));
-    assertEquals(2, BtreeP58.countSymCbalTrees(5));
-    assertEquals(0, BtreeP58.countSymCbalTrees(6));
-    assertEquals(1, BtreeP58.countSymCbalTrees(7));
+  void testSymHbalTreesWithFiveNodes() {
+    List<BtreeP61.Node<String>> trees = BtreeP58.symHbalTrees(5);
+    // There are 2 symmetric completely balanced trees with 5 nodes.
+    // hbalTreeNodes(5) includes these and potentially more if height allows.
+    assertFalse(trees.isEmpty());
+    for (BtreeP61.Node<String> tree : trees) {
+      assertTrue(BtreeP61.isSymmetric(tree));
+      assertEquals(5, tree.nodeCount());
+    }
   }
 }

@@ -1,95 +1,49 @@
 package org.nintynine.problems;
 
+import java.util.List;
+
 /**
- * Binary tree utilities for problem 57.
- *
- * @param <T> type of node values
+ * P57: Binary search trees (dictionaries).
  */
-@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-public class BtreeP57<T extends Comparable<T>> {
-  private Node<T> root;
+public final class BtreeP57 {
 
-  private static class Node<T> {
-    T value;
-    Node<T> left;
-    Node<T> right;
-
-    Node(T value) {
-      this.value = value;
-      this.left = null;
-      this.right = null;
-    }
-  }
-
-  public BtreeP57() {
-    this.root = null;
+  private BtreeP57() {
+    // utility class
   }
 
   /**
-   * Constructs the tree by inserting all given values.
+   * Constructs a binary search tree from a list of values.
    *
-   * @param values values to insert
+   * @param values the values to insert
+   * @param <T> value type
+   * @return the constructed tree
    */
-  public void construct(T[] values) {
+  public static <T extends Comparable<T>> BtreeP61.Node<T> construct(List<T> values) {
+    BtreeP61.Node<T> root = null;
     for (T value : values) {
-      insert(value);
+      root = insert(root, value);
     }
-  }
-
-  public void insert(T value) {
-    root = insertRec(root, value);
-  }
-
-  private Node<T> insertRec(Node<T> node, T value) {
-    if (node == null) {
-      return new Node<>(value);
-    }
-
-    int comparison = value.compareTo(node.value);
-    if (comparison < 0) {
-      node.left = insertRec(node.left, value);
-    } else if (comparison > 0) {
-      node.right = insertRec(node.right, value);
-    }
-
-    return node;
+    return root;
   }
 
   /**
-   * Checks if this tree is symmetric.
+   * Inserts a value into a binary search tree.
    *
-   * @return {@code true} if the tree is symmetric, otherwise {@code false}
+   * @param node the root of the tree
+   * @param value the value to insert
+   * @param <T> value type
+   * @return the updated tree
    */
-  public boolean isSymmetric() {
-    return root == null || isMirror(root.left, root.right);
-  }
-
-  @SuppressWarnings("java:S2234")
-  private boolean isMirror(Node<T> left, Node<T> right) {
-    if (left == null && right == null) {
-      return true;
-    }
-    if (left == null || right == null) {
-      return false;
-    }
-    return isMirror(left.left, right.right) && isMirror(left.right, right.left);
-  }
-
-  // Helper method to get tree structure as a string (for testing)
-  public String getStructure() {
-    return getStructureRec(root);
-  }
-
-  private String getStructureRec(Node<T> node) {
+  public static <T extends Comparable<T>> BtreeP61.Node<T> insert(BtreeP61.Node<T> node, T value) {
     if (node == null) {
-      return "nil";
+      return BtreeP61.Node.leaf(value);
     }
-    return "("
-        + node.value
-        + " "
-        + getStructureRec(node.left)
-        + " "
-        + getStructureRec(node.right)
-        + ")";
+    int cmp = value.compareTo(node.getValue());
+    if (cmp < 0) {
+      return BtreeP61.Node.of(node.getValue(), insert(node.getLeft(), value), node.getRight());
+    } else if (cmp > 0) {
+      return BtreeP61.Node.of(node.getValue(), node.getLeft(), insert(node.getRight(), value));
+    }
+    return node;
   }
 }

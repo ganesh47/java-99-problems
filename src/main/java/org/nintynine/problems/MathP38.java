@@ -7,7 +7,7 @@ import java.util.List;
  * P38: Compare the two methods of calculating Euler's totient function. Compares performance and
  * operation counts between P34 (primitive) and P37 (improved) methods.
  */
-public class MathP38 {
+public final class MathP38 {
   private MathP38() {}
 
   /** Instrumented version of primitive totient calculation (P34 style). */
@@ -51,7 +51,7 @@ public class MathP38 {
       return 1;
     }
 
-    List<MathP36.PrimeFactor> primeFactors = getPrimeFactors(m, counter);
+    List<MathP36.PrimeFactor> primeFactors = MathP36.getPrimeFactors(m, counter);
 
     long result = 1;
     for (MathP36.PrimeFactor pf : primeFactors) {
@@ -60,7 +60,7 @@ public class MathP38 {
 
       // Calculate (p-1) * p^(m-1)
       counter.countArithmetic(); // p-1
-      counter.countArithmetic(); // m-1
+      counter.countArithmetic(); // multiplicity-1
       result *= (p - 1) * pow(p, multiplicity - 1, counter);
       counter.countArithmetic(); // multiplication
     }
@@ -75,55 +75,6 @@ public class MathP38 {
     counter.countComparison(); // m <= 0
     counter.countComparison(); // m == 1
     return true;
-  }
-
-  /** Instrumented version of prime factorization. */
-  private static List<MathP36.PrimeFactor> getPrimeFactors(long n, OperationCounter counter) {
-    counter.countMethodCall();
-    List<MathP36.PrimeFactor> factors = new ArrayList<>();
-
-    // Handle factor 2
-    int count = 0;
-    while (n % 2 == 0) {
-      counter.countComparison(); // n % 2 == 0
-      counter.countArithmetic(); // n % 2
-      count++;
-      counter.countArithmetic(); // count++
-      n /= 2;
-      counter.countArithmetic(); // division
-    }
-    if (count > 0) {
-      counter.countComparison(); // count > 0
-      factors.add(new MathP36.PrimeFactor(2, count));
-    }
-
-    // Handle odd factors
-    for (long i = 3; i * i <= n; i += 2) {
-      counter.countArithmetic(); // i * i
-      counter.countComparison(); // <= n
-      counter.countArithmetic(); // i += 2
-
-      count = 0;
-      while (n % i == 0) {
-        counter.countArithmetic(); // n % i
-        counter.countComparison(); // == 0
-        count++;
-        counter.countArithmetic(); // count++
-        n /= i;
-        counter.countArithmetic(); // division
-      }
-      if (count > 0) {
-        counter.countComparison(); // count > 0
-        factors.add(new MathP36.PrimeFactor(i, count));
-      }
-    }
-
-    if (n > 2) {
-      counter.countComparison(); // n > 2
-      factors.add(new MathP36.PrimeFactor(n, 1));
-    }
-
-    return factors;
   }
 
   /** Instrumented version of power calculation. */
@@ -216,21 +167,23 @@ public class MathP38 {
     }
   }
 
-
   /** Counter class to track operations during calculation. */
-  public static class OperationCounter {
-    private long arithmeticOps = 0;
-    private long comparisonOps = 0;
-    private long methodCalls = 0;
+  public static class OperationCounter implements MathP36.OperationCounter {
+    private long arithmeticOps;
+    private long comparisonOps;
+    private long methodCalls;
 
+    @Override
     public void countArithmetic() {
       arithmeticOps++;
     }
 
+    @Override
     public void countComparison() {
       comparisonOps++;
     }
 
+    @Override
     public void countMethodCall() {
       methodCalls++;
     }
@@ -248,7 +201,7 @@ public class MathP38 {
     }
   }
 
-  /** A counter implementation that ignores all increment operations. */
+  /** No-op counter to minimize instrumentation overhead. */
   public static class NoOpOperationCounter extends OperationCounter {
     @Override
     public void countArithmetic() {

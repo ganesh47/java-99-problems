@@ -27,13 +27,13 @@ class BtreeP60Test {
 
   @Test
   void testHbalTreeNodesEmpty() {
-    List<BtreeP60<String>> trees = BtreeP60.hbalTreeNodes(0);
+    List<BtreeP61.Node<String>> trees = BtreeP60.hbalTreeNodes(0);
     assertTrue(trees.isEmpty());
   }
 
   @Test
   void testHbalTreeNodesSingleNode() {
-    List<BtreeP60<String>> trees = BtreeP60.hbalTreeNodes(1);
+    List<BtreeP61.Node<String>> trees = BtreeP60.hbalTreeNodes(1);
     assertEquals(1, trees.size());
     assertEquals("x", trees.getFirst().getValue());
     assertNull(trees.getFirst().getLeft());
@@ -42,61 +42,43 @@ class BtreeP60Test {
 
   @Test
   void testHbalTreeNodesTwoNodes() {
-    List<BtreeP60<String>> trees = BtreeP60.hbalTreeNodes(2);
-    assertEquals(2, trees.size()); // There should be 2 possible trees with 2 nodes
+    List<BtreeP61.Node<String>> trees = BtreeP60.hbalTreeNodes(2);
+    assertEquals(2, trees.size());
   }
 
   @Test
   void testHbalTreeNodesThreeNodes() {
-    List<BtreeP60<String>> trees = BtreeP60.hbalTreeNodes(3);
-    assertEquals(1, trees.size()); // There should be 1 possible tree with 3 nodes
+    List<BtreeP61.Node<String>> trees = BtreeP60.hbalTreeNodes(3);
+    assertEquals(1, trees.size());
   }
 
   @Test
   void testTreeHeight() {
-    BtreeP60<String> root = new BtreeP60<>("x");
-    assertEquals(1, BtreeP60.getHeight(root));
+    BtreeP61.Node<String> root = BtreeP61.Node.leaf("x");
+    assertEquals(1, root.height());
 
-    root.left = new BtreeP60<>("x");
-    assertEquals(2, BtreeP60.getHeight(root));
+    BtreeP61.Node<String> withLeft = BtreeP61.Node.of("x", BtreeP61.Node.leaf("x"), null);
+    assertEquals(2, withLeft.height());
 
-    root.right = new BtreeP60<>("x");
-    assertEquals(2, BtreeP60.getHeight(root));
+    BtreeP61.Node<String> full = BtreeP61.Node.of("x", BtreeP61.Node.leaf("x"), BtreeP61.Node.leaf("x"));
+    assertEquals(2, full.height());
   }
 
   @Test
   void testHeightBalancedProperty() {
-    List<BtreeP60<String>> trees = BtreeP60.hbalTreeNodes(4);
-    for (BtreeP60<String> tree : trees) {
-      assertTrue(isBalanced(tree));
+    List<BtreeP61.Node<String>> trees = BtreeP60.hbalTreeNodes(4);
+    for (BtreeP61.Node<String> tree : trees) {
+      assertTrue(tree.isHeightBalanced());
     }
   }
 
   @Test
   void testFifteenNodes() {
-    List<BtreeP60<String>> trees = BtreeP60.hbalTreeNodes(15);
+    List<BtreeP61.Node<String>> trees = BtreeP60.hbalTreeNodes(15);
     assertFalse(trees.isEmpty());
-    // All trees should be height-balanced and have exactly 15 nodes
-    for (BtreeP60<String> tree : trees) {
-      assertTrue(isBalanced(tree));
-      assertEquals(15, countNodes(tree));
+    for (BtreeP61.Node<String> tree : trees) {
+      assertTrue(tree.isHeightBalanced());
+      assertEquals(15, tree.nodeCount());
     }
-  }
-
-  // Helper methods for testing
-  private boolean isBalanced(BtreeP60<String> root) {
-    if (root == null) return true;
-
-    int leftHeight = BtreeP60.getHeight(root.getLeft());
-    int rightHeight = BtreeP60.getHeight(root.getRight());
-
-    return Math.abs(leftHeight - rightHeight) <= 1
-        && isBalanced(root.getLeft())
-        && isBalanced(root.getRight());
-  }
-
-  private int countNodes(BtreeP60<String> root) {
-    if (root == null) return 0;
-    return 1 + countNodes(root.getLeft()) + countNodes(root.getRight());
   }
 }
