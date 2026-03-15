@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-01-02T10:27:11.006Z",
+  "summary": {
+    "totalSpecs": 1,
+    "totalFeatures": 5,
+    "coveredFeatures": 0
+  },
+  "items": [
+    {
+      "specId": "specs.java-99-bootstrap",
+      "featureId": "repo.creation",
+      "status": "pending",
+      "notes": "TODO: LLM-based coverage evaluation"
+    },
+    {
+      "specId": "specs.java-99-bootstrap",
+      "featureId": "codex.enablement",
+      "status": "pending",
+      "notes": "TODO: LLM-based coverage evaluation"
+    },
+    {
+      "specId": "specs.java-99-bootstrap",
+      "featureId": "spec-kit.templates",
+      "status": "pending",
+      "notes": "TODO: LLM-based coverage evaluation"
+    },
+    {
+      "specId": "specs.java-99-bootstrap",
+      "featureId": "gh.automation",
+      "status": "pending",
+      "notes": "TODO: LLM-based coverage evaluation"
+    },
+    {
+      "specId": "specs.java-99-bootstrap",
+      "featureId": "adr.wiki.flow",
+      "status": "pending",
+      "notes": "TODO: LLM-based coverage evaluation"
+    }
+  ]
+}
