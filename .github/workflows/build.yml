@@ -20,6 +20,10 @@ jobs:
           - java: '25'
             distribution: 'zulu'
           - java: '24'
+            distribution: 'temurin'
+          - java: '24'
+            distribution: 'zulu'
+          - java: '23'
             distribution: 'microsoft'
           - java: '23'
             distribution: 'corretto'
@@ -33,10 +37,10 @@ jobs:
     name: Build with Java ${{ matrix.java }} (${{ matrix.distribution }})
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up JDK ${{ matrix.java }} (${{ matrix.distribution }})
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
           distribution: ${{ matrix.distribution }}
