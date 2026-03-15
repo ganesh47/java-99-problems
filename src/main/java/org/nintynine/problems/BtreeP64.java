@@ -117,5 +117,18 @@ public final class BtreeP64 {
     public int hashCode() {
       return Objects.hash(value, xcoord, ycoord, left, right);
     }
+
+    /** Returns a new tree where all x-coordinates are shifted by the given delta. */
+    public PositionedNode<T> shift(int delta) {
+      if (delta == 0) {
+        return this;
+      }
+      return new PositionedNode<>(
+          value,
+          xcoord + delta,
+          ycoord,
+          left == null ? null : left.shift(delta),
+          right == null ? null : right.shift(delta));
+    }
   }
 }

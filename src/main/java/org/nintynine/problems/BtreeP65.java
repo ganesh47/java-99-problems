@@ -15,13 +15,13 @@ public final class BtreeP65 {
    *
    * @param root tree root
    * @param <T> element type
-   * @return positioned tree representation compatible with {@link BtreeP64.PositionedNode}
+   * @return positioned tree representation
    */
   public static <T> BtreeP64.PositionedNode<T> layoutBinaryTree(BtreeP61.Node<T> root) {
-    int height = height(root);
-    if (height == 0) {
+    if (root == null) {
       return null;
     }
+    int height = root.height();
     int rootX = 1 << (height - 1);
     return layout(root, 1, height, rootX);
   }
@@ -31,18 +31,9 @@ public final class BtreeP65 {
     if (node == null) {
       return null;
     }
-    int offset = depth >= height ? 0 : 1 << (height - depth - 1);
-    BtreeP64.PositionedNode<T> left =
-        layout(node.getLeft(), depth + 1, height, x - offset);
-    BtreeP64.PositionedNode<T> right =
-        layout(node.getRight(), depth + 1, height, x + offset);
+    int offset = (depth >= height) ? 0 : 1 << (height - depth - 1);
+    BtreeP64.PositionedNode<T> left = layout(node.getLeft(), depth + 1, height, x - offset);
+    BtreeP64.PositionedNode<T> right = layout(node.getRight(), depth + 1, height, x + offset);
     return new BtreeP64.PositionedNode<>(node.getValue(), x, depth, left, right);
-  }
-
-  private static int height(BtreeP61.Node<?> node) {
-    if (node == null) {
-      return 0;
-    }
-    return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
   }
 }

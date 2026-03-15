@@ -26,7 +26,7 @@ public final class BtreeP66 {
       minX = Math.min(minX, value);
     }
     int offset = 1 - minX;
-    return shiftNode(result.node(), offset);
+    return result.node().shift(offset);
   }
 
   private static <T> Result<T> layout(BtreeP61.Node<T> node, int depth) {
@@ -57,62 +57,45 @@ public final class BtreeP66 {
     rightContour[0] = 0;
 
     for (int i = 1; i < height; i++) {
-      int leftValue = Integer.MAX_VALUE;
-      int rightValue = Integer.MAX_VALUE;
-      if (left.node() != null && i - 1 < left.leftContour().length) {
-        leftValue = left.leftContour()[i - 1] - shift;
-      }
-      if (right.node() != null && i - 1 < right.leftContour().length) {
-        rightValue = right.leftContour()[i - 1] + shift;
-      }
+      int leftValue = getValueAt(left.leftContour(), i - 1, left.node() != null, -shift);
+      int rightValue = getValueAt(right.leftContour(), i - 1, right.node() != null, shift);
+
       if (leftValue == Integer.MAX_VALUE && rightValue == Integer.MAX_VALUE) {
         leftContour[i] = 0;
-      } else if (rightValue == Integer.MAX_VALUE) {
-        leftContour[i] = leftValue;
-      } else if (leftValue == Integer.MAX_VALUE) {
-        leftContour[i] = rightValue;
       } else {
         leftContour[i] = Math.min(leftValue, rightValue);
       }
 
-      int leftRight = Integer.MIN_VALUE;
-      int rightRight = Integer.MIN_VALUE;
-      if (left.node() != null && i - 1 < left.rightContour().length) {
-        leftRight = left.rightContour()[i - 1] - shift;
-      }
-      if (right.node() != null && i - 1 < right.rightContour().length) {
-        rightRight = right.rightContour()[i - 1] + shift;
-      }
+      int leftRight = getValueAtMax(left.rightContour(), i - 1, left.node() != null, -shift);
+      int rightRight = getValueAtMax(right.rightContour(), i - 1, right.node() != null, shift);
+
       if (leftRight == Integer.MIN_VALUE && rightRight == Integer.MIN_VALUE) {
         rightContour[i] = 0;
-      } else if (rightRight == Integer.MIN_VALUE) {
-        rightContour[i] = leftRight;
-      } else if (leftRight == Integer.MIN_VALUE) {
-        rightContour[i] = rightRight;
       } else {
         rightContour[i] = Math.max(leftRight, rightRight);
       }
     }
 
-    BtreeP64.PositionedNode<T> leftNode = shiftNode(left.node(), -shift);
-    BtreeP64.PositionedNode<T> rightNode = shiftNode(right.node(), shift);
+    BtreeP64.PositionedNode<T> leftNode = left.node() == null ? null : left.node().shift(-shift);
+    BtreeP64.PositionedNode<T> rightNode = right.node() == null ? null : right.node().shift(shift);
     BtreeP64.PositionedNode<T> positioned =
         new BtreeP64.PositionedNode<>(node.getValue(), 0, depth, leftNode, rightNode);
 
     return new Result<>(positioned, leftContour, rightContour, height);
   }
 
-  private static <T> BtreeP64.PositionedNode<T> shiftNode(
-      BtreeP64.PositionedNode<T> node, int delta) {
-    if (node == null || delta == 0) {
-      return node;
+  private static int getValueAt(int[] contour, int idx, boolean exists, int shift) {
+    if (exists && idx < contour.length) {
+      return contour[idx] + shift;
     }
-    BtreeP64.PositionedNode<T> left =
-        shiftNode(node.getLeft(), delta);
-    BtreeP64.PositionedNode<T> right =
-        shiftNode(node.getRight(), delta);
-    return new BtreeP64.PositionedNode<>(
-        node.getValue(), node.getX() + delta, node.getY(), left, right);
+    return Integer.MAX_VALUE;
+  }
+
+  private static int getValueAtMax(int[] contour, int idx, boolean exists, int shift) {
+    if (exists && idx < contour.length) {
+      return contour[idx] + shift;
+    }
+    return Integer.MIN_VALUE;
   }
 
   private static int requiredShift(int[] leftRightContour, int[] rightLeftContour) {
