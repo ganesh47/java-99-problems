@@ -61,8 +61,8 @@ jobs:
       - name: Test, Package & Verify
         run: ./mvnw -B verify jacoco:report $MVN_ARGS ${EXTRA_ARGS:-}
 
-      - name: Upload Coverage Report (Java 25 only)
-        if: ${{ matrix.java == '25' && matrix.distribution == 'temurin' }}
+      - name: Upload Coverage Report (Java 23 only)
+        if: ${{ matrix.java == '23' && matrix.distribution == 'temurin' }}
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
@@ -70,7 +70,7 @@ jobs:
           retention-days: 14
 
       - name: SonarCloud Scan
-        if: ${{ matrix.java == '25' && matrix.distribution == 'temurin' }}
+        if: ${{ matrix.java == '23' && matrix.distribution == 'temurin' }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |

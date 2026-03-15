@@ -21,6 +21,7 @@ class AdditionalCoverageTest {
     assertPrivateConstructor(BtreeP67.class);
     assertPrivateConstructor(MathP31.class);
     assertPrivateConstructor(MathP34.class);
+    assertPrivateConstructor(MathP36.class);
     assertPrivateConstructor(MathP38.class);
     assertPrivateConstructor(LogicalExpression.class);
     assertPrivateConstructor(TruthP46.class);
