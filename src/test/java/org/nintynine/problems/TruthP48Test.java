@@ -136,7 +136,7 @@ public class TruthP48Test {
   @Test
   void testMissingVariable() {
     List<String> vars = List.of("A");
-    assertThrows(NullPointerException.class, () -> TruthP48.table(vars, "A and B"));
+    assertThrows(IllegalArgumentException.class, () -> TruthP48.table(vars, "A and B"));
   }
 
   @Test

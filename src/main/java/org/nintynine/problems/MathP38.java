@@ -12,13 +12,7 @@ public class MathP38 {
 
   /** Instrumented version of primitive totient calculation (P34 style). */
   private static long totientPhiPrimitive(long m, OperationCounter counter) {
-    if (m <= 0) {
-      throw new IllegalArgumentException("Number must be positive");
-    }
-    counter.countComparison(); // m <= 0
-
-    if (m == 1) {
-      counter.countComparison(); // m == 1
+    if (m == 1 && validatePositive(m, counter)) {
       return 1;
     }
 
@@ -53,13 +47,7 @@ public class MathP38 {
 
   /** Instrumented version of improved totient calculation (P37 style). */
   private static long totientPhiImproved(long m, OperationCounter counter) {
-    if (m <= 0) {
-      throw new IllegalArgumentException("Number must be positive");
-    }
-    counter.countComparison(); // m <= 0
-
-    if (m == 1) {
-      counter.countComparison(); // m == 1
+    if (m == 1 && validatePositive(m, counter)) {
       return 1;
     }
 
@@ -78,6 +66,15 @@ public class MathP38 {
     }
 
     return result;
+  }
+
+  private static boolean validatePositive(long m, OperationCounter counter) {
+    if (m <= 0) {
+      throw new IllegalArgumentException("Number must be positive");
+    }
+    counter.countComparison(); // m <= 0
+    counter.countComparison(); // m == 1
+    return true;
   }
 
   /** Instrumented version of prime factorization. */

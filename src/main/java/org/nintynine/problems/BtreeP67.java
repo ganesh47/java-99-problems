@@ -1,7 +1,5 @@
 package org.nintynine.problems;
 
-import java.util.Objects;
-
 /**
  * P67: A string representation of binary trees.
  *
@@ -16,83 +14,12 @@ public final class BtreeP67 {
   }
 
   /**
-   * Represents a node in the binary tree.
-   *
-   * @param <T> node value type
-   */
-  public static final class Node<T> {
-    private final T value;
-    private final Node<T> left;
-    private final Node<T> right;
-
-    private Node(T value, Node<T> left, Node<T> right) {
-      this.value = Objects.requireNonNull(value, "value");
-      this.left = left;
-      this.right = right;
-    }
-
-    /**
-     * Creates a leaf node.
-     *
-     * @param value node value
-     * @param <T> node value type
-     * @return a new leaf node
-     */
-    public static <T> Node<T> leaf(T value) {
-      return new Node<>(value, null, null);
-    }
-
-    /**
-     * Creates a node with children.
-     *
-     * @param value node value
-     * @param left left child
-     * @param right right child
-     * @param <T> node value type
-     * @return a new node
-     */
-    public static <T> Node<T> of(T value, Node<T> left, Node<T> right) {
-      return new Node<>(value, left, right);
-    }
-
-    public T getValue() {
-      return value;
-    }
-
-    public Node<T> getLeft() {
-      return left;
-    }
-
-    public Node<T> getRight() {
-      return right;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (!(o instanceof Node<?> node)) {
-        return false;
-      }
-      return Objects.equals(value, node.value)
-          && Objects.equals(left, node.left)
-          && Objects.equals(right, node.right);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(value, left, right);
-    }
-  }
-
-  /**
    * Renders a binary tree to a compact string.
    *
    * @param root tree root
    * @return compact string representation
    */
-  public static String toCompactString(Node<?> root) {
+  public static String toCompactString(BtreeP61.Node<?> root) {
     if (root == null) {
       return "";
     }
@@ -101,18 +28,18 @@ public final class BtreeP67 {
     return builder.toString();
   }
 
-  private static void appendNode(Node<?> node, StringBuilder builder) {
-    builder.append(node.value);
-    if (node.left == null && node.right == null) {
+  private static void appendNode(BtreeP61.Node<?> node, StringBuilder builder) {
+    builder.append(node.getValue());
+    if (node.getLeft() == null && node.getRight() == null) {
       return;
     }
     builder.append('(');
-    if (node.left != null) {
-      appendNode(node.left, builder);
+    if (node.getLeft() != null) {
+      appendNode(node.getLeft(), builder);
     }
     builder.append(',');
-    if (node.right != null) {
-      appendNode(node.right, builder);
+    if (node.getRight() != null) {
+      appendNode(node.getRight(), builder);
     }
     builder.append(')');
   }
@@ -124,7 +51,7 @@ public final class BtreeP67 {
    * @return tree root
    * @throws IllegalArgumentException if the input is null or invalid
    */
-  public static Node<String> parse(String representation) {
+  public static BtreeP61.Node<String> parse(String representation) {
     if (representation == null) {
       throw new IllegalArgumentException("Input cannot be null");
     }
@@ -132,7 +59,7 @@ public final class BtreeP67 {
     if (parser.isAtEnd()) {
       return null;
     }
-    Node<String> root = parser.parseNode();
+    BtreeP61.Node<String> root = parser.parseNode();
     if (!parser.isAtEnd()) {
       throw new IllegalArgumentException("Unexpected trailing content at position "
           + parser.position);
@@ -164,14 +91,14 @@ public final class BtreeP67 {
       position++;
     }
 
-    private Node<String> parseNode() {
+    private BtreeP61.Node<String> parseNode() {
       if (peek() == ',' || peek() == ')' || isAtEnd()) {
         return null;
       }
 
       String value = readValue();
-      Node<String> leftChild = null;
-      Node<String> rightChild = null;
+      BtreeP61.Node<String> leftChild = null;
+      BtreeP61.Node<String> rightChild = null;
 
       if (peek() == '(') {
         position++; // consume '('
@@ -181,7 +108,7 @@ public final class BtreeP67 {
         consume(')');
       }
 
-      return Node.of(value, leftChild, rightChild);
+      return BtreeP61.Node.of(value, leftChild, rightChild);
     }
 
     private String readValue() {

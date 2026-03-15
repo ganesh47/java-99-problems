@@ -1,13 +1,16 @@
 package org.nintynine.problems;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.BiFunction;
+import java.util.Map;
 
 /** P46: Truth tables for logical expressions. */
-public class TruthP46 {
+public final class TruthP46 {
+
+  private TruthP46() {
+    // utility class
+  }
+
   /**
    * Generates a truth table for a given logical expression.
    *
@@ -16,13 +19,13 @@ public class TruthP46 {
    * @throws IllegalArgumentException if the expression is invalid
    */
   public static List<TruthTableRow> table(String expression) {
-    ExpressionNode root = parseExpression(expression);
+    LogicalExpression.ExpressionNode root = parseExpression(expression);
     List<TruthTableRow> rows = new ArrayList<>();
 
     // Generate all possible combinations of A and B
     for (boolean a : new boolean[] {false, true}) {
       for (boolean b : new boolean[] {false, true}) {
-        boolean result = root.evaluate(a, b);
+        boolean result = root.evaluate(Map.of("A", a, "B", b));
         rows.add(new TruthTableRow(a, b, result));
       }
     }
@@ -30,59 +33,44 @@ public class TruthP46 {
     return rows;
   }
 
-  /**
-   * Parses a logical expression in prefix notation.
-   *
-   * @param expression the expression to parse
-   * @return root node of the expression tree
-   * @throws IllegalArgumentException if the expression is invalid
-   */
-  private static ExpressionNode parseExpression(String expression) {
+  private static LogicalExpression.ExpressionNode parseExpression(String expression) {
     expression = expression.trim();
 
-    // Handle single variables
     if (expression.length() == 1) {
       char var = expression.charAt(0);
       if (var == 'A' || var == 'B') {
-        return new VariableNode(var);
+        return new LogicalExpression.VariableNode(String.valueOf(var));
       }
       throw new IllegalArgumentException("Invalid variable: " + var + " (must be A or B)");
     }
 
-    // Handle operations
     if (expression.startsWith("(") && expression.endsWith(")")) {
-      // Remove outer parentheses
       expression = expression.substring(1, expression.length() - 1).trim();
 
-      // Split into operator and operands
       int firstSpace = expression.indexOf(' ');
       if (firstSpace == -1) {
-        throw new IllegalArgumentException(
-            "Invalid expression format : "
-                + expression
-                + " (missing space between operator and operands)");
+        throw new IllegalArgumentException("Invalid expression format");
       }
 
-      String operator = expression.substring(0, firstSpace);
+      String operatorSymbol = expression.substring(0, firstSpace);
       String remainingExpr = expression.substring(firstSpace + 1).trim();
 
-      // Find the two operands
       String[] operands = splitOperands(remainingExpr);
       if (operands.length != 2) {
         throw new IllegalArgumentException("Expected two operands");
       }
 
-      LogicalOp op =
-          LogicalOp.fromString(operator)
-              .orElseThrow(() -> new IllegalArgumentException("Unknown operator: " + operator));
+      LogicalExpression.LogicalOp op =
+          LogicalExpression.LogicalOp.fromString(operatorSymbol)
+              .orElseThrow(() -> new IllegalArgumentException("Unknown operator: " + operatorSymbol));
 
-      return new OperationNode(op, parseExpression(operands[0]), parseExpression(operands[1]));
+      return new LogicalExpression.BinaryOperationNode(
+          op, parseExpression(operands[0]), parseExpression(operands[1]));
     }
 
     throw new IllegalArgumentException("Invalid expression format");
   }
 
-  /** Splits an expression into operands, handling nested parentheses. */
   private static String[] splitOperands(String expr) {
     List<String> operands = new ArrayList<>();
     int parenthesesCount = 0;
@@ -119,72 +107,6 @@ public class TruthP46 {
     sb.append("-------------------\n");
     table.forEach(row -> sb.append(row).append('\n'));
     return sb.toString();
-  }
-
-  /** Represents a logical operation that can be performed on boolean values. */
-  public enum LogicalOp {
-    AND("and", (a, b) -> a && b),
-    OR("or", (a, b) -> a || b),
-    NAND("nand", (a, b) -> !(a && b)),
-    NOR("nor", (a, b) -> !(a || b)),
-    XOR("xor", (a, b) -> a ^ b),
-    IMPL("impl", (a, b) -> !a || b),
-    EQU("equ", (a, b) -> a.booleanValue() == b.booleanValue());
-
-    @SuppressWarnings("PMD.UnusedPrivateField")
-    private final String symbol;
-
-    private final BiFunction<Boolean, Boolean, Boolean> operation;
-
-    LogicalOp(String symbol, BiFunction<Boolean, Boolean, Boolean> operation) {
-      this.symbol = symbol;
-      this.operation = operation;
-    }
-
-    public static Optional<LogicalOp> fromString(String symbol) {
-      return Arrays.stream(values()).filter(op -> op.symbol.equals(symbol)).findFirst();
-    }
-
-    public boolean apply(boolean a, boolean b) {
-      return operation.apply(a, b);
-    }
-  }
-
-  /** Represents a logical expression node in the expression tree. */
-  private abstract static class ExpressionNode {
-    abstract boolean evaluate(boolean a, boolean b);
-  }
-
-  /** Represents a variable (A or B) in the expression. */
-  private static class VariableNode extends ExpressionNode {
-    private final char variable;
-
-    public VariableNode(char variable) {
-      this.variable = variable;
-    }
-
-    @Override
-    boolean evaluate(boolean a, boolean b) {
-      return variable == 'A' ? a : b;
-    }
-  }
-
-  /** Represents an operation node with two operands. */
-  private static class OperationNode extends ExpressionNode {
-    private final LogicalOp operator;
-    private final ExpressionNode left;
-    private final ExpressionNode right;
-
-    public OperationNode(LogicalOp operator, ExpressionNode left, ExpressionNode right) {
-      this.operator = operator;
-      this.left = left;
-      this.right = right;
-    }
-
-    @Override
-    boolean evaluate(boolean a, boolean b) {
-      return operator.apply(left.evaluate(a, b), right.evaluate(a, b));
-    }
   }
 
   /** Represents a truth table row. */
