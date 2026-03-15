@@ -50,14 +50,6 @@ public final class BtreeP66 {
       shift = 1;
     }
 
-    BtreeP64.PositionedNode<T> leftNode =
-        shiftNode(left.node(), -shift);
-    BtreeP64.PositionedNode<T> rightNode =
-        shiftNode(right.node(), shift);
-
-    BtreeP64.PositionedNode<T> positioned =
-        new BtreeP64.PositionedNode<>(node.getValue(), 0, depth, leftNode, rightNode);
-
     int height = Math.max(left.height(), right.height()) + 1;
     int[] leftContour = new int[height];
     int[] rightContour = new int[height];
@@ -101,6 +93,11 @@ public final class BtreeP66 {
         rightContour[i] = Math.max(leftRight, rightRight);
       }
     }
+
+    BtreeP64.PositionedNode<T> leftNode = shiftNode(left.node(), -shift);
+    BtreeP64.PositionedNode<T> rightNode = shiftNode(right.node(), shift);
+    BtreeP64.PositionedNode<T> positioned =
+        new BtreeP64.PositionedNode<>(node.getValue(), 0, depth, leftNode, rightNode);
 
     return new Result<>(positioned, leftContour, rightContour, height);
   }

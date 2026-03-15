@@ -2,12 +2,35 @@ package org.nintynine.problems;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /** Additional tests to improve coverage of small utility classes. */
 class AdditionalCoverageTest {
+
+  @Test
+  @DisplayName("Utility classes private constructors coverage")
+  void testPrivateConstructors() throws Exception {
+    assertPrivateConstructor(Btree54.class);
+    assertPrivateConstructor(BtreeP59.class);
+    assertPrivateConstructor(BtreeP61.class);
+    assertPrivateConstructor(BtreeP62.class);
+    assertPrivateConstructor(BtreeP66.class);
+    assertPrivateConstructor(BtreeP67.class);
+    assertPrivateConstructor(MathP31.class);
+    assertPrivateConstructor(MathP34.class);
+    assertPrivateConstructor(MathP38.class);
+  }
+
+  private void assertPrivateConstructor(Class<?> clazz) throws Exception {
+    Constructor<?> constructor = clazz.getDeclaredConstructor();
+    assertTrue(java.lang.reflect.Modifier.isPrivate(constructor.getModifiers()));
+    constructor.setAccessible(true);
+    constructor.newInstance();
+  }
 
   @Test
   @DisplayName("Btree54Node handles raw expression values")
@@ -40,15 +63,15 @@ class AdditionalCoverageTest {
   @Test
   @DisplayName("BtreeP59Node equality and toString")
   void testBtreeP59NodeEquality() {
-    BtreeP59.BTree59Node left1 = new BtreeP59.BTree59Node('L');
-    BtreeP59.BTree59Node right1 = new BtreeP59.BTree59Node('R');
-    BtreeP59.BTree59Node root1 = new BtreeP59.BTree59Node('X');
+    BtreeP59.Btree59Node left1 = new BtreeP59.Btree59Node('L');
+    BtreeP59.Btree59Node right1 = new BtreeP59.Btree59Node('R');
+    BtreeP59.Btree59Node root1 = new BtreeP59.Btree59Node('X');
     root1.left = left1;
     root1.right = right1;
 
-    BtreeP59.BTree59Node left2 = new BtreeP59.BTree59Node('L');
-    BtreeP59.BTree59Node right2 = new BtreeP59.BTree59Node('R');
-    BtreeP59.BTree59Node root2 = new BtreeP59.BTree59Node('X');
+    BtreeP59.Btree59Node left2 = new BtreeP59.Btree59Node('L');
+    BtreeP59.Btree59Node right2 = new BtreeP59.Btree59Node('R');
+    BtreeP59.Btree59Node root2 = new BtreeP59.Btree59Node('X');
     root2.left = left2;
     root2.right = right2;
 

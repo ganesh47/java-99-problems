@@ -2,16 +2,16 @@ package org.nintynine.problems;
 
 import java.util.Objects;
 
-/** P54A: Check whether a given expression represents a binary tree */
+/** P54A: Check whether a given expression represents a binary tree. */
 public class Btree54 {
-  /** Represents a node in the binary tree expression */
+  /** Represents a node in the binary tree expression. */
   public static class Btree54Node {
     private final String value;
     private final Btree54Node left;
     private final Btree54Node right;
 
     /**
-     * Constructs a binary tree node
+     * Constructs a binary tree node.
      *
      * @param value The value at this node
      * @param left Left child node or null
@@ -24,7 +24,7 @@ public class Btree54 {
     }
 
     /**
-     * Creates a leaf node with no children
+     * Creates a leaf node with no children.
      *
      * @param value The value at this node
      */
@@ -34,11 +34,15 @@ public class Btree54 {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (!(o instanceof Btree54Node bTree54Node)) return false;
-      return Objects.equals(value, bTree54Node.value)
-          && Objects.equals(left, bTree54Node.left)
-          && Objects.equals(right, bTree54Node.right);
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof Btree54Node btree54Node)) {
+        return false;
+      }
+      return Objects.equals(value, btree54Node.value)
+          && Objects.equals(left, btree54Node.left)
+          && Objects.equals(right, btree54Node.right);
     }
 
     @Override
@@ -62,6 +66,12 @@ public class Btree54 {
 
   private Btree54() {} // Prevent instantiation
 
+  /**
+   * Checks if a value is valid for a tree node.
+   *
+   * @param value the value to check
+   * @return true if valid, false otherwise
+   */
   private static boolean isValidValue(String value) {
     // Check for any special characters or improper formatting
     return value != null
@@ -73,6 +83,12 @@ public class Btree54 {
         && !"nil".equals(value);
   }
 
+  /**
+   * Checks whether the given expression represents a valid binary tree.
+   *
+   * @param expression the expression to check
+   * @return true if the expression represents a valid binary tree, false otherwise
+   */
   public static boolean isTree(String expression) {
     if (expression == null || expression.trim().isEmpty()) {
       return false;
@@ -101,7 +117,7 @@ public class Btree54 {
       // For expressions in parentheses, try parsing
       parseTree(trimmed);
       return true;
-    } catch (IllegalArgumentException _) {
+    } catch (IllegalArgumentException e) {
       return false;
     }
   }

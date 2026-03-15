@@ -22,8 +22,8 @@ class MyListP06Test {
     MyListP06<String> empty = new MyListP06<>();
     assertTrue(empty.isPalindrome());
 
-    // Additional test for null elements
+    // Additional test for null elements - now safely handled
     MyListP06<String> withNulls = new MyListP06<>(null, "a", null);
-    assertThrows(NullPointerException.class, withNulls::isPalindrome);
+    assertTrue(withNulls.isPalindrome());
   }
 }

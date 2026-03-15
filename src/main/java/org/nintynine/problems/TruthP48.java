@@ -7,7 +7,17 @@ import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
+/**
+ * Problem P48: truth tables for logical expressions.
+ */
 public class TruthP48 {
+
+  /**
+   * Generates a truth table for the given expression and variables.
+   *
+   * @param variables the variables in the expression
+   * @param expression the logical expression
+   */
   public static void table(List<String> variables, String expression) {
     ExpressionNode expr = parse(expression);
     int columnWidth = 8; // Width for each column to accommodate "false" and "true"
@@ -95,7 +105,9 @@ public class TruthP48 {
       int count = 0;
       boolean valid = true;
       for (int i = 0; i < expression.length(); i++) {
-        if (expression.charAt(i) == '(') count++;
+        if (expression.charAt(i) == '(') {
+          count++;
+        }
         if (expression.charAt(i) == ')') {
           count--;
           if (count == 0 && i != expression.length() - 1) {
@@ -104,7 +116,9 @@ public class TruthP48 {
           }
         }
       }
-      if (!valid || count != 0) break;
+      if (!valid || count != 0) {
+        break;
+      }
       expression = expression.substring(1, expression.length() - 1).trim();
     }
 
@@ -113,7 +127,7 @@ public class TruthP48 {
       try {
         // It's a variable
         return new VariableNode(expression);
-      } catch (NumberFormatException _) {
+      } catch (NumberFormatException e) {
         throw new IllegalArgumentException("Invalid expression: " + expression);
       }
     }

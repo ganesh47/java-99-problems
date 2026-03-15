@@ -8,7 +8,9 @@ import java.util.List;
  * operation counts between P34 (primitive) and P37 (improved) methods.
  */
 public class MathP38 {
-  /** Instrumented version of primitive totient calculation (P34 style) */
+  private MathP38() {}
+
+  /** Instrumented version of primitive totient calculation (P34 style). */
   private static long totientPhiPrimitive(long m, OperationCounter counter) {
     if (m <= 0) {
       throw new IllegalArgumentException("Number must be positive");
@@ -34,7 +36,7 @@ public class MathP38 {
     return count;
   }
 
-  /** Instrumented version of GCD calculation */
+  /** Instrumented version of GCD calculation. */
   private static long gcd(long a, long b, OperationCounter counter) {
     counter.countMethodCall();
     while (b != 0) {
@@ -49,7 +51,7 @@ public class MathP38 {
     return a;
   }
 
-  /** Instrumented version of improved totient calculation (P37 style) */
+  /** Instrumented version of improved totient calculation (P37 style). */
   private static long totientPhiImproved(long m, OperationCounter counter) {
     if (m <= 0) {
       throw new IllegalArgumentException("Number must be positive");
@@ -78,7 +80,7 @@ public class MathP38 {
     return result;
   }
 
-  /** Instrumented version of prime factorization */
+  /** Instrumented version of prime factorization. */
   private static List<MathP36.PrimeFactor> getPrimeFactors(long n, OperationCounter counter) {
     counter.countMethodCall();
     List<MathP36.PrimeFactor> factors = new ArrayList<>();
@@ -127,7 +129,7 @@ public class MathP38 {
     return factors;
   }
 
-  /** Instrumented version of power calculation */
+  /** Instrumented version of power calculation. */
   private static long pow(long base, int exponent, OperationCounter counter) {
     counter.countMethodCall();
     if (exponent == 0) {
@@ -151,7 +153,7 @@ public class MathP38 {
     return result;
   }
 
-  /** Compare both methods for a given number */
+  /** Compare both methods for a given number. */
   public static List<PerformanceMetrics> compare(long n) {
     List<PerformanceMetrics> results = new ArrayList<>();
 
@@ -188,7 +190,7 @@ public class MathP38 {
     return results;
   }
 
-  /** Represents performance metrics for a totient calculation method */
+  /** Represents performance metrics for a totient calculation method. */
   public record PerformanceMetrics(
       String methodName,
       long result,
@@ -217,7 +219,8 @@ public class MathP38 {
     }
   }
 
-  /** Counter class to track operations during calculation */
+
+  /** Counter class to track operations during calculation. */
   public static class OperationCounter {
     private long arithmeticOps = 0;
     private long comparisonOps = 0;

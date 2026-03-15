@@ -6,9 +6,12 @@ import java.util.stream.LongStream;
  * P34: Calculate Euler's totient function phi(m). Euler's totient function phi(m) is defined as the
  * number of positive integers r (1 <= r < m) that are coprime to m.
  */
-public class MathP34 {
+public final class MathP34 {
+  private MathP34() {}
+
   /**
-   * Calculates Euler's totient function phi(m) using the primitive method. For a number m, it
+   * Calculates Euler's totient function phi(m) using the primitive method.
+ For a number m, it
    * counts how many numbers from 1 to m-1 are coprime with m. Special properties: 1. For prime
    * numbers p, phi(p) = p-1 2. For n = 1, phi(1) = 1
    *
@@ -48,7 +51,7 @@ public class MathP34 {
     return new PrimeTotientResult(isPrime, totient);
   }
 
-  /** Record to hold the result of prime check and totient calculation */
+  /** Record to hold the result of prime check and totient calculation. */
   public record PrimeTotientResult(boolean isPrime, long totientValue) {
     @Override
     public String toString() {

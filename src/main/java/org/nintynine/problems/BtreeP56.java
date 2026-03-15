@@ -5,14 +5,24 @@ package org.nintynine.problems;
  *
  * @param <T> node value type
  */
-public class BtreeP56<T> {
+public final class BtreeP56<T> {
   private Node<T> root;
 
+  /**
+   * Represents a node in the binary tree.
+   *
+   * @param <T> node value type
+   */
   private static class Node<T> {
     T value;
     Node<T> left;
     Node<T> right;
 
+    /**
+     * Constructs a node with the specified value.
+     *
+     * @param value the node value
+     */
     Node(T value) {
       this.value = value;
       this.left = null;
@@ -20,14 +30,27 @@ public class BtreeP56<T> {
     }
   }
 
+  /**
+   * Constructs an empty binary tree.
+   */
   public BtreeP56() {
     this.root = null;
   }
 
+  /**
+   * Sets the root of the tree.
+   *
+   * @param value the root value
+   */
   public void setRoot(T value) {
     this.root = new Node<>(value);
   }
 
+  /**
+   * Adds a left child to the root.
+   *
+   * @param value the left child value
+   */
   public void addLeft(T value) {
     if (root == null) {
       throw new IllegalStateException("Tree has no root");
@@ -35,6 +58,11 @@ public class BtreeP56<T> {
     root.left = new Node<>(value);
   }
 
+  /**
+   * Adds a right child to the root.
+   *
+   * @param value the right child value
+   */
   public void addRight(T value) {
     if (root == null) {
       throw new IllegalStateException("Tree has no root");
@@ -42,6 +70,11 @@ public class BtreeP56<T> {
     root.right = new Node<>(value);
   }
 
+  /**
+   * Checks if the tree is symmetric.
+   *
+   * @return true if symmetric
+   */
   public boolean isSymmetric() {
     if (root == null) {
       return true;

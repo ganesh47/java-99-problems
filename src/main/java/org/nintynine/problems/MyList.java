@@ -5,22 +5,32 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-interface Streamable<T> extends Iterable<T> {
-  Stream<T> stream();
-}
-
+/**
+ * A custom list implementation for the 99 Problems.
+ *
+ * @param <T> the type of elements
+ */
 public class MyList<T> implements Streamable<T> {
   protected T[] items;
 
+  /**
+   * Constructs a MyList from the provided elements.
+   *
+   * @param elements the elements to include in the list
+   */
   @SafeVarargs
   public MyList(T... elements) {
     this.items = Arrays.copyOf(elements, elements.length);
   }
 
-  // P01 : Find the last box of a list
+  /**
+   * Find the last box of a list.
+   *
+   * @return the last element
+   */
   public T last() {
     return Arrays.stream(items)
-        .reduce((_, b) -> b)
+        .reduce((first, second) -> second)
         .orElseThrow(() -> new IllegalStateException("Empty list has no last element"));
   }
 

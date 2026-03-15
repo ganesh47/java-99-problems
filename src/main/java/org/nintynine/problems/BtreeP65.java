@@ -10,7 +10,8 @@ public final class BtreeP65 {
   }
 
   /**
-   * Layout a binary tree such that nodes on level {@code d} are spaced by {@code 2^{h-d}} where {@code h} is the tree height.
+   * Layout a binary tree such that nodes on level {@code d} are spaced by {@code 2^{h-d}}
+   * where {@code h} is the tree height.
    *
    * @param root tree root
    * @param <T> element type

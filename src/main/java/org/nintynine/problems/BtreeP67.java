@@ -1,170 +1,202 @@
 package org.nintynine.problems;
 
-import java.util.Objects; // For Objects.equals and Objects.hash
+import java.util.Objects;
 
-public class BtreeP67<T> {
+/**
+ * P67: A string representation of binary trees.
+ *
+ * <p>Supports rendering a binary tree to the compact representation used in the
+ * 99-problems kata (e.g. {@code a(b(d,e),c(,f(g,)))}) and parsing the same
+ * format back into a tree structure.</p>
+ */
+public final class BtreeP67 {
 
-    static class Node<T> { // Changed from private static to static (package-private)
-        T value;
-        Node<T> left;
-        Node<T> right;
+  private BtreeP67() {
+    // Utility class
+  }
 
-        Node(T value) {
-            this.value = value;
-            this.left = null;
-            this.right = null;
-        }
+  /**
+   * Represents a node in the binary tree.
+   *
+   * @param <T> node value type
+   */
+  public static final class Node<T> {
+    private final T value;
+    private final Node<T> left;
+    private final Node<T> right;
 
-        @Override
-        public String toString() { // For debugging
-            return "Node{" + "value=" + value +
-                   (left != null && left.value != null ? ", L:" + left.value : "") +
-                   (right != null && right.value != null ? ", R:" + right.value : "") +
-                   '}';
-        }
-
-        // Node equality needed for tree equality
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Node<?> node = (Node<?>) o;
-            // Check current node's value, then recursively check children
-            return Objects.equals(value, node.value) &&
-                   Objects.equals(left, node.left) &&  // relies on Node.equals for left subtree
-                   Objects.equals(right, node.right); // relies on Node.equals for right subtree
-        }
-
-        @Override
-        public int hashCode() {
-            // Combine hash codes of value and children
-            return Objects.hash(value, left, right); // relies on Node.hashCode for children
-        }
+    private Node(T value, Node<T> left, Node<T> right) {
+      this.value = Objects.requireNonNull(value, "value");
+      this.left = left;
+      this.right = right;
     }
 
-    private Node<T> root;
-
-    public BtreeP67() {
-        this.root = null;
+    /**
+     * Creates a leaf node.
+     *
+     * @param value node value
+     * @param <T> node value type
+     * @return a new leaf node
+     */
+    public static <T> Node<T> leaf(T value) {
+      return new Node<>(value, null, null);
     }
 
-    // Constructor to create a tree with a given root.
-    public BtreeP67(Node<T> root) {
-        this.root = root;
+    /**
+     * Creates a node with children.
+     *
+     * @param value node value
+     * @param left left child
+     * @param right right child
+     * @param <T> node value type
+     * @return a new node
+     */
+    public static <T> Node<T> of(T value, Node<T> left, Node<T> right) {
+      return new Node<>(value, left, right);
     }
 
-    // Getter for the root, might be useful for testing.
-    public Node<T> getRoot() {
-        return root;
+    public T getValue() {
+      return value;
     }
 
-    public static BtreeP67<String> fromString(String representation) {
-        if (representation == null || representation.isEmpty()) {
-            return new BtreeP67<>(null); // Tree with null root for empty string
-        }
-        int[] index = {0}; // Current parsing position in the string
-        Node<String> rootNode = parseInternal(representation, index);
-
-        // After parsing, index should be at the end of the string.
-        // If not, it means there are unparsed characters, so the string is malformed.
-        if (index[0] != representation.length()) {
-            throw new IllegalArgumentException("Malformed tree string: unexpected characters after parsing. Index: " + index[0] + ", String length: " + representation.length() + ", String: '" + representation + "'");
-        }
-
-        return new BtreeP67<>(rootNode);
+    public Node<T> getLeft() {
+      return left;
     }
 
-    private static Node<String> parseInternal(String s, int[] index) {
-        // Base case: if we are at the end of string or at a separator for an empty spot
-        if (index[0] >= s.length()) {
-            // This can happen if e.g. string ends prematurely like "a("
-            // The checks for comma/parenthesis later will catch this if it's mid-structure.
-            // If it's a valid end of a recursive call (e.g. for a null child), this is fine.
-            return null;
-        }
-        char currentChar = s.charAt(index[0]);
-        if (currentChar == ',' || currentChar == ')') { // Indicates an empty subtree spot
-            return null;
-        }
-
-        // Parse the value of the current node (assuming single character values)
-        String value = String.valueOf(currentChar);
-        Node<String> currentNode = new Node<>(value);
-        index[0]++; // Consume the character for the node's value
-
-        // Check if this node has children, indicated by an opening parenthesis '('
-        if (index[0] < s.length() && s.charAt(index[0]) == '(') {
-            index[0]++; // Consume '('
-
-            // Parse the left child. This will return null if the left child is empty (e.g., ",c").
-            currentNode.left = parseInternal(s, index);
-
-            // After parsing the left child, a comma must follow.
-            if (index[0] >= s.length() || s.charAt(index[0]) != ',') {
-                throw new IllegalArgumentException("Malformed tree string: expected ',' separator after left child/subtree for node '" + value + "' near index " + index[0] + " in '" + s + "'");
-            }
-            index[0]++; // Consume ','
-
-            // Parse the right child. This will return null if the right child is empty (e.g., "b,").
-            currentNode.right = parseInternal(s, index);
-
-            // After parsing the right child, a closing parenthesis must follow.
-            if (index[0] >= s.length() || s.charAt(index[0]) != ')') {
-                throw new IllegalArgumentException("Malformed tree string: expected ')' to close children of node '" + value + "' near index " + index[0] + " in '" + s + "'");
-            }
-            index[0]++; // Consume ')'
-        }
-        // If no '(', it's a leaf node; its left and right children remain null by default.
-        return currentNode;
+    public Node<T> getRight() {
+      return right;
     }
 
-    @Override
-    public String toString() {
-        if (root == null) {
-            return ""; // Consistent with fromString("") creating a tree with null root
-        }
-        StringBuilder sb = new StringBuilder();
-        buildStringInternal(root, sb);
-        return sb.toString();
-    }
-
-    private void buildStringInternal(Node<T> node, StringBuilder sb) {
-        // This method is called only for non-null nodes by its callers.
-        sb.append(node.value);
-
-        // A node is a "parent" (needs parentheses) if it has at least one non-null child.
-        // If both children are null, it's a leaf node, and no parentheses are printed.
-        if (node.left != null || node.right != null) {
-            sb.append('(');
-            if (node.left != null) {
-                buildStringInternal(node.left, sb); // Recursively build string for left child
-            }
-            // If left child is null, nothing is appended for its part.
-
-            sb.append(',');
-
-            if (node.right != null) {
-                buildStringInternal(node.right, sb); // Recursively build string for right child
-            }
-            // If right child is null, nothing is appended for its part.
-
-            sb.append(')');
-        }
-    }
-
-    // For comparing tree structures.
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BtreeP67<?> that = (BtreeP67<?>) o;
-        // Tree equality depends on root node equality (which is recursive)
-        return Objects.equals(root, that.root);
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof Node<?> node)) {
+        return false;
+      }
+      return Objects.equals(value, node.value)
+          && Objects.equals(left, node.left)
+          && Objects.equals(right, node.right);
     }
 
     @Override
     public int hashCode() {
-        // Tree hash code depends on root node hash code (which is recursive)
-        return Objects.hash(root);
+      return Objects.hash(value, left, right);
     }
+  }
+
+  /**
+   * Renders a binary tree to a compact string.
+   *
+   * @param root tree root
+   * @return compact string representation
+   */
+  public static String toCompactString(Node<?> root) {
+    if (root == null) {
+      return "";
+    }
+    StringBuilder builder = new StringBuilder();
+    appendNode(root, builder);
+    return builder.toString();
+  }
+
+  private static void appendNode(Node<?> node, StringBuilder builder) {
+    builder.append(node.value);
+    if (node.left == null && node.right == null) {
+      return;
+    }
+    builder.append('(');
+    if (node.left != null) {
+      appendNode(node.left, builder);
+    }
+    builder.append(',');
+    if (node.right != null) {
+      appendNode(node.right, builder);
+    }
+    builder.append(')');
+  }
+
+  /**
+   * Parses a compact string representation of a binary tree.
+   *
+   * @param representation compact string representation
+   * @return tree root
+   * @throws IllegalArgumentException if the input is null or invalid
+   */
+  public static Node<String> parse(String representation) {
+    if (representation == null) {
+      throw new IllegalArgumentException("Input cannot be null");
+    }
+    Parser parser = new Parser(representation);
+    if (parser.isAtEnd()) {
+      return null;
+    }
+    Node<String> root = parser.parseNode();
+    if (!parser.isAtEnd()) {
+      throw new IllegalArgumentException("Unexpected trailing content at position "
+          + parser.position);
+    }
+    return root;
+  }
+
+  private static final class Parser {
+    private final String input;
+    private int position;
+
+    private Parser(String input) {
+      this.input = input;
+      this.position = 0;
+    }
+
+    private boolean isAtEnd() {
+      return position >= input.length();
+    }
+
+    private char peek() {
+      return isAtEnd() ? '\0' : input.charAt(position);
+    }
+
+    private void consume(char expected) {
+      if (peek() != expected) {
+        throw new IllegalArgumentException("Expected '" + expected + "' at position " + position);
+      }
+      position++;
+    }
+
+    private Node<String> parseNode() {
+      if (peek() == ',' || peek() == ')' || isAtEnd()) {
+        return null;
+      }
+
+      String value = readValue();
+      Node<String> leftChild = null;
+      Node<String> rightChild = null;
+
+      if (peek() == '(') {
+        position++; // consume '('
+        leftChild = parseNode();
+        consume(',');
+        rightChild = parseNode();
+        consume(')');
+      }
+
+      return Node.of(value, leftChild, rightChild);
+    }
+
+    private String readValue() {
+      int start = position;
+      while (!isAtEnd()) {
+        char current = input.charAt(position);
+        if (current == '(' || current == ')' || current == ',' || Character.isWhitespace(current)) {
+          break;
+        }
+        position++;
+      }
+      if (start == position) {
+        throw new IllegalArgumentException("Missing node value at position " + position);
+      }
+      return input.substring(start, position);
+    }
+  }
 }

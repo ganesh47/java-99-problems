@@ -12,7 +12,7 @@ public final class BtreeP64 {
   }
 
   /**
-   * Layout the supplied tree so that the x-coordinate follows the inorder traversal index and the y-coordinate is the depth.
+   * Layout the supplied tree so that the x-coordinate follows the inorder traversal index.
    *
    * @param root tree root
    * @param <T> element type
@@ -55,16 +55,25 @@ public final class BtreeP64 {
    */
   public static final class PositionedNode<T> {
     private final T value;
-    private final int x;
-    private final int y;
+    private final int xcoord;
+    private final int ycoord;
     private final PositionedNode<T> left;
     private final PositionedNode<T> right;
 
+    /**
+     * Constructs a PositionedNode.
+     *
+     * @param value node value
+     * @param xcoord x-coordinate
+     * @param ycoord y-coordinate
+     * @param left left child
+     * @param right right child
+     */
     public PositionedNode(
-        T value, int x, int y, PositionedNode<T> left, PositionedNode<T> right) {
+        T value, int xcoord, int ycoord, PositionedNode<T> left, PositionedNode<T> right) {
       this.value = Objects.requireNonNull(value, "value");
-      this.x = x;
-      this.y = y;
+      this.xcoord = xcoord;
+      this.ycoord = ycoord;
       this.left = left;
       this.right = right;
     }
@@ -74,11 +83,11 @@ public final class BtreeP64 {
     }
 
     public int getX() {
-      return x;
+      return xcoord;
     }
 
     public int getY() {
-      return y;
+      return ycoord;
     }
 
     public PositionedNode<T> getLeft() {
@@ -97,8 +106,8 @@ public final class BtreeP64 {
       if (!(o instanceof PositionedNode<?> that)) {
         return false;
       }
-      return x == that.x
-          && y == that.y
+      return xcoord == that.xcoord
+          && ycoord == that.ycoord
           && Objects.equals(value, that.value)
           && Objects.equals(left, that.left)
           && Objects.equals(right, that.right);
@@ -106,7 +115,7 @@ public final class BtreeP64 {
 
     @Override
     public int hashCode() {
-      return Objects.hash(value, x, y, left, right);
+      return Objects.hash(value, xcoord, ycoord, left, right);
     }
   }
 }

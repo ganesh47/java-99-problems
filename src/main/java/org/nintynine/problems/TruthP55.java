@@ -5,15 +5,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Utility class for completely balanced binary trees.
+ */
 @SuppressWarnings("ClassEscapesDefinedScope")
-public class TruthP55 {
+public final class TruthP55 {
   private TruthP55() {}
 
+  /**
+   * Represents a node in the binary tree.
+   */
   static class Node {
     String value;
     Node left;
     Node right;
 
+    /**
+     * Constructs a node with the specified value and children.
+     *
+     * @param value the node value
+     * @param left the left child
+     * @param right the right child
+     */
     Node(String value, Node left, Node right) {
       this.value = value;
       this.left = left;
@@ -32,8 +45,12 @@ public class TruthP55 {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (!(o instanceof Node node)) return false;
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof Node node)) {
+        return false;
+      }
       return Objects.equals(value, node.value)
           && Objects.equals(left, node.left)
           && Objects.equals(right, node.right);
@@ -46,7 +63,7 @@ public class TruthP55 {
   }
 
   /**
-   * Generates all possible completely balanced binary trees with n nodes
+   * Generates all possible completely balanced binary trees with n nodes.
    *
    * @param n number of nodes
    * @return list of all possible balanced trees
@@ -108,11 +125,13 @@ public class TruthP55 {
     int rem = n - 1;
 
     // Try all valid distributions
-    for (int left = 0; left <= rem; left++) {
-      int right = rem - left;
-      if (Math.abs(left - right) <= 1) {
-        List<Node> leftSubtrees = left == 0 ? Collections.singletonList(null) : cbalTree(left);
-        List<Node> rightSubtrees = right == 0 ? Collections.singletonList(null) : cbalTree(right);
+    for (int leftCount = 0; leftCount <= rem; leftCount++) {
+      int rightCount = rem - leftCount;
+      if (Math.abs(leftCount - rightCount) <= 1) {
+        List<Node> leftSubtrees = leftCount == 0 ? Collections.singletonList(null)
+            : cbalTree(leftCount);
+        List<Node> rightSubtrees = rightCount == 0 ? Collections.singletonList(null)
+            : cbalTree(rightCount);
 
         for (Node leftTree : leftSubtrees) {
           for (Node rightTree : rightSubtrees) {

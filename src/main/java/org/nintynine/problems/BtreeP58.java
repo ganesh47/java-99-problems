@@ -5,14 +5,20 @@ import java.util.List;
 import java.util.Objects;
 
 /** Utilities for constructing symmetric binary trees. */
-public class BtreeP58 {
+public final class BtreeP58 {
   private BtreeP58() {}
 
+  /** Represents a node in the binary tree. */
   public static class BtreeP58Node {
     char value;
     BtreeP58Node left;
     BtreeP58Node right;
 
+    /**
+     * Constructs a node with the specified value.
+     *
+     * @param value node value
+     */
     BtreeP58Node(char value) {
       this.value = value;
       left = null;
@@ -26,39 +32,57 @@ public class BtreeP58 {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      BtreeP58Node bTreeP58Node = (BtreeP58Node) o;
-      return value == bTreeP58Node.value
-          && Objects.equals(left, bTreeP58Node.left)
-          && Objects.equals(right, bTreeP58Node.right);
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
+      BtreeP58Node that = (BtreeP58Node) o;
+      return value == that.value
+          && Objects.equals(left, that.left)
+          && Objects.equals(right, that.right);
     }
 
     @Override
     public String toString() {
-      if (left == null && right == null) return String.valueOf(value);
+      if (left == null && right == null) {
+        return String.valueOf(value);
+      }
       return String.format(
           "%c(%s,%s)",
           value, left == null ? "NIL" : left.toString(), right == null ? "NIL" : right.toString());
     }
   }
 
+  /**
+   * Generates all symmetric completely balanced trees with the given number of nodes.
+   *
+   * @param nodes number of nodes
+   * @return list of symmetric trees
+   */
   public static List<BtreeP58Node> symCbalTrees(int nodes) {
-    if (nodes % 2 == 0) return new ArrayList<>();
+    if (nodes % 2 == 0) {
+      return new ArrayList<>();
+    }
     return generateSymCbalTrees(nodes);
   }
 
   private static List<BtreeP58Node> generateSymCbalTrees(int nodes) {
     List<BtreeP58Node> result = new ArrayList<>();
 
-    if (nodes == 0) return result;
+    if (nodes == 0) {
+      return result;
+    }
     if (nodes == 1) {
       result.add(new BtreeP58Node('X'));
       return result;
     }
 
     int remainingNodes = nodes - 1;
-    if (remainingNodes % 2 != 0) return result;
+    if (remainingNodes % 2 != 0) {
+      return result;
+    }
 
     List<BtreeP58Node> subtrees = generateBalancedSubtrees(remainingNodes / 2);
     for (BtreeP58Node leftSubtree : subtrees) {
@@ -102,7 +126,9 @@ public class BtreeP58 {
   }
 
   private static BtreeP58Node mirrorTree(BtreeP58Node root) {
-    if (root == null) return null;
+    if (root == null) {
+      return null;
+    }
     BtreeP58Node mirrored = new BtreeP58Node(root.value);
     mirrored.left = mirrorTree(root.right);
     mirrored.right = mirrorTree(root.left);
@@ -110,13 +136,21 @@ public class BtreeP58 {
   }
 
   private static BtreeP58Node cloneTree(BtreeP58Node root) {
-    if (root == null) return null;
+    if (root == null) {
+      return null;
+    }
     BtreeP58Node clone = new BtreeP58Node(root.value);
     clone.left = cloneTree(root.left);
     clone.right = cloneTree(root.right);
     return clone;
   }
 
+  /**
+   * Counts the number of symmetric completely balanced trees with the given number of nodes.
+   *
+   * @param nodes number of nodes
+   * @return count of symmetric trees
+   */
   public static int countSymCbalTrees(int nodes) {
     return symCbalTrees(nodes).size();
   }
