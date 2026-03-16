@@ -4,92 +4,46 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Problem P68: Preorder and inorder sequences of binary trees.
- *
- * <p>See issue #61.
  */
-@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-public class BtreeP68 {
+public final class BtreeP68 {
 
   private BtreeP68() {
     // utility class
   }
 
-  /** Simple binary tree node. */
-  public static class Node {
-    char value;
-    Node left;
-    Node right;
-
-    Node(char value) {
-      this.value = value;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (!(o instanceof Node other)) {
-        return false;
-      }
-      return value == other.value
-          && Objects.equals(left, other.left)
-          && Objects.equals(right, other.right);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(value, left, right);
-    }
-
-    @Override
-    public String toString() {
-      if (left == null && right == null) {
-        return String.valueOf(value);
-      }
-      return value
-          + "("
-          + (left == null ? "NIL" : left.toString())
-          + ","
-          + (right == null ? "NIL" : right.toString())
-          + ")";
-    }
-  }
-
   /** Preorder sequence for the given tree. */
-  public static List<Character> preorder(Node node) {
+  public static List<Character> preorder(BtreeP61.Node<Character> node) {
     List<Character> result = new ArrayList<>();
     preorderRec(node, result);
     return result;
   }
 
-  private static void preorderRec(Node node, List<Character> acc) {
+  private static void preorderRec(BtreeP61.Node<Character> node, List<Character> acc) {
     if (node == null) {
       return;
     }
-    acc.add(node.value);
-    preorderRec(node.left, acc);
-    preorderRec(node.right, acc);
+    acc.add(node.getValue());
+    preorderRec(node.getLeft(), acc);
+    preorderRec(node.getRight(), acc);
   }
 
   /** Inorder sequence for the given tree. */
-  public static List<Character> inorder(Node node) {
+  public static List<Character> inorder(BtreeP61.Node<Character> node) {
     List<Character> result = new ArrayList<>();
     inorderRec(node, result);
     return result;
   }
 
-  private static void inorderRec(Node node, List<Character> acc) {
+  private static void inorderRec(BtreeP61.Node<Character> node, List<Character> acc) {
     if (node == null) {
       return;
     }
-    inorderRec(node.left, acc);
-    acc.add(node.value);
-    inorderRec(node.right, acc);
+    inorderRec(node.getLeft(), acc);
+    acc.add(node.getValue());
+    inorderRec(node.getRight(), acc);
   }
 
   /**
@@ -98,27 +52,15 @@ public class BtreeP68 {
    * @param seq preorder sequence
    * @return root of the constructed tree
    */
-  public static Node fromPreorder(List<Character> seq) {
-    Node root = null;
+  public static BtreeP61.Node<Character> fromPreorder(List<Character> seq) {
     if (seq == null) {
       return null;
     }
+    BtreeP61.Node<Character> root = null;
     for (char c : seq) {
-      root = insert(root, c);
+      root = BtreeP57.insert(root, c);
     }
     return root;
-  }
-
-  private static Node insert(Node node, char value) {
-    if (node == null) {
-      return new Node(value);
-    }
-    if (value < node.value) {
-      node.left = insert(node.left, value);
-    } else if (value > node.value) {
-      node.right = insert(node.right, value);
-    }
-    return node;
   }
 
   /**
@@ -129,36 +71,32 @@ public class BtreeP68 {
    * @return reconstructed tree root
    * @throws IllegalArgumentException if inputs are invalid
    */
-  public static Node preInTree(List<Character> preorder, List<Character> inorder) {
+  public static BtreeP61.Node<Character> preInTree(List<Character> preorder, List<Character> inorder) {
     if (preorder == null || inorder == null || preorder.size() != inorder.size()) {
       throw new IllegalArgumentException("invalid traversals");
     }
-    Map<Character, Integer> index = new HashMap<>();
+    Map<Character, Integer> indexMap = new HashMap<>();
     for (int i = 0; i < inorder.size(); i++) {
-      index.put(inorder.get(i), i);
+      indexMap.put(inorder.get(i), i);
     }
-    Index preIdx = new Index();
-    return build(preorder, 0, inorder.size() - 1, index, preIdx);
+    return build(preorder, 0, inorder.size() - 1, indexMap, new int[] {0});
   }
 
-  private static Node build(
+  private static BtreeP61.Node<Character> build(
       List<Character> preorder,
       int inStart,
       int inEnd,
-      Map<Character, Integer> index,
-      Index preIdx) {
+      Map<Character, Integer> indexMap,
+      int[] preIdx) {
     if (inStart > inEnd) {
       return null;
     }
-    char rootVal = preorder.get(preIdx.pos++);
-    Node node = new Node(rootVal);
-    int inIndex = index.get(rootVal);
-    node.left = build(preorder, inStart, inIndex - 1, index, preIdx);
-    node.right = build(preorder, inIndex + 1, inEnd, index, preIdx);
-    return node;
-  }
+    char rootVal = preorder.get(preIdx[0]++);
+    int inIdx = indexMap.get(rootVal);
 
-  private static class Index {
-    int pos;
+    BtreeP61.Node<Character> left = build(preorder, inStart, inIdx - 1, indexMap, preIdx);
+    BtreeP61.Node<Character> right = build(preorder, inIdx + 1, inEnd, indexMap, preIdx);
+
+    return BtreeP61.Node.of(rootVal, left, right);
   }
 }

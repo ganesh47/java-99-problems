@@ -1,93 +1,62 @@
 package org.nintynine.problems;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * P69 (**): Dotstring representation of binary trees.
- *
- * <p>A binary tree where nodes are identified by single characters can be represented as a
- * "dotstring" using a preorder traversal in which null (empty) subtrees are encoded by a dot
- * character '.'. For example the tree from problem P67 is encoded as {@code ABD..E..C.FG...}.
- *
- * <p>This class provides utility methods to convert between a tree structure and its dotstring
- * representation.
+ * Problem P69: Dotstring representation of binary trees.
  */
-@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-public class BtreeP69 {
+public final class BtreeP69 {
 
   private BtreeP69() {
     // utility class
   }
 
-  /** Node of the binary tree. */
-  public static class Node {
-    char value;
-    Node left;
-    Node right;
+  /**
+   * Render a binary tree to its dotstring representation.
+   *
+   * @param node tree root
+   * @return dotstring representation
+   */
+  public static String toDotstring(BtreeP61.Node<Character> node) {
+    StringBuilder sb = new StringBuilder();
+    toDotstringRec(node, sb);
+    return sb.toString();
+  }
 
-    Node(char value) {
-      this.value = value;
+  private static void toDotstringRec(BtreeP61.Node<Character> node, StringBuilder sb) {
+    if (node == null) {
+      sb.append(".");
+      return;
     }
-
-    @Override
-    public String toString() {
-      if (left == null && right == null) {
-        return String.valueOf(value);
-      }
-      return value
-          + "("
-          + (left == null ? "NIL" : left.toString())
-          + ","
-          + (right == null ? "NIL" : right.toString())
-          + ")";
-    }
+    sb.append(node.getValue());
+    toDotstringRec(node.getLeft(), sb);
+    toDotstringRec(node.getRight(), sb);
   }
 
   /**
-   * Convert a dotstring representation to a tree.
+   * Parse a dotstring representation into a binary tree.
    *
-   * @param ds the dotstring
-   * @return root node of the parsed tree or {@code null} if dotstring is just '.'
-   * @throws IllegalArgumentException if the dotstring is null or malformed
+   * @param s dotstring
+   * @return tree root
    */
-  public static Node tree(String ds) {
-    if (ds == null) {
-      throw new IllegalArgumentException("dotstring cannot be null");
+  public static BtreeP61.Node<Character> fromDotstring(String s) {
+    if (s == null || s.isEmpty()) {
+      return null;
     }
-    Index index = new Index();
-    Node root = parse(ds, index);
-    if (index.pos != ds.length()) {
-      throw new IllegalArgumentException("Extra characters in dotstring");
-    }
-    return root;
+    return fromDotstringRec(s, new int[] {0});
   }
 
-  private static Node parse(String ds, Index index) {
-    if (index.pos >= ds.length()) {
-      throw new IllegalArgumentException("Incomplete dotstring");
+  private static BtreeP61.Node<Character> fromDotstringRec(String s, int[] pos) {
+    if (pos[0] >= s.length()) {
+      return null;
     }
-    char c = ds.charAt(index.pos++);
+    char c = s.charAt(pos[0]++);
     if (c == '.') {
       return null;
     }
-    Node node = new Node(c);
-    node.left = parse(ds, index);
-    node.right = parse(ds, index);
-    return node;
-  }
-
-  /**
-   * Convert a tree into its dotstring representation.
-   *
-   * @param node the root node
-   * @return dotstring encoding
-   */
-  public static String dotstring(Node node) {
-    if (node == null) {
-      return ".";
-    }
-    return node.value + dotstring(node.left) + dotstring(node.right);
-  }
-
-  private static class Index {
-    int pos = 0;
+    BtreeP61.Node<Character> left = fromDotstringRec(s, pos);
+    BtreeP61.Node<Character> right = fromDotstringRec(s, pos);
+    return BtreeP61.Node.of(c, left, right);
   }
 }

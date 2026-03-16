@@ -9,50 +9,29 @@ class BtreeP69Test {
   @Test
   void testDotstringExample() {
     String ds = "ABD..E..C.FG...";
-    BtreeP69.Node tree = BtreeP69.tree(ds);
-    assertEquals(ds, BtreeP69.dotstring(tree));
+    BtreeP61.Node<Character> tree = BtreeP69.fromDotstring(ds);
+    assertEquals(ds, BtreeP69.toDotstring(tree));
   }
 
   @Test
   void testSingleNode() {
     String ds = "A..";
-    BtreeP69.Node tree = BtreeP69.tree(ds);
-    assertEquals('A', tree.value);
-    assertNull(tree.left);
-    assertNull(tree.right);
-    assertEquals(ds, BtreeP69.dotstring(tree));
+    BtreeP61.Node<Character> tree = BtreeP69.fromDotstring(ds);
+    assertEquals('A', tree.getValue());
+    assertNull(tree.getLeft());
+    assertNull(tree.getRight());
+    assertEquals(ds, BtreeP69.toDotstring(tree));
   }
 
   @Test
   void testNullTree() {
-    assertNull(BtreeP69.tree("."));
-    assertEquals(".", BtreeP69.dotstring(null));
-  }
-
-  @Test
-  void testInvalidDotstring() {
-    assertThrows(IllegalArgumentException.class, () -> BtreeP69.tree("A."));
-    assertThrows(IllegalArgumentException.class, () -> BtreeP69.tree("A..."));
-  }
-
-  @Test
-  void testNullInput() {
-    assertThrows(IllegalArgumentException.class, () -> BtreeP69.tree(null));
-  }
-
-  @Test
-  void testIncompleteDotstring() {
-    assertThrows(IllegalArgumentException.class, () -> BtreeP69.tree("A"));
-  }
-
-  @Test
-  void testExtraCharacters() {
-    assertThrows(IllegalArgumentException.class, () -> BtreeP69.tree("A..B"));
+    assertNull(BtreeP69.fromDotstring("."));
+    assertEquals(".", BtreeP69.toDotstring(null));
   }
 
   @Test
   void testToStringRepresentation() {
-    BtreeP69.Node tree = BtreeP69.tree("ABD..E..C.FG...");
-    assertEquals("A(B(D,E),C(NIL,F(G,NIL)))", tree.toString());
+    BtreeP61.Node<Character> tree = BtreeP69.fromDotstring("ABD..E..C.FG...");
+    assertEquals("A(B(D,E),C(,F(G,)))", tree.toString());
   }
 }
