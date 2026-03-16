@@ -34,8 +34,11 @@ public final class BtreeP62B {
    * @return list of values in breadth-first order
    */
   public static <T> List<T> levelOrder(BtreeP61.Node<T> root) {
+    if (root == null) {
+      return List.of();
+    }
     List<T> result = new ArrayList<>();
-    int height = height(root);
+    int height = root.height();
     for (int level = 1; level <= height; level++) {
       result.addAll(atLevel(root, level));
     }
@@ -52,12 +55,5 @@ public final class BtreeP62B {
     }
     collectAtLevel(node.getLeft(), level - 1, acc);
     collectAtLevel(node.getRight(), level - 1, acc);
-  }
-
-  private static <T> int height(BtreeP61.Node<T> node) {
-    if (node == null) {
-      return 0;
-    }
-    return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
   }
 }

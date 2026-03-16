@@ -1,6 +1,5 @@
 package org.nintynine.problems;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,20 +19,6 @@ public final class BtreeP61A {
    * @return list of leaf values (left to right)
    */
   public static <T> List<T> leaves(BtreeP61.Node<T> root) {
-    List<T> result = new ArrayList<>();
-    collectLeaves(root, result);
-    return result;
-  }
-
-  private static <T> void collectLeaves(BtreeP61.Node<T> node, List<T> acc) {
-    if (node == null) {
-      return;
-    }
-    if (node.getLeft() == null && node.getRight() == null) {
-      acc.add(node.getValue());
-      return;
-    }
-    collectLeaves(node.getLeft(), acc);
-    collectLeaves(node.getRight(), acc);
+    return BtreeP61.collect(root, BtreeP61.Node::isLeaf);
   }
 }

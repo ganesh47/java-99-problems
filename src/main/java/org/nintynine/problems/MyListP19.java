@@ -1,6 +1,6 @@
 package org.nintynine.problems;
 
-import java.util.stream.LongStream;
+import java.lang.reflect.Array;
 
 /**
  * A generic list class that provides functionality to rotate elements.
@@ -22,50 +22,28 @@ public class MyListP19<T> extends MyListP18<T> {
   /**
    * Rotates the list N places to the left. Negative values rotate to the right.
    *
-   * <p>Examples:
-   *
-   * <pre>
-   * [a, b, c, d] rotate 1 → [b, c, d, a]
-   * [a, b, c, d] rotate -1 → [d, a, b, c]
-   * [a, b, c, d] rotate 4 → [a, b, c, d]
-   * [a, b, c, d] rotate 5 → [b, c, d, a]
-   * </pre>
-   *
-   * @param n number of places to rotate (positive for left, negative for right)
+   * @param n number of places to rotate
    * @return a new MyListP19 containing the rotated elements
    */
+  @SuppressWarnings("unchecked")
   public MyListP19<T> rotate(int n) {
     if (length() <= 1) {
       return new MyListP19<>(items);
     }
 
-    // Normalize n to be within list length
-    n = Math.toIntExact(n % length());
-    if (n < 0) {
-      n += Math.toIntExact(length()); // Convert right rotation to the equivalent left rotation
+    int len = (int) length();
+    int k = n % len;
+    if (k < 0) {
+      k += len;
     }
 
-    if (n == 0) {
+    if (k == 0) {
       return new MyListP19<>(items);
     }
 
-    // Split the list at a rotation point
-    Pair<MyListP17<T>, MyListP17<T>> parts = split(n);
-
-    // Create an array for rotated elements
-    @SuppressWarnings("unchecked")
-    T[] rotated = (T[]) new Object[Math.toIntExact(length())];
-
-    // Copy the second part
-    LongStream.iterate(0, i -> i < parts.second().length(), i -> i + 1)
-        .forEachOrdered(i -> rotated[Math.toIntExact(i)] = parts.second().elementAt(i + 1));
-
-    // Copy the first part
-    LongStream.iterate(0, i -> i < parts.first().length(), i -> i + 1)
-        .forEachOrdered(
-            i ->
-                rotated[Math.toIntExact(parts.second().length() + i)] =
-                    parts.first().elementAt(i + 1));
+    T[] rotated = (T[]) Array.newInstance(items.getClass().getComponentType(), len);
+    System.arraycopy(items, k, rotated, 0, len - k);
+    System.arraycopy(items, 0, rotated, len - k, k);
 
     return new MyListP19<>(rotated);
   }

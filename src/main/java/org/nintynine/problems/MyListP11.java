@@ -19,21 +19,12 @@ public class MyListP11<T> extends MyListP10<T> {
   }
 
   /**
-   * Performs modified run-length encoding on the list. Single elements are kept as is, while
-   * consecutive duplicates are encoded as EncodedElement instances.
+   * Modified run-length encoding. Only elements with duplicates are transferred
+   * as EncodedElement terms.
    *
-   * <p>Examples:
+   * <p>E.g. {@code [a,a,b,c,c,a]} results in {@code [(2 a), b, (2 c), a]}.</p>
    *
-   * <pre>
-   * [a, a, a, a, b, c, c, a, a, d, e, e, e, e] → [(4 a), b, (2 c), (2 a), d, (4 e)]
-   * [a, b, c] → [a, b, c]
-   * [] → []
-   * [a] → [a]
-   * [a, a] → [(2 a)]
-   * </pre>
-   *
-   * @return a new MyListP11 containing a mix of original elements and EncodedElement instances
-   * @throws NullPointerException if the list contains null elements
+   * @return encoded sequence
    */
   public MyListP11<Object> encodeModified() {
     MyListP09<MyListP09<T>> packed = pack();

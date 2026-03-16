@@ -21,21 +21,13 @@ public class MyListP10<T> extends MyListP09<T> {
   }
 
   /**
-   * Performs run-length encoding on the list. Consecutive duplicates of elements are encoded as
-   * EncodedElement instances containing the count and the element.
+   * Run-length encoding of a list. Consecutive duplicates of elements are encoded
+   * as EncodedElement instances.
    *
-   * <p>Examples:
+   * <p>Example: {@code [a,a,a,a,b,c,c,a,a,d,e,e,e,e]} becomes
+   * {@code [(4 a), (1 b), (2 c), (2 a), (1 d), (4 e)]}.</p>
    *
-   * <pre>
-   * [a, a, a, a, b, c, c, a, a, d, e, e, e, e] → [(4 a), (1 b), (2 c), (2 a), (1 d), (4 e)]
-   * [a, b, c] → [(1 a), (1 b), (1 c)]
-   * [] → []
-   * [a] → [(1 a)]
-   * </pre>
-   *
-   * @return a new MyListP10 containing EncodedElement instances representing the run-length
-   *     encoding
-   * @throws NullPointerException if the list contains null elements
+   * @return list of run-length encoded elements
    */
   public MyListP10<EncodedElement<T>> encode() {
     MyListP09<MyListP09<T>> packed = pack();

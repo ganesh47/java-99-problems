@@ -6,10 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A generic list class that provides direct run-length encoding functionality. Encodes consecutive
- * duplicates without creating intermediate sublists.
- *
- * @param <T> the type of elements in the list
+ * A generic list class that provides direct run-length encoding functionality.
  */
 public class MyListP13<T> extends MyListP12<T> {
 
@@ -24,23 +21,9 @@ public class MyListP13<T> extends MyListP12<T> {
   }
 
   /**
-   * Performs direct run-length encoding on the list. Consecutive duplicates are encoded as
-   * EncodedElement instances, while single elements are kept as is. Unlike P11, this implementation
-   * doesn't create intermediate sublists.
+   * Direct run-length encoding.
    *
-   * <p>Examples:
-   *
-   * <pre>
-   * [a, a, a, a, b, c, c, a, a, d, e, e, e, e] → [(4 a), b, (2 c), (2 a), d, (4 e)]
-   * [a, b, c] → [a, b, c]
-   * [] → []
-   * [a] → [a]
-   * [a, a] → [(2 a)]
-   * </pre>
-   *
-   * @return a new org.nintynine.problems.MyListP13 containing a mix of original elements and
-   *     EncodedElement instances
-   * @throws NullPointerException if the list contains null elements
+   * @return encoded result
    */
   public MyListP13<Object> encodeDirect() {
     if (length() == 0) {
@@ -62,19 +45,10 @@ public class MyListP13<T> extends MyListP12<T> {
       }
     }
 
-    // Handle the last group
     addEncodedElement(result, count, currentElement);
-
     return new MyListP13<>(result.toArray());
   }
 
-  /**
-   * Helper method to add either an encoded element or a single element to the result list.
-   *
-   * @param result the list to add the element to
-   * @param count the count of consecutive occurrences
-   * @param element the element to add
-   */
   private void addEncodedElement(List<Object> result, long count, T element) {
     if (count == 1) {
       result.add(element);
@@ -83,23 +57,10 @@ public class MyListP13<T> extends MyListP12<T> {
     }
   }
 
-  /** Override of decode method to return MyListP13 instead of MyListP12. */
   @Override
-  @SuppressWarnings({"unchecked", "DuplicatedCode"})
+  @SuppressWarnings("unchecked")
   public <U> MyListP13<U> decode() {
-    List<U> decoded = new ArrayList<>();
-
-    for (T item : items) {
-      if (item instanceof MyListP10.EncodedElement<?> encoded) {
-        U element = (U) encoded.element;
-        for (long i = 0; i < encoded.count; i++) {
-          decoded.add(element);
-        }
-      } else {
-        decoded.add((U) item);
-      }
-    }
-
+    List<U> decoded = decodeItems();
     return new MyListP13<>(
         decoded.toArray(
             size ->

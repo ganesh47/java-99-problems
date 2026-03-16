@@ -173,4 +173,30 @@ public final class BtreeP61 {
   public static <T> boolean isSymmetric(Node<T> root) {
     return root == null || isMirror(root.getLeft(), root.getRight());
   }
+
+  /**
+   * Collects node values into a list based on a filter and traversal order.
+   *
+   * @param node starting node
+   * @param predicate filter for nodes to collect
+   * @param <T> element type
+   * @return list of collected values
+   */
+  public static <T> List<T> collect(Node<T> node, java.util.function.Predicate<Node<T>> predicate) {
+    List<T> result = new ArrayList<>();
+    collectRec(node, predicate, result);
+    return result;
+  }
+
+  private static <T> void collectRec(
+      Node<T> node, java.util.function.Predicate<Node<T>> predicate, List<T> acc) {
+    if (node == null) {
+      return;
+    }
+    if (predicate.test(node)) {
+      acc.add(node.getValue());
+    }
+    collectRec(node.left, predicate, acc);
+    collectRec(node.right, predicate, acc);
+  }
 }

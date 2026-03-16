@@ -36,4 +36,26 @@ public class MathP31 {
     }
     return true;
   }
+
+  /**
+   * Generates a prime number sieve up to n using BitSet.
+   *
+   * @param n upper limit
+   * @return BitSet where set bits represent prime numbers
+   */
+  public static java.util.BitSet sieve(long n) {
+    java.util.BitSet sieve = new java.util.BitSet((int) n + 1);
+    if (n < 2) {
+      return sieve;
+    }
+    sieve.set(2, (int) n + 1);
+    for (int i = 2; (long) i * i <= n; i++) {
+      if (sieve.get(i)) {
+        for (int j = i * i; j <= n; j += i) {
+          sieve.clear(j);
+        }
+      }
+    }
+    return sieve;
+  }
 }

@@ -57,8 +57,8 @@ public final class BtreeP66 {
     rightContour[0] = 0;
 
     for (int i = 1; i < height; i++) {
-      int leftValue = getValueAt(left.leftContour(), i - 1, left.node() != null, -shift);
-      int rightValue = getValueAt(right.leftContour(), i - 1, right.node() != null, shift);
+      int leftValue = getValueAt(left.leftContour(), i - 1, left.node() != null, -shift, Integer.MAX_VALUE);
+      int rightValue = getValueAt(right.leftContour(), i - 1, right.node() != null, shift, Integer.MAX_VALUE);
 
       if (leftValue == Integer.MAX_VALUE && rightValue == Integer.MAX_VALUE) {
         leftContour[i] = 0;
@@ -66,8 +66,8 @@ public final class BtreeP66 {
         leftContour[i] = Math.min(leftValue, rightValue);
       }
 
-      int leftRight = getValueAtMax(left.rightContour(), i - 1, left.node() != null, -shift);
-      int rightRight = getValueAtMax(right.rightContour(), i - 1, right.node() != null, shift);
+      int leftRight = getValueAt(left.rightContour(), i - 1, left.node() != null, -shift, Integer.MIN_VALUE);
+      int rightRight = getValueAt(right.rightContour(), i - 1, right.node() != null, shift, Integer.MIN_VALUE);
 
       if (leftRight == Integer.MIN_VALUE && rightRight == Integer.MIN_VALUE) {
         rightContour[i] = 0;
@@ -84,18 +84,11 @@ public final class BtreeP66 {
     return new Result<>(positioned, leftContour, rightContour, height);
   }
 
-  private static int getValueAt(int[] contour, int idx, boolean exists, int shift) {
+  private static int getValueAt(int[] contour, int idx, boolean exists, int shift, int defaultValue) {
     if (exists && idx < contour.length) {
       return contour[idx] + shift;
     }
-    return Integer.MAX_VALUE;
-  }
-
-  private static int getValueAtMax(int[] contour, int idx, boolean exists, int shift) {
-    if (exists && idx < contour.length) {
-      return contour[idx] + shift;
-    }
-    return Integer.MIN_VALUE;
+    return defaultValue;
   }
 
   private static int requiredShift(int[] leftRightContour, int[] rightLeftContour) {
