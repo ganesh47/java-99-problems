@@ -3,7 +3,9 @@ package org.nintynine.problems;
 import java.util.Objects;
 
 /** P54A: Check whether a given expression represents a binary tree. */
-public class Btree54 {
+public final class Btree54 {
+  private static final String NIL = "nil";
+
   /** Represents a node in the binary tree expression. */
   public static class Btree54Node {
     private final String value;
@@ -56,11 +58,11 @@ public class Btree54 {
         if (value.startsWith("(")) {
           return value;
         }
-        return String.format("(%s nil nil)", value);
+        return String.format("(%s %s %s)", value, NIL, NIL);
       }
       return String.format(
           "(%s %s %s)",
-          value, left == null ? "nil" : left.toString(), right == null ? "nil" : right.toString());
+          value, left == null ? NIL : left.toString(), right == null ? NIL : right.toString());
     }
   }
 
@@ -80,7 +82,7 @@ public class Btree54 {
         && !value.contains(")")
         && !value.contains(",")
         && !value.contains(" ")
-        && !"nil".equals(value);
+        && !NIL.equals(value);
   }
 
   /**
@@ -136,94 +138,97 @@ public class Btree54 {
 
     expression = expression.trim();
 
-    // Handle single value case
-    if (!expression.startsWith("(")) {
+    if (!expression.startsWith("(") || !expression.endsWith(")")) {
       if (isValidValue(expression)) {
         return new Btree54Node(expression);
       }
-      throw new IllegalArgumentException("Invalid value: " + expression);
+      throw new IllegalArgumentException("Invalid node format: " + expression);
     }
 
-    // Remove outer parentheses
-    if (!expression.endsWith(")")) {
-      throw new IllegalArgumentException("Missing closing parenthesis");
-    }
-    expression = expression.substring(1, expression.length() - 1).trim();
-
-    // Split into value and subtrees
-    String[] parts = splitExpression(expression);
-    if (parts.length != 3) {
-      throw new IllegalArgumentException("Invalid node format");
-    }
-
-    String value = parts[0];
-    String leftExpr = parts[1];
-    String rightExpr = parts[2];
+    String[] result = splitExpression(expression);
+    String value = result[0];
+    String leftExpr = result[1];
+    String rightExpr = result[2];
 
     if (!isValidValue(value)) {
-      throw new IllegalArgumentException("Invalid node value");
+      throw new IllegalArgumentException("Invalid root value: " + value);
     }
 
-    Btree54Node left = "nil".equals(leftExpr) ? null : parseTree(leftExpr);
-    Btree54Node right = "nil".equals(rightExpr) ? null : parseTree(rightExpr);
+    Btree54Node left = NIL.equals(leftExpr) ? null : parseTree(leftExpr);
+    Btree54Node right = NIL.equals(rightExpr) ? null : parseTree(rightExpr);
 
     return new Btree54Node(value, left, right);
   }
 
-  @SuppressWarnings("java:S5852")
-  private static String[] splitExpression(String expr) {
-    // Add space validation
-    if (expr.contains(")(") || expr.matches(".*\\w\\(.*") || expr.matches(".*\\)\\w.*")) {
-      throw new IllegalArgumentException("Invalid expression format");
+  /**
+   * Helper to split an expression into root value, left child, and right child.
+   *
+   * @param expression the expression to split
+   * @return String array with [value, left, right]
+   */
+  private static String[] splitExpression(String expression) {
+    // Remove outer parentheses
+    String inner = expression.substring(1, expression.length() - 1).trim();
+
+    // The root value is the first token
+    int firstSpace = inner.indexOf(' ');
+    if (firstSpace == -1) {
+      throw new IllegalArgumentException("Invalid expression: " + expression);
     }
+
+    String value = inner.substring(0, firstSpace);
+    String remaining = inner.substring(firstSpace + 1).trim();
+
+    // Now split the children
+    String[] children = splitChildren(remaining);
 
     String[] result = new String[3];
-    int idx = 0;
-    StringBuilder current = new StringBuilder();
-    int parenthesesCount = 0;
-
-    for (char c : expr.toCharArray()) {
-      if (c == '(') {
-        parenthesesCount++;
-        current.append(c);
-      } else if (c == ')') {
-        parenthesesCount--;
-        current.append(c);
-        if (parenthesesCount < 0) {
-          throw new IllegalArgumentException("Unmatched parentheses");
-        }
-      } else if (c == ' ' && parenthesesCount == 0 && !current.isEmpty()) {
-        // Only split on space when not inside parentheses
-        if (idx >= 3) {
-          throw new IllegalArgumentException("Too many parts in expression");
-        }
-        result[idx++] = current.toString();
-        current = new StringBuilder();
-      } else if (c != ' ' || parenthesesCount > 0) {
-        current.append(c);
-      }
-    }
-
-    if (!current.isEmpty()) {
-      if (idx >= 3) {
-        throw new IllegalArgumentException("Too many parts in expression");
-      }
-      result[idx] = current.toString();
-    }
-
-    // Must have exactly three parts
-    if (idx != 2 || result[0] == null || result[1] == null || result[2] == null) {
-      throw new IllegalArgumentException("Invalid expression format");
-    }
+    result[0] = value;
+    result[1] = children[0];
+    result[2] = children[1];
 
     // Validate "nil" tokens
-    if (!"nil".equals(result[1]) && !result[1].startsWith("(")) {
+    if (!NIL.equals(result[1]) && !result[1].startsWith("(")) {
       throw new IllegalArgumentException("Invalid left child format");
     }
-    if (!"nil".equals(result[2]) && !result[2].startsWith("(")) {
+    if (!NIL.equals(result[2]) && !result[2].startsWith("(")) {
       throw new IllegalArgumentException("Invalid right child format");
     }
 
     return result;
+  }
+
+  /** Splits the children part of an expression into left and right. */
+  private static String[] splitChildren(String childrenPart) {
+    String[] result = new String[2];
+
+    if (childrenPart.startsWith(NIL)) {
+      result[0] = NIL;
+      result[1] = childrenPart.substring(3).trim();
+    } else if (childrenPart.startsWith("(")) {
+      int splitPos = findClosingParenthesis(childrenPart);
+      result[0] = childrenPart.substring(0, splitPos + 1);
+      result[1] = childrenPart.substring(splitPos + 1).trim();
+    } else {
+      throw new IllegalArgumentException("Invalid children format");
+    }
+
+    return result;
+  }
+
+  /** Finds the index of the closing parenthesis matching the first opening one. */
+  private static int findClosingParenthesis(String s) {
+    int count = 0;
+    for (int i = 0; i < s.length(); i++) {
+      if (s.charAt(i) == '(') {
+        count++;
+      } else if (s.charAt(i) == ')') {
+        count--;
+        if (count == 0) {
+          return i;
+        }
+      }
+    }
+    throw new IllegalArgumentException("Unbalanced parentheses");
   }
 }

@@ -1,8 +1,5 @@
 package org.nintynine.problems;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Problem P69: Dotstring representation of binary trees.
  */

@@ -7,7 +7,9 @@ import java.util.Optional;
  * P40: Goldbach's conjecture implementation. Finds two prime numbers that sum up to a given even
  * number.
  */
-public class MathP40 {
+public final class MathP40 {
+  private MathP40() {}
+
   /**
    * Finds a pair of prime numbers that sum up to the given even number. Returns the first such pair
    * found (typically with the smallest first prime).

@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
  * P41: List of Goldbach compositions. Lists all even numbers and their Goldbach compositions in a
  * given range.
  */
-public class MathP41 {
+public final class MathP41 {
+  private MathP41() {}
+
   /**
    * Lists all Goldbach compositions in the given range.
    *
