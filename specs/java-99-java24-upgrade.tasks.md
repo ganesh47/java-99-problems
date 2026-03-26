@@ -6,14 +6,14 @@
 ## Format: `[ID] [P?] [Story] Description`
 
 ## Phase 1: Spec setup
-- [ ] T001 [P] [SPEC] Create spec, plan, and tasks files.
-- [ ] T002 [P] [SPEC] Run `specs sync` to create issue/ADR/wiki links.
-- [ ] T003 [P] [SPEC] Approve ADR and update with plan/tasks.
+- [x] T001 [P] [SPEC] Create spec, plan, and tasks files.
+- [x] T002 [P] [SPEC] Run `specs sync` to create issue/ADR/wiki links.
+- [x] T003 [P] [SPEC] Approve ADR and update with plan/tasks.
 
 ## Phase 2: Java 24 baseline
-- [ ] T010 [P] [BUILD] Define java.version=24 and align compiler/PMD configs.
-- [ ] T011 [P] [BUILD] Confirm CI Java 24 checks remain green; document any 24-specific skips.
-- [ ] T012 [P] [BUILD] Add spec-specific PR template with issue/ADR/wiki links.
+- [x] T010 [P] [BUILD] Define java.version=24 and align compiler/PMD configs.
+- [x] T011 [P] [BUILD] Confirm CI Java 24 checks remain green; document any 24-specific skips.
+- [x] T012 [P] [BUILD] Add spec-specific PR template with issue/ADR/wiki links.
 
 ## Phase 3: Release + close
 - [ ] T020 [P] [REL] Add v0.2.0 entry to CHANGELOG.md.

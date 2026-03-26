@@ -27,6 +27,11 @@ public class MyListP19<T> extends MyListP18<T> {
    */
   @SuppressWarnings("unchecked")
   public MyListP19<T> rotate(int n) {
+    for (T item : items) {
+      if (item == null) {
+        throw new NullPointerException("List contains null elements");
+      }
+    }
     if (length() <= 1) {
       return new MyListP19<>(items);
     }
