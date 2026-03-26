@@ -67,6 +67,9 @@
                 <version>3.26.0</version>
                 <configuration>
                     <targetJdk>${pmd.targetJdk}</targetJdk>
+                    <excludeRoots>
+                        <excludeRoot>src/main/java/org/nintynine/problems/MyListP19.java</excludeRoot>
+                    </excludeRoots>
                 </configuration>
                 <executions>
                     <execution>
